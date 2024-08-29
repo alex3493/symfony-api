@@ -1,0 +1,48 @@
+App\Module\User\Application\UpdateUserProfile\UpdateUserProfileCommand:
+    properties:
+        email:
+            -   Email:
+                    message: The email {{ value }} is not a valid email.
+            -   NotBlank: ~
+
+App\Module\User\Application\ChangePassword\ChangePasswordCommand:
+    properties:
+        currentPassword:
+            -   NotBlank: ~
+        password:
+            -   NotBlank: ~
+        passwordConfirmation:
+            -   NotBlank: ~
+            -   EqualTo:
+                    propertyPath: password
+                    message: 'Passwords do not match.'
+
+App\Module\User\Application\ResetPassword\RequestResetPassword\RequestResetPasswordMessage:
+    properties:
+        email:
+            -   Email:
+                    message: The email {{ value }} is not a valid email.
+            -   NotBlank: ~
+
+App\Module\User\Application\ResetPassword\PerformResetPassword\PerformResetPasswordCommand:
+    properties:
+        email:
+            -   Email:
+                    message: The email {{ value }} is not a valid email.
+            -   NotBlank: ~
+        resetToken:
+            -   NotBlank: ~
+        password:
+            -   NotBlank: ~
+        passwordConfirmation:
+            -   NotBlank: ~
+            -   EqualTo:
+                    propertyPath: password
+                    message: 'Passwords do not match.'
+
+App\Module\User\Application\Admin\AdminUpdateUser\AdminUpdateUserCommand:
+    properties:
+        email:
+            -   Email:
+                    message: The email {{ value }} is not a valid email.
+            -   NotBlank: ~

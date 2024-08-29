@@ -1,0 +1,14 @@
+SuccessResponse:
+  type: object
+  properties:
+    token: { type: string, example: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MTU0MDg2NjgsImV4cCI6MTcxNTQxMjI2OCwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidGVzdEBleGFtcGxlLmNvbSJ9.kEOiTZgCPkdHc-aXeW1-gaYyM9Zr_Q9dyaLbV8P5JdT5OLxx-ESs0Lp4tn2zGa3TPipo0Ii7kotzY7pKuz0UEnsNCClNfvURZ0jUW2HZ87gFSh2CVKEqLZkGffeY2bpM9iVRf2Pd-LM3q_KgTI6wG7j3oQrfPDG1KtCQDBcjUmLyzWiULGwemdJn7f2pfgoM48PVo1n0ZBSQHozmCwBoq0DlroJuLUT3V0J5p_HULrYQtYXEDxB749FWBVBgn_AVXyGFFLds8Bek52BzZj6QmIxsMa_JluGOktYYdH78vRu4ecFJbpWCrHeV9sFcxsi66gfyMw8RdsH6GR8dSTXWNg' }
+    refresh_token: { type: string, example: '4cea10180fea6e9112a9001defba3bab942ddf46ef66c553bf20504a2b747b381d89e84f4e92d2e059d486070f3d58e15e902cfd9981c79065d79185050f543e' }
+InvalidCredentialsResponse:
+  type: object
+  properties:
+    message:
+      type: string
+      example: Invalid credentials
+    code:
+      type: integer
+      example: 401

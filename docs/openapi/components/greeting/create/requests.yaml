@@ -1,0 +1,14 @@
+GreetingCreateRequest:
+  type: object
+  properties:
+    text:
+      type: string
+    variant:
+      type: string
+      enum:
+        - primary
+        - secondary
+        - success
+        - warning
+  required:
+    - text

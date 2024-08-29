@@ -1,0 +1,6 @@
+SuccessResponse:
+  type: object
+  properties:
+    greeting:
+      type: object
+      $ref: '../../../models/greeting.yaml#/Greeting'

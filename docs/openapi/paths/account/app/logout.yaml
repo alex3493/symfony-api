@@ -1,0 +1,34 @@
+delete:
+  description: User logout from given device
+  tags:
+    - App User Account
+  security:
+    - bearerAuth: [ ]
+  parameters:
+    - in: path
+      name: tokenId
+      schema:
+        type: string
+      required: true
+      description: Auth token ID
+  requestBody:
+    content:
+      application/json: { }
+  responses:
+    200:
+      description: Logout success
+      content:
+        application/json:
+          schema:
+            $ref: '../../../components/account/app/logout/responses.yaml#/Success'
+    401:
+      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
+    404:
+      description: Auth token not found
+      content:
+        application/json:
+          schema:
+            $ref: '../../../models/validation-error.yaml#/InvalidRequestError'
+          example:
+            status: 404
+            message: Token not found

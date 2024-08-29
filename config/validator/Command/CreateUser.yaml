@@ -1,0 +1,36 @@
+App\Module\User\Application\RegisterAppUser\RegisterAppUserCommand:
+    properties:
+        email:
+            -   Email:
+                    message: The email {{ value }} is not a valid email.
+            -   NotBlank: ~
+        password:
+            -   NotBlank: ~
+        passwordConfirmation:
+            -   NotBlank: ~
+            -   EqualTo:
+                    propertyPath: password
+                    message: 'Passwords do not match.'
+
+App\Module\User\Application\RegisterWebUser\RegisterWebUserCommand:
+    properties:
+        email:
+            -   Email:
+                    message: The email {{ value }} is not a valid email.
+            -   NotBlank: ~
+        password:
+            -   NotBlank: ~
+        passwordConfirmation:
+            -   NotBlank: ~
+            -   EqualTo:
+                    propertyPath: password
+                    message: 'Passwords do not match.'
+
+App\Module\User\Application\Admin\AdminCreateUser\AdminCreateUserCommand:
+    properties:
+        email:
+            -   Email:
+                    message: The email {{ value }} is not a valid email.
+            -   NotBlank: ~
+        password:
+            -   NotBlank: ~

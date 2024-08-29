@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Module\User\Domain\AuthToken" table="auth_token"
+            repository-class="App\Module\User\Infrastructure\Persistence\Doctrine\AuthTokenRepository">
+        <id name="id" type="guid" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <many-to-one field="user" target-entity="App\Module\User\Domain\User" inversed-by="authTokens">
+            <join-column name="user_id" referenced-column-name="id" on-delete="CASCADE"/>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-one>
+
+        <field name="name" column="name" length="255"/>
+        <field name="token" column="token" type="string"/>
+
+        <field name="createdAt" type="datetime" column="created"/>
+        <field name="lastUsedAt" type="datetime" column="last_used" nullable="true"/>
+        <field name="expiresAt" type="datetime" column="expires" nullable="true"/>
+
+        <indexes>
+            <index columns="name"/>
+        </indexes>
+
+        <unique-constraints>
+            <unique-constraint columns="name,user_id" name="user_device_unique"/>
+        </unique-constraints>
+    </entity>
+
+</doctrine-mapping>

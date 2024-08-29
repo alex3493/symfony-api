@@ -1,0 +1,133 @@
+services:
+  db:
+    container_name: db
+    image: mysql:latest
+    # command: --default-authentication-plugin=mysql_native_password
+    # TODO: how to use it?
+    # command: --default-authentication-plugin=caching_sha2_password
+    volumes:
+      - "db_app:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
+    networks:
+      - symfony_app
+  php:
+    container_name: php
+    build:
+      context: ./php
+      args:
+        TIMEZONE: ${TIMEZONE}
+    depends_on:
+      db:
+        condition: service_started
+    command: /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+    volumes:
+      - ../:/var/www/symfony:cached
+      - symfony_app_var:/var/www/symfony/var
+      - symfony_app_vendor:/var/www/symfony/vendor
+      - ../vendor:/var/www/symfony/vendor
+      - ../var:/var/www/symfony/var
+    networks:
+      - symfony_app
+  nginx:
+    container_name: web
+    build:
+      context: ./nginx
+    volumes:
+      - ../:/var/www/symfony:cached
+      - symfony_app_var:/var/www/symfony/var
+      - symfony_app_vendor:/var/www/symfony/vendor
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      php:
+        condition: service_started
+    networks:
+      - symfony_app
+    env_file:
+      - .env.nginx
+  mailer:
+    container_name: mailer
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - symfony_app
+  mercure-hub:
+    container_name: mercure-hub
+    # TODO: We are using previous version because the latest one is broken at the moment of this writing.
+    image: dunglas/mercure:v0.16.0
+    # image: dunglas/mercure:latest
+    restart: unless-stopped
+    environment:
+      # Uncomment the following line to disable HTTPS,
+      SERVER_NAME: ':3000'
+      MERCURE_PUBLISHER_JWT_KEY: ${MERCURE_JWT_SECRET}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${MERCURE_JWT_SECRET}
+      # Set the URL of your Symfony project (without trailing slash!) as value of the cors_origins directive
+      MERCURE_EXTRA_DIRECTIVES: |-
+        cors_origins *
+        publish_origins *
+    # Comment the following line to disable the development mode
+    command: /usr/bin/caddy run --config /etc/caddy/Caddyfile.dev
+    # We do not have healthz route yet.
+    #    healthcheck:
+    #      test: ["CMD", "curl", "-f", "https://localhost/healthz"]
+    #      timeout: 5s
+    #      retries: 5
+    #      start_period: 60s
+    ports:
+      - "3000:3000"
+    networks:
+      - symfony_app
+    volumes:
+      - mercure_data:/data
+      - mercure_config:/config
+  rabbit-mq:
+    container_name: rabbit-mq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq:cached
+    networks:
+      - symfony_app
+  swagger-ui:
+    container_name: swagger-ui
+    image: swaggerapi/swagger-ui:v5.11.3
+    volumes:
+      - './../docs/openapi/:/openapi'
+      - './../docs/openapi/paths:/usr/share/nginx/html/paths'
+      - './../docs/openapi/components:/usr/share/nginx/html/components'
+      - './../docs/openapi/models:/usr/share/nginx/html/models'
+    environment:
+      - SWAGGER_JSON=/openapi/openapi.yaml
+      - SWAGGER_JSON_URL=
+    ports:
+      - "8888:8080"
+    networks:
+      - symfony_app
+volumes:
+  symfony_app_var:
+  symfony_app_vendor:
+  db_app:
+  mercure_data:
+  mercure_config:
+  rabbitmq:
+
+networks:
+  symfony_app:
+
+

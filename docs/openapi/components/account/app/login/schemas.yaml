@@ -1,0 +1,16 @@
+SuccessResponse:
+  type: object
+  properties:
+    user:
+      type: object
+      $ref: '../../../../models/user/user.yaml#/User'
+    token: { type: string, example: 'ee66723b915904025c7465590cf1f2e385e2667be9c8b112ff5f515471b5f66e' }
+InvalidCredentialsResponse:
+  type: object
+  properties:
+    message:
+      type: string
+      example: Invalid credentials
+    code:
+      type: integer
+      example: 401

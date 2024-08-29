@@ -1,0 +1,20 @@
+UserUpdateRequest:
+  type: object
+  properties:
+    email:
+      type: string
+      example: 'updated-user@example.com'
+    password:
+      type: string|null
+      example: 'updated-secret-password'
+    first_name:
+      type: string
+      example: 'John'
+    last_name:
+      type: string
+      example: 'Smith Junior'
+    role:
+      type: string
+      example: 'ROLE_USER'
+  required:
+    - email

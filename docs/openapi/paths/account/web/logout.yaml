@@ -1,0 +1,20 @@
+post:
+  description: User logout
+  tags:
+    - Web User Account
+  security:
+    - bearerAuth: [ ]
+  requestBody:
+    content:
+      application/json: { }
+  responses:
+    200:
+      description: Logout success
+      content:
+        application/json:
+          schema:
+            $ref: '../../../components/account/web/logout/responses.yaml#/Success'
+    401:
+      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedJWTError'
+
+

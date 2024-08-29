@@ -1,0 +1,68 @@
+DuplicateEmailValidationError:
+  type: object
+  properties:
+    property:
+      type: string
+      example: "email"
+    error:
+      type: string
+      example: "Email already in use"
+    context:
+      type: string
+      example: "User"
+# TODO: 3 responses below have the same structure - optimize!
+MissingParameterError:
+  type: object
+  properties:
+    message:
+      type: string
+    code:
+      type: integer
+
+InvalidRequestError:
+  type: object
+  properties:
+    message:
+      type: string
+    code:
+      type: integer
+
+ApiValidationError:
+  type: object
+  properties:
+    property:
+      type: string
+    context:
+      type: string
+    errors:
+      type: array
+
+
+ApiValidationErrors:
+  type: object
+  properties:
+    message:
+      type: string
+    code:
+      type: integer
+    errors:
+      type: array
+
+
+AccessError:
+  type: object
+  properties:
+    title:
+      type: string
+    status:
+      type: integer
+    detail:
+      type: string
+
+UnauthorizedError:
+  type: object
+  properties:
+    message:
+      type: string
+    code:
+      type: integer

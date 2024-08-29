@@ -1,0 +1,47 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    app.auth_token_expiration_minutes: 43200 # 30 days.
+    # app.auth_token_expiration_minutes: 0 # Never expires.
+    app.reset_password_token_expiration_minutes: 60
+    # We need the setting below to avoid erasing user hashed password from DB on login.
+    security.authentication.manager.erase_credentials: false
+
+    app.email_from: '%env(EMAIL_FROM)%'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Kernel.php'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Module\Shared\Infrastructure\EventListener\ExceptionListener:
+        tags: [ kernel.event_listener ]
+
+    App\Module\Shared\Infrastructure\MessageHandler\MercureUpdateMessageHandler:
+        tags: [ messenger.message_handler ]
+
+    _instanceof:
+        App\Module\Shared\Domain\Bus\Command\CommandHandler:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+        App\Module\Shared\Domain\Bus\Query\QueryHandler:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+        App\Module\Shared\Domain\Event\DomainEventSubscriberInterface:
+            tags:
+                - { name: messenger.message_handler, bus: event.bus }

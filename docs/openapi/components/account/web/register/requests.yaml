@@ -1,0 +1,24 @@
+RegisterRequest:
+  type: object
+  properties:
+    email:
+      type: string
+      example: "user@example.com"
+    password:
+      type: string
+      example: "secret-password"
+    password_confirmation:
+      type: string
+      example: "secret-password"
+    first_name:
+      type: string
+      example: "John"
+    last_name:
+      type: string
+      example: "Doe"
+  required:
+    - email
+    - password
+    - password_confirmation
+
+

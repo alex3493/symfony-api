@@ -1,0 +1,101 @@
+get:
+  description: Get user list, paginated and ordered.
+  tags:
+    - Admin User Management
+  security:
+    - bearerAuth: [ ]
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+      required: false
+      description: Page to start with.
+    - in: query
+      name: limit
+      schema:
+        type: integer
+      required: false
+      description: Items per page.
+    - in: query
+      name: orderBy
+      schema:
+        type: string
+      required: false
+      description: Table order by
+    - in: query
+      name: orderType
+      schema:
+        type: strings
+        enum:
+          - asc
+          - desc
+      required: false
+      description: Table order type.
+  requestBody:
+    content:
+      application/json: { }
+  responses:
+    200:
+      description: Greeting list
+      content:
+        application/json:
+          schema:
+            $ref: '../../../components/admin/users/list/responses.yaml#/Success'
+    401:
+      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
+
+post:
+  description: Create new user
+  tags:
+    - Admin User Management
+  security:
+    - bearerAuth: [ ]
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/admin/users/create/requests.yaml#/UserCreateRequest'
+  responses:
+    200:
+      description: User created successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../../components/admin/users/create/responses.yaml#/Success'
+    401:
+      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
+    422:
+      description: Update request error - provided data is invalid
+      content:
+        application/json:
+          schema:
+            $ref: '../../../models/validation-error.yaml#/ApiValidationErrors'
+          examples:
+            Empty email:
+              value:
+                code: 422
+                message: Validation failed
+                errors:
+                  - property: email
+                    context: User
+                    errors:
+                      - This value should not be blank.
+            Empty password:
+              value:
+                code: 422
+                message: Validation failed
+                errors:
+                  - property: password
+                    context: User
+                    errors:
+                      - This value should not be blank.
+            Invalid email:
+              value:
+                code: 422
+                message: Validation failed
+                errors:
+                  - property: email
+                    context: User
+                    errors:
+                      - The email @invalid-email is not a valid email.

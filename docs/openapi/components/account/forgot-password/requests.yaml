@@ -1,0 +1,7 @@
+RequestResetPasswordRequest:
+  properties:
+    email:
+      type: string
+      example: 'test@example.com'
+  required:
+    - email

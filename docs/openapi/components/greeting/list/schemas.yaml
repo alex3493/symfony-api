@@ -1,0 +1,9 @@
+SuccessResponse:
+  properties:
+    greetings:
+      type: array
+      items:
+        anyOf:
+          - $ref: '../../../models/greeting.yaml#/UpdatedGreeting'
+          - $ref: '../../../models/greeting.yaml#/Greeting'
+

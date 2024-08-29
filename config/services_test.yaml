@@ -1,0 +1,19 @@
+services:
+    Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher:
+        arguments: [ '@Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface' ]
+        public: true
+    Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager:
+        arguments: [ '@Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface', '@Symfony\Contracts\EventDispatcher\EventDispatcherInterface' ]
+        public: true
+
+    #   test_alias.service:QueryBus:
+    #       alias: 'App\Module\Shared\Domain\Bus\Query\QueryBus'
+    #       public: true
+    #
+    #   test_alias.service:CommandBus:
+    #         alias: 'App\Module\Shared\Domain\Bus\Command\CommandBus'
+    #         public: true
+
+    _defaults:
+        public: true
+

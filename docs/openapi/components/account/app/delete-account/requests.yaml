@@ -1,0 +1,8 @@
+DeleteAccountRequest:
+  properties:
+    password:
+      type: string
+      example: 'password'
+
+  required:
+    - password

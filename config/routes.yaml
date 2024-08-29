@@ -1,0 +1,10 @@
+controllers:
+    resource:
+        path: ../src/EntryPoint/Http/Controller/
+        namespace: App\EntryPoint\Http\Controller
+    type: attribute
+
+api_login_check:
+    path: /api/web/login_check
+api_refresh_token:
+    path: /api/web/token/refresh

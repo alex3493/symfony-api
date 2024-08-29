@@ -1,0 +1,14 @@
+AuthToken:
+  properties:
+    id:
+      type: string
+      example: "018f3338-015b-7507-92ca-742cb72ad379"
+    name:
+      type: string
+      example: "iPhone 15 Pro"
+    created_at:
+      type: string
+      example: "2024-05-01T08:14:19+00:00"
+    last_used_at:
+      type: string
+      example: "2024-05-01T08:14:19+00:00"

@@ -1,0 +1,19 @@
+PerformResetPasswordRequest:
+  properties:
+    email:
+      type: string
+      example: 'test@example.com'
+    reset_token:
+      type: string
+      example: '8aa8f92b211038f3393f743f07e7a35473e028705994a0567112ca41af98888d'
+    password:
+      type: string
+      example: 'new-password'
+    password_confirmation:
+      type: string
+      example: 'new-password'
+  required:
+    - email
+    - reset_token
+    - password
+    - password_confirmation

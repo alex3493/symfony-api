@@ -1,0 +1,50 @@
+UpdatedGreeting:
+  properties:
+    id:
+      type: string
+      example: '018fe734-8d05-778c-86d5-f8384333c39f'
+    text:
+      type: string
+      example: 'Greeting text updated'
+    variant:
+      type: object
+      example: { name: 'secondary' }
+    author:
+      type: object
+      $ref: './user/user.yaml#/GreetingAuthor'
+    updated_by:
+      type: string
+      $ref: './user/user.yaml#/GreetingAuthor'
+    created_at:
+      type: string
+      example: '2024-06-05T06:48:34+00:00'
+    updated_at:
+      type: string
+      example: '2024-06-05T06:49:34+00:00'
+
+Greeting:
+  properties:
+    id:
+      type: string
+      example: '018fe734-8d05-778c-86d5-f8384333c39g'
+    text:
+      type: string
+      example: 'Greeting text'
+    variant:
+      type: object
+      example: { name: 'primary' }
+    author:
+      type: object
+      $ref: './user/user.yaml#/GreetingAuthor'
+    updated_by:
+      type: string
+      example: null
+    created_at:
+      type: string
+      example: '2024-06-05T06:48:34+00:00'
+    updated_at:
+      type: string
+      example: null
+
+
+

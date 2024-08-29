@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Module\User\Domain\User" table="user"
+            repository-class="App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository">
+        <id name="id" type="guid" column="id">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="email" column="email" length="255"/>
+        <field name="password" column="password" type="string" nullable="true"/>
+
+        <field name="firstName" column="first_name" length="255" nullable="true"/>
+        <field name="lastName" column="last_name" length="255" nullable="true"/>
+
+        <field name="roles" column="roles" type="json"/>
+
+        <one-to-many field="authTokens" target-entity="App\Module\User\Domain\AuthToken" mapped-by="user"
+                     orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+
+        <field name="createdAt" type="datetime" column="created"/>
+        <field name="updatedAt" type="datetime" column="updated" nullable="true"/>
+        <field name="deletedAt" type="datetime" column="deleted" nullable="true"/>
+
+        <indexes>
+            <index columns="email"/>
+        </indexes>
+
+        <unique-constraints>
+            <unique-constraint columns="email" name="email_unique"/>
+        </unique-constraints>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="preUpdate" method="setUpdatedAtNow"/>
+        </lifecycle-callbacks>
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,26 @@
+post:
+  description: User login
+  tags:
+    - Web User Account
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/account/web/login/requests.yaml#/LoginRequest'
+  responses:
+    200:
+      description: Login success
+      content:
+        application/json:
+          schema:
+            $ref: '../../../components/account/web/login/responses.yaml#/Success'
+    401:
+      description: Invalid credentials
+      content:
+        application/json:
+          schema:
+            $ref: '../../../components/account/web/login/responses.yaml#/InvalidCredentials'
+    400:
+      $ref: '../../../openapi.yaml#/components/responses/BadRequestMissingParameters'
+
+

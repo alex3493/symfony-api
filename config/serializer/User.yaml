@@ -1,0 +1,36 @@
+App\Module\User\Domain\User:
+    attributes:
+        id:
+            groups: [ 'user', 'auth-token', 'greeting' ]
+        email:
+            groups: [ 'user', 'auth-token' ]
+        firstName:
+            serialized_name: first_name
+            groups: [ 'user', 'auth-token', 'greeting' ]
+        lastName:
+            serialized_name: last_name
+            groups: [ 'user', 'auth-token', 'greeting' ]
+        displayName:
+            serialized_name: display_name
+            groups: [ 'user', 'auth-token', 'greeting' ]
+        roles:
+            groups: [ 'user', 'auth-token' ]
+        role:
+            groups: [ 'user', 'auth-token' ]
+        createdAt:
+            serialized_name: created_at
+            groups: [ 'user' ]
+        updatedAt:
+            serialized_name: updated_at
+            groups: [ 'user' ]
+        deletedAt:
+            serialized_name: deleted_at
+            groups: [ 'user' ]
+        softDeleted:
+            serialized_name: deleted
+            groups: [ 'user' ]
+        authTokens:
+            serialized_name: auth_tokens
+            groups: [ 'user' ]
+        userIdentifier:
+            ignore: true

@@ -1,0 +1,22 @@
+App\Module\User\Domain\AuthToken:
+    attributes:
+        id:
+            groups:
+              [ 'auth-token', 'user' ]
+        token:
+            groups:
+              [ 'auth-token' ]
+        name:
+            groups:
+              [ 'auth-token', 'user' ]
+        #    user:
+        #      groups:
+        #        [ 'auth-token' ]
+        createdAt:
+            serialized_name: created_at
+            groups:
+              [ 'auth-token', 'user' ]
+        lastUsedAt:
+            serialized_name: last_used_at
+            groups:
+              [ 'auth-token', 'user' ]

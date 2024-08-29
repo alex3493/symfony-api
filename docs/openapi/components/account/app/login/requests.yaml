@@ -1,0 +1,15 @@
+LoginRequest:
+  type: object
+  properties:
+    email:
+      type: string
+      example: "admin@example.com"
+    password:
+      type: string
+      example: "password"
+    device_name:
+      type: string
+      example: "iPhone 15 Pro"
+  required:
+    - email
+    - password

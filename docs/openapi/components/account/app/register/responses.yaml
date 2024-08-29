@@ -1,0 +1,10 @@
+Success:
+  type: object
+  $ref: './schemas.yaml#/SuccessResponse'
+ConflictError:
+  type: object
+  $ref: './schemas.yaml#/EmailConflictResponse'
+
+
+
+

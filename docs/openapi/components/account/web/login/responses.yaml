@@ -1,0 +1,7 @@
+Success:
+  type: object
+  $ref: './schemas.yaml#/SuccessResponse'
+InvalidCredentials:
+  type: object
+  $ref: './schemas.yaml#/InvalidCredentialsResponse'
+

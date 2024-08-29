@@ -1,0 +1,6 @@
+SuccessResponse:
+  type: object
+  properties:
+    message:
+      type: string
+      example: 'User deleted successfully'
