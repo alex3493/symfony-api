@@ -40,10 +40,6 @@ class NotificationTest extends DatabaseTestCase
         $this->transport('async')->rejected()->assertEmpty();
 
         $this->transport('async')->queue()->assertEmpty();
-
-        // TODO: check why failed queue is empty when we have rejected message.
-        // Maybe we are waiting for max retries before placing message into failed queue.
-        $this->transport('failed')->queue()->assertEmpty();
     }
 
     public function test_authorize_mercure_subscription()

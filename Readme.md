@@ -91,8 +91,9 @@ Depending on the authentication mode all subsequent requests should use one of t
 - User can reset password with her email and token received in reset-password email.
 
 We leverage Symfony Mercure (SSE) to implement real-time updates for all connected UI clients. Whenever an entity is
-created, updated or deleted we publish a Mercure update message, so that all clients see updates without the need of
-page reload.
+created, updated or deleted we can publish a Mercure update message, so that all clients see updates without the need of
+page reload. _This feature is reserved right now, however we have a testable controller that publishes Mercure
+messages._
 
 ## Installation
 
@@ -101,9 +102,8 @@ page reload.
 3. Browse OpenAPI docs: http://localhost:8888
 
 *Note: `docker compose up -d` command executes entry point script (composer install, migrations if need be, etc.) that
-may take some time on slow systems. If you get 502 bad gateway response when you open http://localhost shortly after
-starting docker containers, please, wait for a while or check `php` container logs to make sure that all start up tasks
-are finished.*
+may take some time on slow systems. If you get errors in Swagger "Try it out" shortly after starting docker containers,
+please, wait for a while or check `php` container logs to make sure that all start up tasks are finished.*
 
 ## How to test
 
@@ -140,8 +140,6 @@ commands should be executed inside docker `php` container.
 You can use Swagger UI at http://localhost:8888 for testing selected API endpoints. Most endpoints require
 authorization, so you will have to run registration / login first and then copy token from response to authorize
 subsequent requests.
-
-You can also use one of frontend counterpart projects that consume this API:
 
 ## What's next
 
