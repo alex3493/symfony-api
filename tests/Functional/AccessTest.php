@@ -175,9 +175,7 @@ class AccessTest extends DatabaseTestCase
             'email' => '@invalid-email',
         ]);
 
-        // Actually the code is 500 here.
-        // TODO: how to fix it?
-        $this->assertResponseStatusCodeSame(500);
+        $this->assertResponseStatusCodeSame(422);
 
         $response = json_decode($client->getResponse()->getContent());
 
