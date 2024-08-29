@@ -92,9 +92,7 @@ class AppUserTest extends DatabaseTestCase
 
         $this->assertEquals('Validation failed.', $response->message);
 
-        // Actually the code is 500 here.
-        // TODO: how to fix it?
-        $this->assertResponseStatusCodeSame(500);
+        $this->assertResponseStatusCodeSame(422);
         $this->assertCount(1, $response->errors);
         $this->assertEquals('email', $response->errors[0]->property);
     }
@@ -128,9 +126,7 @@ class AppUserTest extends DatabaseTestCase
             'device_name' => 'iPhone 15',
         ]);
 
-        // Actually the code is 500 here.
-        // TODO: how to fix it?
-        $this->assertResponseStatusCodeSame(500);
+        $this->assertResponseStatusCodeSame(422);
     }
 
     public function test_register_user_error_invalid_email(): void
@@ -146,9 +142,7 @@ class AppUserTest extends DatabaseTestCase
             'device_name' => 'iPhone 15',
         ]);
 
-        // Actually the code is 500 here.
-        // TODO: how to fix it?
-        $this->assertResponseStatusCodeSame(500);
+        $this->assertResponseStatusCodeSame(422);
     }
 
     public function test_we_can_login_a_user(): void
@@ -410,9 +404,7 @@ class AppUserTest extends DatabaseTestCase
             'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
-        // Actually the code is 500 here.
-        // TODO: how to fix it?
-        $this->assertResponseStatusCodeSame(500);
+        $this->assertResponseStatusCodeSame(422);
 
         $response = json_decode($client->getResponse()->getContent());
         $this->assertEquals('Validation failed.', $response->message);

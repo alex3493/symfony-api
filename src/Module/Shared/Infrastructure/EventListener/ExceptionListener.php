@@ -24,6 +24,11 @@ class ExceptionListener
         $this->logger = $logger;
     }
 
+    /**
+     * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+     * @return void
+     * @throws \ReflectionException
+     */
     public function __invoke(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
@@ -44,13 +49,12 @@ class ExceptionListener
                 $this->logger->debug('ExceptionListener :: Messenger validation failed exception',
                     ['exception' => $exception]);
 
-                // We have to do some extra work to convert messenger validation violations to validation errors.
-                $errors = $this->translateMessengerValidationViolationsToErrors($exception->getViolations());
+                $exception = $this->validationExceptionFromMessenger($exception);
+
                 $response = new JsonResponse([
-                    'message' => 'Validation failed.',
-                    'errors' => $errors,
-                    // We consider that messenger validation error code in always 422.
-                    'code' => DomainException::$codes['UNPROCESSABLE_ENTITY'],
+                    'message' => $exception->getMessage(),
+                    'errors' => $exception->getErrors(),
+                    'code' => $exception->getCode(),
                 ]);
             } elseif ($exception instanceof FormValidationException) {
                 // Custom form validation exception.
@@ -66,8 +70,6 @@ class ExceptionListener
                 $response = new JsonResponse([
                     'message' => $exception->getMessage(),
                     'code' => $exception->getCode(),
-                    // For domain exception traces are not needed for development.
-                    // 'traces' => $exception->getTrace(),
                 ]);
             } else {
                 // All other exceptions.
@@ -101,19 +103,22 @@ class ExceptionListener
     }
 
     /**
-     * @param \Symfony\Component\Validator\ConstraintViolationList $violations
-     * @return array
+     * @param \Symfony\Component\Messenger\Exception\ValidationFailedException $e
+     * @return \App\Module\Shared\Domain\Exception\ValidationException
+     * @throws \ReflectionException
      */
-    private function translateMessengerValidationViolationsToErrors(ConstraintViolationList $violations): array
+    private function validationExceptionFromMessenger(ValidationFailedException $e): ValidationException
     {
-        $errors = [];
-        foreach ($violations as $violation) {
-            $message = $violation->getRoot();
-            $errors[$violation->getPropertyPath()]['property'] = $violation->getPropertyPath();
-            $errors[$violation->getPropertyPath()]['errors'][] = $violation->getMessage();
-            $errors[$violation->getPropertyPath()]['context'] = $message instanceof (ValidatedMessageInterface::class) ? $message->validationContext() : 'General';
+        $context = 'General';
+
+        foreach ($e->getViolations() as $violation) {
+            // If any of violation messages implements ValidatedMessageInterface we read context from message.
+            if ($violation->getRoot() instanceof ValidatedMessageInterface) {
+                $context = $violation->getRoot()->validationContext();
+                break;
+            }
         }
 
-        return array_values($errors);
+        return new ValidationException($e->getViolations(), $context);
     }
 }
