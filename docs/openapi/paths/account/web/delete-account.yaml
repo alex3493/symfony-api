@@ -1,36 +1,36 @@
 post:
-  description: Delete user account
-  tags:
-    - Web User Account
-  security:
-    - bearerAuth: [ ]
-  requestBody:
-    content:
-      application/json:
-        schema:
-          $ref: '../../../components/account/web/delete-account/requests.yaml#/DeleteAccountRequest'
-  responses:
-    200:
-      description: Delete account success
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/account/web/delete-account/responses.yaml#/Success'
-    400:
-      $ref: '../../../openapi.yaml#/components/responses/BadRequestMissingParameters'
-    401:
-      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedJWTError'
-    422:
-      description: Delete account request error - provided data is invalid
-      content:
-        application/json:
-          schema:
-            $ref: '../../../models/validation-error.yaml#/ApiValidationErrors'
-          example:
-            code: 422
-            message: Invalid credentials
-            errors:
-              - property: password
-                context: User
-                errors:
-                  - Wrong value for your current password
+    description: Delete user account
+    tags:
+        - Web User Account
+    security:
+        -   bearerAuth: [ ]
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../components/account/web/delete-account/requests.yaml#/DeleteAccountRequest'
+    responses:
+        200:
+            description: Delete account success
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/account/web/delete-account/responses.yaml#/Success'
+        400:
+            $ref: '../../../openapi.yaml#/components/responses/BadRequestMissingParameters'
+        401:
+            $ref: '../../../openapi.yaml#/components/responses/UnauthorizedJWTError'
+        422:
+            description: Delete account request error - provided data is invalid
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../models/validation-error.yaml#/ApiValidationErrors'
+                    example:
+                        code: 422
+                        message: Invalid credentials
+                        errors:
+                            -   property: password
+                                context: User
+                                errors:
+                                    - Wrong value for your current password

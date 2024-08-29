@@ -1,152 +1,139 @@
 openapi: 3.0.0
 info:
-  title: Symfony API
-  description: These API specifications describe both SPA-app API and mobile-app API
-  version: 1.0.0
-  contact:
-    name: API Support
-    url: https://github.com/alex3493
-    email: alex.polonski@gmail.com
+    title: Symfony API
+    description: These API specifications describe both SPA-app API and mobile-app API
+    version: 1.0.0
+    contact:
+        name: API Support
+        url: https://github.com/alex3493
+        email: alex.polonski@gmail.com
 servers:
-  - url: http://localhost
-    description: Develop local server
+    -   url: http://localhost
+        description: Develop local server
 paths:
-  # Mobile App account endpoints.
-  /api/app/register:
-    $ref: 'paths/account/app/register.yaml'
-  /api/app/login:
-    $ref: 'paths/account/app/login.yaml'
-  /api/app/account/logout/{tokenId}:
-    $ref: 'paths/account/app/logout.yaml'
-  /api/app/account/me/sign-out:
-    $ref: 'paths/account/app/sign-out.yaml'
-  /api/app/account/me/update:
-    $ref: 'paths/account/app/update.yaml'
-  /api/app/account/me/change-password:
-    $ref: 'paths/account/app/change-password.yaml'
-  /api/app/account/me/delete-account:
-    $ref: 'paths/account/app/delete-account.yaml'
+    # Mobile App account endpoints.
+    /api/app/register:
+        $ref: 'paths/account/app/register.yaml'
+    /api/app/login:
+        $ref: 'paths/account/app/login.yaml'
+    /api/app/account/logout/{tokenId}:
+        $ref: 'paths/account/app/logout.yaml'
+    /api/app/account/me/sign-out:
+        $ref: 'paths/account/app/sign-out.yaml'
+    /api/app/account/me/update:
+        $ref: 'paths/account/app/update.yaml'
+    /api/app/account/me/change-password:
+        $ref: 'paths/account/app/change-password.yaml'
+    /api/app/account/me/delete-account:
+        $ref: 'paths/account/app/delete-account.yaml'
 
-  # Web SPA account endpoints.
-  /api/web/register:
-    $ref: 'paths/account/web/register.yaml'
-  /api/web/login_check:
-    $ref: 'paths/account/web/login.yaml'
-  /api/web/account/logout/{tokenId}:
-    $ref: 'paths/account/web/logout-device.yaml'
-  /api/web/account/me/logout:
-    $ref: 'paths/account/web/logout.yaml'
-  /api/web/account/me/sign-out:
-    $ref: 'paths/account/web/sign-out.yaml'
-  /api/web/account/me/update:
-    $ref: 'paths/account/web/update.yaml'
-  /api/web/account/me/change-password:
-    $ref: 'paths/account/web/change-password.yaml'
-  /api/web/account/me/delete-account:
-    $ref: 'paths/account/web/delete-account.yaml'
+    # Web SPA account endpoints.
+    /api/web/register:
+        $ref: 'paths/account/web/register.yaml'
+    /api/web/login_check:
+        $ref: 'paths/account/web/login.yaml'
+    /api/web/account/logout/{tokenId}:
+        $ref: 'paths/account/web/logout-device.yaml'
+    /api/web/account/me/logout:
+        $ref: 'paths/account/web/logout.yaml'
+    /api/web/account/me/sign-out:
+        $ref: 'paths/account/web/sign-out.yaml'
+    /api/web/account/me/update:
+        $ref: 'paths/account/web/update.yaml'
+    /api/web/account/me/change-password:
+        $ref: 'paths/account/web/change-password.yaml'
+    /api/web/account/me/delete-account:
+        $ref: 'paths/account/web/delete-account.yaml'
 
-  # Web SPA admin endpoints.
-  /api/admin/users:
-    $ref: 'paths/admin/users/index.yaml'
-  /api/admin/user/{userId}:
-    $ref: 'paths/admin/users/item.yaml'
-  /api/admin/user/delete/{userId}:
-    $ref: 'paths/admin/users/soft-delete.yaml'
-  /api/admin/user/restore/{userId}:
-    $ref: 'paths/admin/users/restore.yaml'
+    # Web SPA admin endpoints.
+    /api/admin/users:
+        $ref: 'paths/admin/users/index.yaml'
+    /api/admin/user/{userId}:
+        $ref: 'paths/admin/users/item.yaml'
+    /api/admin/user/delete/{userId}:
+        $ref: 'paths/admin/users/soft-delete.yaml'
+    /api/admin/user/restore/{userId}:
+        $ref: 'paths/admin/users/restore.yaml'
 
-  # Reset password endpoints.
-  /api/forgot-password:
-    $ref: 'paths/account/forgot-password.yaml'
-  /api/reset-password:
-    $ref: 'paths/account/reset-password.yaml'
-
-
-  # Greetings endpoints (both Mobile App and Web SPA).
-  /api/app/greetings:
-    $ref: 'paths/greetings/app/index.yaml'
-  /api/web/greetings:
-    $ref: 'paths/greetings/web/index.yaml'
-  /api/app/greeting/{greetingId}:
-    $ref: 'paths/greetings/app/item.yaml'
-  /api/web/greeting/{greetingId}:
-    $ref: 'paths/greetings/web/item.yaml'
-
+    # Reset password endpoints.
+    /api/forgot-password:
+        $ref: 'paths/account/forgot-password.yaml'
+    /api/reset-password:
+        $ref: 'paths/account/reset-password.yaml'
 
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT or Access Token
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT or Access Token
 
-  #-------------------------------
-  # Reusable request parameters
-  #-------------------------------
-  # parameters:
+    #-------------------------------
+    # Reusable request parameters
+    #-------------------------------
+    # parameters:
 
-  #-------------------------------
-  # Reusable responses schemas
-  #-------------------------------
-  responses:
-    UnauthorizedJWTError:
-      description: Unauthorized - JWT is missing or invalid
+    #-------------------------------
+    # Reusable responses schemas
+    #-------------------------------
+    responses:
+        UnauthorizedJWTError:
+            description: Unauthorized - JWT is missing or invalid
 
-      content:
-        application/json:
-          schema:
-            $ref: './models/validation-error.yaml#/UnauthorizedError'
-          examples:
-            No JWT token:
-              value:
-                code: 401
-                message: JWT token not found
-            JWT Invalid:
-              value:
-                code: 401
-                message: Invalid JWT token
-    UnauthorizedNotLoggedInError:
-      description: Unauthorized - user must be logged in
-      content:
-        application/json:
-          schema:
-            $ref: './models/validation-error.yaml#/AccessError'
-          example:
-            status: 401
-            message: An error occurred
-            detail: Full authentication is required to access this resource.
+            content:
+                application/json:
+                    schema:
+                        $ref: './models/validation-error.yaml#/UnauthorizedError'
+                    examples:
+                        No JWT token:
+                            value:
+                                code: 401
+                                message: JWT token not found
+                        JWT Invalid:
+                            value:
+                                code: 401
+                                message: Invalid JWT token
+        UnauthorizedNotLoggedInError:
+            description: Unauthorized - user must be logged in
+            content:
+                application/json:
+                    schema:
+                        $ref: './models/validation-error.yaml#/AccessError'
+                    example:
+                        status: 401
+                        message: An error occurred
+                        detail: Full authentication is required to access this resource.
 
-    BadRequestMissingParameters:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: './models/validation-error.yaml#/MissingParameterError'
-          examples:
-            Missing mandatory key:
-              value:
-                code: 400
-                message: Mandatory key <some_key> is missing
-            Empty request:
-              value:
-                code: 400
-                message: Request content is empty or not valid
+        BadRequestMissingParameters:
+            description: Bad request
+            content:
+                application/json:
+                    schema:
+                        $ref: './models/validation-error.yaml#/MissingParameterError'
+                    examples:
+                        Missing mandatory key:
+                            value:
+                                code: 400
+                                message: Mandatory key <some_key> is missing
+                        Empty request:
+                            value:
+                                code: 400
+                                message: Request content is empty or not valid
 
-  #-------------------------------
-  # Reusable examples
-  #-------------------------------
-  # examples:
+    #-------------------------------
+    # Reusable examples
+    #-------------------------------
+    # examples:
 
 tags:
-  # APP TAGS
-  - name: App User Account
-    description: Mobile App User Account registration, login, etc.
-  - name: Web User Account
-    description: Web (SPA) user registration, login, etc.
-  - name: Admin User Management
-    description: Web (SPA) user management for administrators.
-  - name: Password reset
-    description: Password reset for all users.
-  - name: Greetings
-    description: Greetings (Mobile App and SPA).
+    # APP TAGS
+    -   name: App User Account
+        description: Mobile App User Account registration, login, etc.
+    -   name: Web User Account
+        description: Web (SPA) user registration, login, etc.
+    -   name: Admin User Management
+        description: Web (SPA) user management for administrators.
+    -   name: Password reset
+        description: Password reset for all users.
+
 

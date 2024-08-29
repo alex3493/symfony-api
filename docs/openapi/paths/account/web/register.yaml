@@ -1,61 +1,61 @@
 post:
-  description: User registration
-  tags:
-    - Web User Account
-  requestBody:
-    content:
-      application/json:
-        schema:
-          $ref: '../../../components/account/web/register/requests.yaml#/RegisterRequest'
-  responses:
-    200:
-      description: Registration success
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/account/web/register/responses.yaml#/Success'
-    409:
-      description: Registration failed - email already in use
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/account/web/register/responses.yaml#/ConflictError'
-    400:
-      $ref: '../../../openapi.yaml#/components/responses/BadRequestMissingParameters'
-    422:
-      description: Registration request error - provided data is invalid
-      content:
-        application/json:
-          schema:
-            $ref: '../../../models/validation-error.yaml#/ApiValidationErrors'
-          examples:
-            Invalid email:
-              value:
-                code: 422
-                message: Validation failed
-                errors:
-                  - property: email
-                    context: User
-                    errors:
-                      - Email invalid@email@example.com is not valid.
+    description: User registration
+    tags:
+        - Web User Account
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../components/account/web/register/requests.yaml#/RegisterRequest'
+    responses:
+        200:
+            description: Registration success
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/account/web/register/responses.yaml#/Success'
+        409:
+            description: Registration failed - email already in use
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/account/web/register/responses.yaml#/ConflictError'
+        400:
+            $ref: '../../../openapi.yaml#/components/responses/BadRequestMissingParameters'
+        422:
+            description: Registration request error - provided data is invalid
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../models/validation-error.yaml#/ApiValidationErrors'
+                    examples:
+                        Invalid email:
+                            value:
+                                code: 422
+                                message: Validation failed
+                                errors:
+                                    -   property: email
+                                        context: User
+                                        errors:
+                                            - Email invalid@email@example.com is not valid.
 
-            Password confirmation:
-              value:
-                code: 422
-                message: Validation failed
-                errors:
-                  - property: password_confirmation
-                    context: User
-                    errors:
-                      - This value should not be blank.
-                      - Passwords do not match
+                        Password confirmation:
+                            value:
+                                code: 422
+                                message: Validation failed
+                                errors:
+                                    -   property: password_confirmation
+                                        context: User
+                                        errors:
+                                            - This value should not be blank.
+                                            - Passwords do not match
 
-            Mandatory parameter blank:
-              value:
-                code: 422
-                message: Validation failed
-                errors:
-                  - property: password
-                    context: User
-                    errors:
-                      - This value should not be blank.
+                        Mandatory parameter blank:
+                            value:
+                                code: 422
+                                message: Validation failed
+                                errors:
+                                    -   property: password
+                                        context: User
+                                        errors:
+                                            - This value should not be blank.

@@ -1,15 +1,15 @@
 SuccessResponse:
-  properties:
-    items:
-      type: array
-      items:
-        anyOf:
-          - $ref: '../../../../models/user/user.yaml#/User'
-          - $ref: '../../../../models/user/user.yaml#/WebUser'
-          - $ref: '../../../../models/user/user.yaml#/UserLoggedOut'
-    totalItems:
-      type: integer
-      example: 3
-    totalPages:
-      type: integer
-      example: 1
+    properties:
+        items:
+            type: array
+            items:
+                anyOf:
+                    -   $ref: '../../../../models/user/user.yaml#/User'
+                    -   $ref: '../../../../models/user/user.yaml#/WebUser'
+                    -   $ref: '../../../../models/user/user.yaml#/UserLoggedOut'
+        totalItems:
+            type: integer
+            example: 3
+        totalPages:
+            type: integer
+            example: 1

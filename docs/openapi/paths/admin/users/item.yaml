@@ -1,86 +1,86 @@
 patch:
-  description: Update user
-  tags:
-    - Admin User Management
-  security:
-    - bearerAuth: [ ]
-  parameters:
-    - in: path
-      name: userId
-      schema:
-        type: string
-      required: true
-      description: User ID
-  requestBody:
-    content:
-      application/json:
-        schema:
-          $ref: '../../../components/admin/users/update/requests.yaml#/UserUpdateRequest'
-  responses:
-    200:
-      description: User updated successfully
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/admin/users/update/responses.yaml#/Success'
-    401:
-      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
-    422:
-      description: Update request error - provided data is invalid
-      content:
-        application/json:
-          schema:
-            $ref: '../../../models/validation-error.yaml#/ApiValidationErrors'
-          examples:
-            Empty email:
-              value:
-                code: 422
-                message: Validation failed
-                errors:
-                  - property: email
-                    context: User
-                    errors:
-                      - This value should not be blank.
-            Invalid email:
-              value:
-                code: 422
-                message: Validation failed
-                errors:
-                  - property: email
-                    context: User
-                    errors:
-                      - The email @invalid-email is not a valid email.
+    description: Update user
+    tags:
+        - Admin User Management
+    security:
+        -   bearerAuth: [ ]
+    parameters:
+        -   in: path
+            name: userId
+            schema:
+                type: string
+            required: true
+            description: User ID
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../components/admin/users/update/requests.yaml#/UserUpdateRequest'
+    responses:
+        200:
+            description: User updated successfully
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/admin/users/update/responses.yaml#/Success'
+        401:
+            $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
+        422:
+            description: Update request error - provided data is invalid
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../models/validation-error.yaml#/ApiValidationErrors'
+                    examples:
+                        Empty email:
+                            value:
+                                code: 422
+                                message: Validation failed
+                                errors:
+                                    -   property: email
+                                        context: User
+                                        errors:
+                                            - This value should not be blank.
+                        Invalid email:
+                            value:
+                                code: 422
+                                message: Validation failed
+                                errors:
+                                    -   property: email
+                                        context: User
+                                        errors:
+                                            - The email @invalid-email is not a valid email.
 delete:
-  description: Delete user
-  tags:
-    - Admin User Management
-  security:
-    - bearerAuth: [ ]
-  parameters:
-    - in: path
-      name: userId
-      schema:
-        type: string
-      required: true
-      description: User ID
-  requestBody:
-    content:
-      application/json: { }
-  responses:
-    200:
-      description: Delete user success
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/admin/users/delete/responses.yaml#/Success'
-    401:
-      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
-    404:
-      description: User not found
-      content:
-        application/json:
-          schema:
-            $ref: '../../../models/validation-error.yaml#/InvalidRequestError'
-          example:
-            code: 404
-            message: User not found
+    description: Delete user
+    tags:
+        - Admin User Management
+    security:
+        -   bearerAuth: [ ]
+    parameters:
+        -   in: path
+            name: userId
+            schema:
+                type: string
+            required: true
+            description: User ID
+    requestBody:
+        content:
+            application/json: { }
+    responses:
+        200:
+            description: Delete user success
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/admin/users/delete/responses.yaml#/Success'
+        401:
+            $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
+        404:
+            description: User not found
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../models/validation-error.yaml#/InvalidRequestError'
+                    example:
+                        code: 404
+                        message: User not found

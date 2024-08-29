@@ -1,24 +1,24 @@
 SuccessResponse:
-  type: object
-  properties:
-    user:
-      type: object
-      $ref: '../../../../models/user/user.yaml#/User'
-    token: { type: string, example: 'ee66723b915904025c7465590cf1f2e385e2667be9c8b112ff5f515471b5f66e' }
+    type: object
+    properties:
+        user:
+            type: object
+            $ref: '../../../../models/user/user.yaml#/User'
+        token: { type: string, example: 'ee66723b915904025c7465590cf1f2e385e2667be9c8b112ff5f515471b5f66e' }
 
 EmailConflictResponse:
-  type: object
-  properties:
-    code:
-      type: integer
-      example: 409
-    message:
-      type: string
-      example: Validation failed.
-    errors:
-      type: array
-      items:
-        $ref: '../../../../models/validation-error.yaml#/DuplicateEmailValidationError'
+    type: object
+    properties:
+        code:
+            type: integer
+            example: 409
+        message:
+            type: string
+            example: Validation failed.
+        errors:
+            type: array
+            items:
+                $ref: '../../../../models/validation-error.yaml#/DuplicateEmailValidationError'
 
 
 

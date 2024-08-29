@@ -1,12 +1,12 @@
 UpdateRequest:
-  type: object
-  properties:
-    email:
-      type: string
-      example: "jdoe@example.com"
-    first_name:
-      type: string
-      example: "John"
-    last_name:
-      type: string
-      example: "Doe"
+    type: object
+    properties:
+        email:
+            type: string
+            example: "jdoe@example.com"
+        first_name:
+            type: string
+            example: "John"
+        last_name:
+            type: string
+            example: "Doe"

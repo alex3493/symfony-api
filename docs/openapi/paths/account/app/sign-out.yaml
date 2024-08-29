@@ -1,19 +1,19 @@
 post:
-  description: User logout from all devices (sign out)
-  tags:
-    - App User Account
-  security:
-    - bearerAuth: [ ]
-  requestBody:
-    content:
-      application/json: { }
-  responses:
-    200:
-      description: Sign out success
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/account/app/sign-out/responses.yaml#/Success'
-    401:
-      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
+    description: User logout from all devices (sign out)
+    tags:
+        - App User Account
+    security:
+        -   bearerAuth: [ ]
+    requestBody:
+        content:
+            application/json: { }
+    responses:
+        200:
+            description: Sign out success
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/account/app/sign-out/responses.yaml#/Success'
+        401:
+            $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
 

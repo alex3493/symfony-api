@@ -1,25 +1,25 @@
 post:
-  description: User login
-  tags:
-    - App User Account
-  requestBody:
-    content:
-      application/json:
-        schema:
-          $ref: '../../../components/account/app/login/requests.yaml#/LoginRequest'
-  responses:
-    200:
-      description: Login success
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/account/app/login/responses.yaml#/Success'
-    400:
-      $ref: '../../../openapi.yaml#/components/responses/BadRequestMissingParameters'
-    401:
-      description: Invalid credentials
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/account/app/login/responses.yaml#/InvalidCredentials'
+    description: User login
+    tags:
+        - App User Account
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../components/account/app/login/requests.yaml#/LoginRequest'
+    responses:
+        200:
+            description: Login success
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/account/app/login/responses.yaml#/Success'
+        400:
+            $ref: '../../../openapi.yaml#/components/responses/BadRequestMissingParameters'
+        401:
+            description: Invalid credentials
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/account/app/login/responses.yaml#/InvalidCredentials'
 

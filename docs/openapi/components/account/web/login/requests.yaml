@@ -1,12 +1,12 @@
 LoginRequest:
-  type: object
-  properties:
-    email:
-      type: string
-      example: "admin@example.com"
-    password:
-      type: string
-      example: "password"
-  required:
-    - email
-    - password
+    type: object
+    properties:
+        email:
+            type: string
+            example: "admin@example.com"
+        password:
+            type: string
+            example: "password"
+    required:
+        - email
+        - password
