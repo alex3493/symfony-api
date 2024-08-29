@@ -1,4 +1,4 @@
 SuccessResponse:
-  type: object
-  properties:
-    message: { type: string, example: 'User account deleted successfully' }
+    type: object
+    properties:
+        message: { type: string, example: 'User account deleted successfully' }

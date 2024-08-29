@@ -1,20 +1,20 @@
 patch:
-  description: Update user profile
-  tags:
-    - Web User Account
-  requestBody:
-    content:
-      application/json:
-        schema:
-          $ref: '../../../components/account/web/update/requests.yaml#/UpdateRequest'
-  responses:
-    200:
-      description: Update success
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/account/web/update/responses.yaml#/Success'
-    400:
-      $ref: '../../../openapi.yaml#/components/responses/BadRequestMissingParameters'
-    401:
-      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedJWTError'
+    description: Update user profile
+    tags:
+        - Web User Account
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../components/account/web/update/requests.yaml#/UpdateRequest'
+    responses:
+        200:
+            description: Update success
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/account/web/update/responses.yaml#/Success'
+        400:
+            $ref: '../../../openapi.yaml#/components/responses/BadRequestMissingParameters'
+        401:
+            $ref: '../../../openapi.yaml#/components/responses/UnauthorizedJWTError'

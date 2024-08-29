@@ -1,210 +1,210 @@
 User:
-  properties:
-    id:
-      type: string
-      example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
-    email:
-      type: string
-      example: "user@example.com"
-    firstName:
-      type: string
-      example: "John"
-    lastName:
-      type: string
-      example: "Doe"
-    display_name:
-      type: string
-      example: "John Doe"
-    roles:
-      type: array
-      example: [ "ROLE_USER" ]
-    role:
-      type: string
-      example: "ROLE_USER"
-    created_at:
-      type: string
-      example: '2024-06-05T06:48:34+00:00'
-    updated_at:
-      type: string|null
-      example: null
-    deleted_at:
-      type: string|null
-      example: null
-    deleted:
-      type: boolean
-      example: false
-    auth_tokens:
-      type: array
-      items:
-        $ref: "./auth-token.yaml#/AuthToken"
+    properties:
+        id:
+            type: string
+            example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
+        email:
+            type: string
+            example: "user@example.com"
+        firstName:
+            type: string
+            example: "John"
+        lastName:
+            type: string
+            example: "Doe"
+        display_name:
+            type: string
+            example: "John Doe"
+        roles:
+            type: array
+            example: [ "ROLE_USER" ]
+        role:
+            type: string
+            example: "ROLE_USER"
+        created_at:
+            type: string
+            example: '2024-06-05T06:48:34+00:00'
+        updated_at:
+            type: string|null
+            example: null
+        deleted_at:
+            type: string|null
+            example: null
+        deleted:
+            type: boolean
+            example: false
+        auth_tokens:
+            type: array
+            items:
+                $ref: "./auth-token.yaml#/AuthToken"
 
 UserLoggedOut:
-  properties:
-    id:
-      type: string
-      example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
-    email:
-      type: string
-      example: "user-logged-out@example.com"
-    firstName:
-      type: string
-      example: "John"
-    lastName:
-      type: string
-      example: "Doe"
-    display_name:
-      type: string
-      example: "John Doe"
-    roles:
-      type: array
-      example: [ "ROLE_USER" ]
-    role:
-      type: string
-      example: "ROLE_USER"
-    created_at:
-      type: string
-      example: '2024-06-05T06:48:34+00:00'
-    updated_at:
-      type: string|null
-      example: '2024-06-06T06:48:34+00:00'
-    deleted_at:
-      type: string|null
-      example: null
-    deleted:
-      type: boolean
-      example: false
-    auth_tokens:
-      type: array
-      example: [ ]
+    properties:
+        id:
+            type: string
+            example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
+        email:
+            type: string
+            example: "user-logged-out@example.com"
+        firstName:
+            type: string
+            example: "John"
+        lastName:
+            type: string
+            example: "Doe"
+        display_name:
+            type: string
+            example: "John Doe"
+        roles:
+            type: array
+            example: [ "ROLE_USER" ]
+        role:
+            type: string
+            example: "ROLE_USER"
+        created_at:
+            type: string
+            example: '2024-06-05T06:48:34+00:00'
+        updated_at:
+            type: string|null
+            example: '2024-06-06T06:48:34+00:00'
+        deleted_at:
+            type: string|null
+            example: null
+        deleted:
+            type: boolean
+            example: false
+        auth_tokens:
+            type: array
+            example: [ ]
 
 WebUser:
-  properties:
-    id:
-      type: string
-      example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
-    email:
-      type: string
-      example: "user-web@example.com"
-    firstName:
-      type: string
-      example: "Jane"
-    lastName:
-      type: string
-      example: "Doe"
-    display_name:
-      type: string
-      example: "Jane Doe"
-    roles:
-      type: array
-      example: [ "ROLE_USER" ]
-    role:
-      type: string
-      example: "ROLE_USER"
-    created_at:
-      type: string
-      example: '2024-06-05T06:48:34+00:00'
-    updated_at:
-      type: string|null
-      example: null
-    deleted_at:
-      type: string|null
-      example: null
-    deleted:
-      type: boolean
-      example: false
-    auth_tokens:
-      type: array
-      example: [ ]
+    properties:
+        id:
+            type: string
+            example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
+        email:
+            type: string
+            example: "user-web@example.com"
+        firstName:
+            type: string
+            example: "Jane"
+        lastName:
+            type: string
+            example: "Doe"
+        display_name:
+            type: string
+            example: "Jane Doe"
+        roles:
+            type: array
+            example: [ "ROLE_USER" ]
+        role:
+            type: string
+            example: "ROLE_USER"
+        created_at:
+            type: string
+            example: '2024-06-05T06:48:34+00:00'
+        updated_at:
+            type: string|null
+            example: null
+        deleted_at:
+            type: string|null
+            example: null
+        deleted:
+            type: boolean
+            example: false
+        auth_tokens:
+            type: array
+            example: [ ]
 
 UpdatedUser:
-  properties:
-    id:
-      type: string
-      example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
-    email:
-      type: string
-      example: "user-web@example.com"
-    firstName:
-      type: string
-      example: "Jane"
-    lastName:
-      type: string
-      example: "Doe"
-    display_name:
-      type: string
-      example: "Jane Doe"
-    roles:
-      type: array
-      example: [ "ROLE_USER" ]
-    role:
-      type: string
-      example: "ROLE_USER"
-    created_at:
-      type: string
-      example: '2024-06-05T06:48:34+00:00'
-    updated_at:
-      type: string|null
-      example: '2024-06-06T06:48:34+00:00'
-    deleted_at:
-      type: string|null
-      example: null
-    deleted:
-      type: boolean
-      example: false
-    auth_tokens:
-      type: array
-      example: [ ]
+    properties:
+        id:
+            type: string
+            example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
+        email:
+            type: string
+            example: "user-web@example.com"
+        firstName:
+            type: string
+            example: "Jane"
+        lastName:
+            type: string
+            example: "Doe"
+        display_name:
+            type: string
+            example: "Jane Doe"
+        roles:
+            type: array
+            example: [ "ROLE_USER" ]
+        role:
+            type: string
+            example: "ROLE_USER"
+        created_at:
+            type: string
+            example: '2024-06-05T06:48:34+00:00'
+        updated_at:
+            type: string|null
+            example: '2024-06-06T06:48:34+00:00'
+        deleted_at:
+            type: string|null
+            example: null
+        deleted:
+            type: boolean
+            example: false
+        auth_tokens:
+            type: array
+            example: [ ]
 
 SoftDeletedUser:
-  properties:
-    id:
-      type: string
-      example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
-    email:
-      type: string
-      example: "user-deleted@example.com"
-    firstName:
-      type: string
-      example: "Jane"
-    lastName:
-      type: string
-      example: "Doe"
-    display_name:
-      type: string
-      example: "Jane Doe"
-    roles:
-      type: array
-      example: [ "ROLE_USER" ]
-    role:
-      type: string
-      example: "ROLE_USER"
-    created_at:
-      type: string
-      example: '2024-06-05T06:48:34+00:00'
-    updated_at:
-      type: string|null
-      example: '2024-06-06T06:48:34+00:00'
-    deleted_at:
-      type: string|null
-      example: '2024-06-07T06:48:34+00:00'
-    deleted:
-      type: boolean
-      example: true
-    auth_tokens:
-      type: array
-      example: [ ]
+    properties:
+        id:
+            type: string
+            example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
+        email:
+            type: string
+            example: "user-deleted@example.com"
+        firstName:
+            type: string
+            example: "Jane"
+        lastName:
+            type: string
+            example: "Doe"
+        display_name:
+            type: string
+            example: "Jane Doe"
+        roles:
+            type: array
+            example: [ "ROLE_USER" ]
+        role:
+            type: string
+            example: "ROLE_USER"
+        created_at:
+            type: string
+            example: '2024-06-05T06:48:34+00:00'
+        updated_at:
+            type: string|null
+            example: '2024-06-06T06:48:34+00:00'
+        deleted_at:
+            type: string|null
+            example: '2024-06-07T06:48:34+00:00'
+        deleted:
+            type: boolean
+            example: true
+        auth_tokens:
+            type: array
+            example: [ ]
 
 GreetingAuthor:
-  properties:
-    id:
-      type: string
-      example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
-    firstName:
-      type: string
-      example: "John"
-    lastName:
-      type: string
-      example: "Doe"
-    display_name:
-      type: string
-      example: "John Doe"
+    properties:
+        id:
+            type: string
+            example: "018f2618-7f89-7437-a561-57ea5e5ad46a"
+        firstName:
+            type: string
+            example: "John"
+        lastName:
+            type: string
+            example: "Doe"
+        display_name:
+            type: string
+            example: "John Doe"

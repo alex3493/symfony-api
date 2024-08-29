@@ -1,6 +1,6 @@
 SuccessResponse:
-  type: object
-  properties:
-    user:
-      type: object
-      $ref: '../../../../models/user/user.yaml#/UpdatedUser'
+    type: object
+    properties:
+        user:
+            type: object
+            $ref: '../../../models/user/user.yaml#/UpdatedUser'

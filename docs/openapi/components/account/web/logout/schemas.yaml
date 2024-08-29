@@ -1,6 +1,6 @@
 SuccessResponse:
-  type: object
-  properties:
-    message: { type: string, example: 'You have successfully logged out' }
+    type: object
+    properties:
+        message: { type: string, example: 'You have successfully logged out' }
 
 

@@ -1,23 +1,23 @@
 SuccessResponse:
-  type: object
-  properties:
-    user:
-      type: object
-      $ref: '../../../../models/user/user.yaml#/WebUser'
+    type: object
+    properties:
+        user:
+            type: object
+            $ref: '../../../../models/user/user.yaml#/WebUser'
 
 EmailConflictResponse:
-  type: object
-  properties:
-    code:
-      type: integer
-      example: 409
-    message:
-      type: string
-      example: Validation failed.
-    errors:
-      type: array
-      items:
-        $ref: '../../../../models/validation-error.yaml#/DuplicateEmailValidationError'
+    type: object
+    properties:
+        code:
+            type: integer
+            example: 409
+        message:
+            type: string
+            example: Validation failed.
+        errors:
+            type: array
+            items:
+                $ref: '../../../../models/validation-error.yaml#/DuplicateEmailValidationError'
 
 
 

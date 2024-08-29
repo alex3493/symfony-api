@@ -1,34 +1,34 @@
 patch:
-  description: Un-delete (restore) user
-  tags:
-    - Admin User Management
-  security:
-    - bearerAuth: [ ]
-  parameters:
-    - in: path
-      name: userId
-      schema:
-        type: string
-      required: true
-      description: User ID
-  requestBody:
-    content:
-      application/json: { }
-  responses:
-    200:
-      description: Restore user success
-      content:
-        application/json:
-          schema:
-            $ref: '../../../components/admin/users/restore/responses.yaml#/Success'
-    401:
-      $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
-    404:
-      description: User not found
-      content:
-        application/json:
-          schema:
-            $ref: '../../../models/validation-error.yaml#/InvalidRequestError'
-          example:
-            code: 404
-            message: User not found
+    description: Un-delete (restore) user
+    tags:
+        - Admin User Management
+    security:
+        -   bearerAuth: [ ]
+    parameters:
+        -   in: path
+            name: userId
+            schema:
+                type: string
+            required: true
+            description: User ID
+    requestBody:
+        content:
+            application/json: { }
+    responses:
+        200:
+            description: Restore user success
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../components/admin/users/restore/responses.yaml#/Success'
+        401:
+            $ref: '../../../openapi.yaml#/components/responses/UnauthorizedNotLoggedInError'
+        404:
+            description: User not found
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../models/validation-error.yaml#/InvalidRequestError'
+                    example:
+                        code: 404
+                        message: User not found

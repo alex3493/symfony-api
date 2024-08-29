@@ -60,7 +60,7 @@ class ResetPasswordService implements ResetPasswordServiceInterface
             throw new FormValidationException('Password reset token is invalid or wrong email provided.', [
                 [
                     'property' => 'email',
-                    'errors' => ['Provided email is invalid'],
+                    'errors' => ['Provided email is invalid or reset token not found'],
                     'context' => 'User',
                 ],
             ]);

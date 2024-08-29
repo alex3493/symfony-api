@@ -1,15 +1,15 @@
 ChangePasswordRequest:
-  properties:
-    current_password:
-      type: string
-      example: 'password'
-    password:
-      type: string
-      example: 'new-password'
-    password_confirmation:
-      type: string
-      example: 'new-password'
-  required:
-    - current_password
-    - password
-    - password_confirmation
+    properties:
+        current_password:
+            type: string
+            example: 'password'
+        password:
+            type: string
+            example: 'new-password'
+        password_confirmation:
+            type: string
+            example: 'new-password'
+    required:
+        - current_password
+        - password
+        - password_confirmation

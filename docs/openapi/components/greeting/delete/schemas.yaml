@@ -1,6 +1,0 @@
-SuccessResponse:
-  type: object
-  properties:
-    message:
-      type: string
-      example: 'Greeting deleted'

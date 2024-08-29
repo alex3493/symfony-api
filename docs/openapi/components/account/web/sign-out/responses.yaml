@@ -1,3 +1,3 @@
 Success:
-  type: object
-  $ref: './schemas.yaml#/SuccessResponse'
+    type: object
+    $ref: './schemas.yaml#/SuccessResponse'

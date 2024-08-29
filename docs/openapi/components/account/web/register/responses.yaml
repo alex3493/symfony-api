@@ -1,9 +1,9 @@
 Success:
-  type: object
-  $ref: './schemas.yaml#/SuccessResponse'
+    type: object
+    $ref: './schemas.yaml#/SuccessResponse'
 ConflictError:
-  type: object
-  $ref: './schemas.yaml#/EmailConflictResponse'
+    type: object
+    $ref: './schemas.yaml#/EmailConflictResponse'
 
 
 

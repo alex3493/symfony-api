@@ -1,21 +1,21 @@
 UserCreateRequest:
-  type: object
-  properties:
-    email:
-      type: string
-      example: 'new-user@example.com'
-    password:
-      type: string
-      example: 'secret-password'
-    first_name:
-      type: string
-      example: 'John'
-    last_name:
-      type: string
-      example: 'Smith'
-    role:
-      type: string
-      example: 'ROLE_USER'
-  required:
-    - email
-    - password
+    type: object
+    properties:
+        email:
+            type: string
+            example: 'new-user@example.com'
+        password:
+            type: string
+            example: 'secret-password'
+        first_name:
+            type: string
+            example: 'John'
+        last_name:
+            type: string
+            example: 'Smith'
+        role:
+            type: string
+            example: 'ROLE_USER'
+    required:
+        - email
+        - password
