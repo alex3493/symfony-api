@@ -23,7 +23,6 @@ use App\Module\User\Domain\ResetPasswordToken;
 use App\Module\User\Domain\User;
 use App\Tests\DatabaseTestCase;
 use Symfony\Component\Messenger\Exception\ValidationFailedException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserTest extends DatabaseTestCase
 {
@@ -495,6 +494,7 @@ class UserTest extends DatabaseTestCase
         $container = static::getContainer();
         $commandBus = $container->get(CommandBus::class);
 
+        // "Invalid email" case.
         $command = new RequestResetPasswordCommand('@invalid-email');
 
         try {
@@ -506,6 +506,68 @@ class UserTest extends DatabaseTestCase
             $this->assertCount(1, $violations);
             $this->assertEquals('email', $violations[0]->getPropertyPath());
         }
+
+        // Seed a soft-deleted user.
+        static::$userSeeder->seedUser([
+            'email' => 'deleted@example.com',
+            'deleted' => true,
+        ], [], true);
+
+        $resetPasswordTokenRepository = $this->getRepository(ResetPasswordToken::class);
+
+        // "User soft-deleted" case.
+        $command = new RequestResetPasswordCommand('deleted@example.com');
+
+        $commandBus->dispatch($command);
+
+        $this->transport('async')->queue()->assertNotEmpty();
+
+        $messages = $this->transport('async')->queue()->messages();
+
+        $this->assertInstanceOf(RequestResetPasswordCommand::class, $messages[0]);
+
+        // Check that queued message carries correct payload.
+        $this->assertEquals('deleted@example.com', $messages[0]->email());
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
+
+        // Check that we haven't created a reset token.
+        $tokens = $resetPasswordTokenRepository->findAll();
+
+        $this->assertCount(0, $tokens);
+
+        // Check that no emails were sent.
+        $this->assertEmailCount(0);
+
+        // "Email not registered" case.
+        $command = new RequestResetPasswordCommand('not-existing@example.com');
+
+        $commandBus->dispatch($command);
+
+        $this->transport('async')->queue()->assertNotEmpty();
+
+        $messages = $this->transport('async')->queue()->messages();
+
+        $this->assertInstanceOf(RequestResetPasswordCommand::class, $messages[0]);
+
+        // Check that queued message carries correct payload.
+        $this->assertEquals('not-existing@example.com', $messages[0]->email());
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
+
+        // Check that we haven't created a reset token.
+        $tokens = $resetPasswordTokenRepository->findAll();
+
+        $this->assertCount(0, $tokens);
+
+        // Check that no emails were sent.
+        $this->assertEmailCount(0);
     }
 
     public function test_repeated_request_reset_password_command(): void

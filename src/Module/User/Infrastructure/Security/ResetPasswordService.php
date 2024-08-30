@@ -99,14 +99,23 @@ class ResetPasswordService implements ResetPasswordServiceInterface
 
     /**
      * @param string $email
-     * @return \App\Module\User\Domain\ResetPasswordToken
+     * @return void
+     * @throws \Doctrine\ORM\Exception\NotSupported
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Random\RandomException
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function generateResetPasswordToken(string $email): ResetPasswordToken
+    public function generateResetPasswordToken(string $email): void
     {
+        $userRepository = $this->repository->getRelatedRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => $email]);
+
+        // Only proceed if email provided belongs to a valid user. Soft-deleted users cannot request password reset.
+        if (is_null($user)) {
+            return;
+        }
+
         $token = bin2hex(random_bytes(32));
 
         $expiresAfter = $this->params->get('app.reset_password_token_expiration_minutes');
@@ -123,8 +132,6 @@ class ResetPasswordService implements ResetPasswordServiceInterface
         $this->repository->save($resetToken);
 
         $this->sendResetPasswordEmail($resetToken);
-
-        return $resetToken;
     }
 
     /**

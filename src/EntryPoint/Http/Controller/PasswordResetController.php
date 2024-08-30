@@ -33,7 +33,7 @@ class PasswordResetController extends AbstractApiController
 
         $commandBus->dispatch($command);
 
-        return $this->json(['message' => 'Reset link sent to '.$jsonData['email']]);
+        return $this->json(['message' => 'If '.$jsonData['email'].' belongs to a registered user, reset password email has been sent']);
     }
 
     /**
