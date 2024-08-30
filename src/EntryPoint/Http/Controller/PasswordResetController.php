@@ -6,7 +6,7 @@ namespace App\EntryPoint\Http\Controller;
 use App\EntryPoint\Http\Contract\AbstractApiController;
 use App\Module\Shared\Domain\Bus\Command\CommandBus;
 use App\Module\User\Application\ResetPassword\PerformResetPassword\PerformResetPasswordCommand;
-use App\Module\User\Application\ResetPassword\RequestResetPassword\RequestResetPasswordMessage;
+use App\Module\User\Application\ResetPassword\RequestResetPassword\RequestResetPasswordCommand;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,7 +29,7 @@ class PasswordResetController extends AbstractApiController
             'email',
         ]);
 
-        $command = new RequestResetPasswordMessage($jsonData['email']);
+        $command = new RequestResetPasswordCommand($jsonData['email']);
 
         $commandBus->dispatch($command);
 

@@ -6,7 +6,7 @@ namespace App\Module\User\Application\ResetPassword\RequestResetPassword;
 use App\Module\Shared\Domain\Bus\Command\AsyncCommand;
 use App\Module\Shared\Domain\Bus\Command\ValidatedMessageInterface;
 
-class RequestResetPasswordMessage implements AsyncCommand, ValidatedMessageInterface
+class RequestResetPasswordCommand implements AsyncCommand, ValidatedMessageInterface
 {
     private string $email;
 

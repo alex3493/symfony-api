@@ -15,7 +15,7 @@ use App\Module\User\Application\LogoutWebUser\LogoutWebUserCommand;
 use App\Module\User\Application\RegisterAppUser\RegisterAppUserCommand;
 use App\Module\User\Application\RegisterWebUser\RegisterWebUserCommand;
 use App\Module\User\Application\ResetPassword\PerformResetPassword\PerformResetPasswordCommand;
-use App\Module\User\Application\ResetPassword\RequestResetPassword\RequestResetPasswordMessage;
+use App\Module\User\Application\ResetPassword\RequestResetPassword\RequestResetPasswordCommand;
 use App\Module\User\Application\SignOutAppUser\SignOutAppUserCommand;
 use App\Module\User\Application\UpdateUserProfile\UpdateUserProfileCommand;
 use App\Module\User\Domain\AuthToken;
@@ -459,7 +459,7 @@ class UserTest extends DatabaseTestCase
 
         $user = static::$userSeeder->seedUser([], [], true);
 
-        $command = new RequestResetPasswordMessage($user['user']->getEmail());
+        $command = new RequestResetPasswordCommand($user['user']->getEmail());
 
         $commandBus->dispatch($command);
 
@@ -467,7 +467,7 @@ class UserTest extends DatabaseTestCase
 
         $messages = $this->transport('async')->queue()->messages();
 
-        $this->assertInstanceOf(RequestResetPasswordMessage::class, $messages[0]);
+        $this->assertInstanceOf(RequestResetPasswordCommand::class, $messages[0]);
 
         // Check that queued message carries correct payload.
         $this->assertEquals('test@example.com', $messages[0]->email());
@@ -495,7 +495,7 @@ class UserTest extends DatabaseTestCase
         $container = static::getContainer();
         $commandBus = $container->get(CommandBus::class);
 
-        $command = new RequestResetPasswordMessage('@invalid-email');
+        $command = new RequestResetPasswordCommand('@invalid-email');
 
         try {
             $commandBus->dispatch($command);
@@ -515,7 +515,7 @@ class UserTest extends DatabaseTestCase
 
         $user = static::$userSeeder->seedUser([], [], true);
 
-        $command = new RequestResetPasswordMessage($user['user']->getEmail());
+        $command = new RequestResetPasswordCommand($user['user']->getEmail());
 
         $commandBus->dispatch($command);
 
@@ -523,7 +523,7 @@ class UserTest extends DatabaseTestCase
 
         $messages = $this->transport('async')->queue()->messages();
 
-        $this->assertInstanceOf(RequestResetPasswordMessage::class, $messages[0]);
+        $this->assertInstanceOf(RequestResetPasswordCommand::class, $messages[0]);
 
         // Check that queued message carries correct payload.
         $this->assertEquals('test@example.com', $messages[0]->email());

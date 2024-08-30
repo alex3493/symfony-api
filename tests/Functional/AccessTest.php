@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Module\User\Application\ResetPassword\RequestResetPassword\RequestResetPasswordMessage;
+use App\Module\User\Application\ResetPassword\RequestResetPassword\RequestResetPasswordCommand;
 use App\Module\User\Domain\ResetPasswordToken;
 use App\Tests\DatabaseTestCase;
 
@@ -143,7 +143,7 @@ class AccessTest extends DatabaseTestCase
 
         $messages = $this->transport('async')->queue()->messages();
 
-        $this->assertInstanceOf(RequestResetPasswordMessage::class, $messages[0]);
+        $this->assertInstanceOf(RequestResetPasswordCommand::class, $messages[0]);
 
         // Check that queued message carries correct payload.
         $this->assertEquals($user['user']->getEmail(), $messages[0]->email());

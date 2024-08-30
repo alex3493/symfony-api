@@ -15,7 +15,7 @@ class RequestResetPasswordCommandHandler implements CommandHandler
         $this->service = $service;
     }
 
-    public function __invoke(RequestResetPasswordMessage $command): void
+    public function __invoke(RequestResetPasswordCommand $command): void
     {
         $this->service->generateResetPasswordToken($command->email());
     }

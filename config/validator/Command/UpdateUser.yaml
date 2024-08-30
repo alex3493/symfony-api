@@ -17,7 +17,7 @@ App\Module\User\Application\ChangePassword\ChangePasswordCommand:
                     propertyPath: password
                     message: 'Passwords do not match.'
 
-App\Module\User\Application\ResetPassword\RequestResetPassword\RequestResetPasswordMessage:
+App\Module\User\Application\ResetPassword\RequestResetPassword\RequestResetPasswordCommand:
     properties:
         email:
             -   Email:
