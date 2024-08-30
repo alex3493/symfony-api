@@ -139,6 +139,11 @@ class AccessTest extends DatabaseTestCase
 
         $this->assertResponseIsSuccessful();
 
+        $response = json_decode($client->getResponse()->getContent());
+
+        $this->assertEquals('If test@example.com belongs to a registered user, reset password email has been sent',
+            $response->message);
+
         $this->transport('async')->queue()->assertNotEmpty();
 
         $messages = $this->transport('async')->queue()->messages();
