@@ -2,6 +2,8 @@ patch:
     description: Update user profile
     tags:
         - App User Account
+    security:
+        -   bearerAuth: [ ]
     requestBody:
         content:
             application/json:

@@ -87,7 +87,12 @@ class ExceptionListener
                 $response->setStatusCode($exception->getStatusCode());
                 $response->headers->replace($exception->getHeaders());
             } else {
-                $response->setStatusCode($exception->getCode() ?: Response::HTTP_INTERNAL_SERVER_ERROR);
+                $code = $exception->getCode();
+                // Make sure we set a valid status code.
+                if (! array_key_exists($code, Response::$statusTexts)) {
+                    $code = Response::HTTP_INTERNAL_SERVER_ERROR;
+                }
+                $response->setStatusCode($code);
             }
 
             // Send the modified response object to the event.
@@ -108,7 +113,7 @@ class ExceptionListener
      */
     private function validationExceptionFromMessenger(ValidationFailedException $e): ValidationException
     {
-        $context = 'General';
+        $context = 'Global';
 
         foreach ($e->getViolations() as $violation) {
             // If any of violation messages implements ValidatedMessageInterface we read context from message.

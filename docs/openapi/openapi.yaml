@@ -56,9 +56,13 @@ paths:
         $ref: 'paths/admin/users/restore.yaml'
 
     # Reset password endpoints.
-    /api/forgot-password:
+    /api/app/forgot-password:
         $ref: 'paths/account/forgot-password.yaml'
-    /api/reset-password:
+    /api/app/reset-password:
+        $ref: 'paths/account/reset-password.yaml'
+    /api/web/forgot-password:
+            $ref: 'paths/account/forgot-password.yaml'
+    /api/web/reset-password:
         $ref: 'paths/account/reset-password.yaml'
 
 components:
