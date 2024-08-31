@@ -113,7 +113,7 @@ class ExceptionListener
      */
     private function validationExceptionFromMessenger(ValidationFailedException $e): ValidationException
     {
-        $context = 'General';
+        $context = 'Global';
 
         foreach ($e->getViolations() as $violation) {
             // If any of violation messages implements ValidatedMessageInterface we read context from message.
