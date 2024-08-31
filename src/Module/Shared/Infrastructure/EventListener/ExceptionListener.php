@@ -89,7 +89,7 @@ class ExceptionListener
             } else {
                 $code = $exception->getCode();
                 // Make sure we set a valid status code.
-                if (!array_key_exists($code, Response::$statusTexts)) {
+                if (! array_key_exists($code, Response::$statusTexts)) {
                     $code = Response::HTTP_INTERNAL_SERVER_ERROR;
                 }
                 $response->setStatusCode($code);
