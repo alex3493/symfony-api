@@ -55,7 +55,8 @@ security:
     access_control:
         - { path: ^/api/web/(register|login|token/refresh), roles: PUBLIC_ACCESS }
         - { path: ^/api/app/(login|register), roles: PUBLIC_ACCESS }
-        - { path: ^/api/(forgot-password|reset-password), roles: PUBLIC_ACCESS }
+        - { path: ^/api/web/(forgot-password|reset-password), roles: PUBLIC_ACCESS }
+        - { path: ^/api/app/(forgot-password|reset-password), roles: PUBLIC_ACCESS }
         - { path: ^/api/web/, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/app/, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/admin/, roles: [ ROLE_ADMIN ] }

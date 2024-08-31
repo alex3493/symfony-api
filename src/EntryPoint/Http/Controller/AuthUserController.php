@@ -202,6 +202,8 @@ class AuthUserController extends AbstractApiController
             'email',
             ['firstName', 'first_name'],
             ['lastName', 'last_name'],
+        ], [
+            'email',
         ]);
 
         $command = new UpdateUserProfileCommand($userId, $jsonData['email'], $jsonData['firstName'],

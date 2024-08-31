@@ -20,7 +20,8 @@ class PasswordResetController extends AbstractApiController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @throws \App\Module\Shared\Domain\Exception\BadRequestDomainException
      */
-    #[Route('/forgot-password', name: 'forgot-password', methods: ['POST'])]
+    #[Route('/web/forgot-password', name: 'web-forgot-password', methods: ['POST'])]
+    #[Route('/app/forgot-password', name: 'app-forgot-password', methods: ['POST'])]
     public function requestResetPassword(Request $request, CommandBus $commandBus): JsonResponse
     {
         $jsonData = $this->getRequestData($request, [
@@ -42,7 +43,8 @@ class PasswordResetController extends AbstractApiController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @throws \App\Module\Shared\Domain\Exception\BadRequestDomainException
      */
-    #[Route('/reset-password', name: 'reset-password', methods: ['POST'])]
+    #[Route('/web/reset-password', name: 'web-reset-password', methods: ['POST'])]
+    #[Route('/app/reset-password', name: 'app-reset-password', methods: ['POST'])]
     public function resetPassword(Request $request, CommandBus $commandBus): JsonResponse
     {
         $jsonData = $this->getRequestData($request, [

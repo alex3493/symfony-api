@@ -133,7 +133,7 @@ class AccessTest extends DatabaseTestCase
 
         $client = self::getReusableClient();
 
-        $client->jsonRequest('POST', '/api/forgot-password', [
+        $client->jsonRequest('POST', '/api/app/forgot-password', [
             'email' => $user['user']->getEmail(),
         ]);
 
@@ -176,7 +176,7 @@ class AccessTest extends DatabaseTestCase
     {
         $client = self::getReusableClient();
 
-        $client->jsonRequest('POST', '/api/forgot-password', [
+        $client->jsonRequest('POST', '/api/app/forgot-password', [
             'email' => '@invalid-email',
         ]);
 
@@ -197,7 +197,7 @@ class AccessTest extends DatabaseTestCase
 
         $client = self::getReusableClient();
 
-        $client->jsonRequest('POST', '/api/reset-password', [
+        $client->jsonRequest('POST', '/api/app/reset-password', [
             'email' => $user['user']->getEmail(),
             'reset_token' => $passwordResetToken->getResetToken(),
             'password' => 'new-password',

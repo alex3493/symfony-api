@@ -54,7 +54,8 @@ Depending on the authentication mode all subsequent requests should use one of t
 - `^/api/app/` - Auth token (mobile app)
 - `^/api/web/` - JWT (browser)
 - `^/api/admin/` - JWT (browser), endpoints for admin users only
-- `^/api/(forgot-password|reset-password)` - special endpoints for all users who wish to reset their password
+- `^/api/app/(forgot-password|reset-password)` - special endpoints for mobile app users who wish to reset their passwords
+- `^/api/web/(forgot-password|reset-password)` - special endpoints for Web SPA users who wish to reset their passwords
 
 **Account actions (auth token):**
 
