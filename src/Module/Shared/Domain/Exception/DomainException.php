@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\Shared\Domain\Exception;
 
-use Exception;
-
-abstract class DomainException extends Exception
+abstract class DomainException extends \Exception
 {
     public static array $codes = [
         'BAD_REQUEST' => 400,
