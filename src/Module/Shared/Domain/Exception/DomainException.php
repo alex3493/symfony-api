@@ -13,5 +13,6 @@ abstract class DomainException extends Exception
         'UNPROCESSABLE_ENTITY' => 422,
         'UNAUTHORIZED' => 401,
         'FORBIDDEN' => 403,
+        'CONFLICT' => 409,
     ];
 }

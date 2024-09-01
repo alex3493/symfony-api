@@ -6,7 +6,7 @@ DuplicateEmailValidationError:
             example: "email"
         error:
             type: string
-            example: "Email already in use"
+            example: "Email already taken"
         context:
             type: string
             example: "User"

@@ -5,7 +5,6 @@ namespace App\Module\Shared\Domain\Exception;
 
 use ReflectionClass;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
@@ -31,7 +30,7 @@ class ValidationException extends DomainException
 
             if ($violation->getConstraint() instanceof UniqueEntity) {
                 // If at least one of violations is caused by duplicate entry, we update the code.
-                $code = Response::HTTP_CONFLICT;
+                $code = DomainException::$codes['CONFLICT'];
             }
 
             // We group errors by context and property name.
