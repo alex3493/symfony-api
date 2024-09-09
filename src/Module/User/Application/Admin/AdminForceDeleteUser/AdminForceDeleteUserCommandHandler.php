@@ -7,8 +7,11 @@ use App\Module\Shared\Application\MessageResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 
-class AdminForceDeleteUserCommandHandler implements CommandHandler
+readonly class AdminForceDeleteUserCommandHandler implements CommandHandler
 {
+    /**
+     * @param \App\Module\User\Domain\Contract\UserCommandServiceInterface $service
+     */
     public function __construct(private UserCommandServiceInterface $service)
     {
     }

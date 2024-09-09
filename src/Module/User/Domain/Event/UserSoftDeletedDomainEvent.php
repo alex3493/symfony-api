@@ -14,7 +14,7 @@ class UserSoftDeletedDomainEvent extends DomainEvent implements AsyncDomainEvent
      * @param string|null $eventId
      * @param \DateTime|null $occurredOn
      */
-    public function __construct(private User $user, string $eventId = null, \DateTime $occurredOn = null)
+    public function __construct(private readonly User $user, string $eventId = null, \DateTime $occurredOn = null)
     {
         parent::__construct($eventId, $occurredOn);
     }

@@ -23,7 +23,8 @@ readonly class UserCommandService implements UserCommandServiceInterface
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
      */
     public function __construct(
-        private UserRepository $repository, private UserPasswordHasherInterface $passwordHasher, private ValidatorInterface $validator
+        private UserRepository $repository, private UserPasswordHasherInterface $passwordHasher,
+        private ValidatorInterface $validator
     ) {
     }
 

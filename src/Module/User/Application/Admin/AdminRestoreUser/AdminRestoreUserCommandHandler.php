@@ -7,7 +7,7 @@ use App\Module\Shared\Application\UserResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 
-class AdminRestoreUserCommandHandler implements CommandHandler
+readonly class AdminRestoreUserCommandHandler implements CommandHandler
 {
     public function __construct(private UserCommandServiceInterface $service)
     {

@@ -7,6 +7,9 @@ use App\Module\Shared\Domain\Bus\Command\Command;
 
 readonly class AdminForceDeleteUserCommand implements Command
 {
+    /**
+     * @param string $userId
+     */
     public function __construct(private string $userId)
     {
     }

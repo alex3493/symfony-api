@@ -18,6 +18,9 @@ readonly class MessengerQueryBus implements QueryBus
         handle as handleQuery;
     }
 
+    /**
+     * @param \Symfony\Component\Messenger\MessageBusInterface $queryBus
+     */
     public function __construct(private MessageBusInterface $queryBus)
     {
         $this->messageBus = $queryBus;

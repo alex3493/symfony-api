@@ -9,6 +9,9 @@ use Symfony\Component\Mercure\Update;
 
 readonly class MercureUpdateMessageHandler
 {
+    /**
+     * @param \Symfony\Component\Mercure\HubInterface $hub
+     */
     public function __construct(private HubInterface $hub)
     {
     }

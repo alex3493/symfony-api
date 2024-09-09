@@ -7,13 +7,13 @@ use App\Module\Shared\Application\PaginatedListResponse;
 use App\Module\Shared\Domain\Bus\Query\QueryHandler;
 use App\Module\User\Domain\Contract\UserQueryServiceInterface;
 
-class AdminUserListQueryHandler implements QueryHandler
+readonly class AdminUserListQueryHandler implements QueryHandler
 {
-    private UserQueryServiceInterface $service;
-
-    public function __construct(UserQueryServiceInterface $service)
+    /**
+     * @param \App\Module\User\Domain\Contract\UserQueryServiceInterface $service
+     */
+    public function __construct(private UserQueryServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     public function __invoke(AdminUserListQuery $query): PaginatedListResponse

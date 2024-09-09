@@ -7,7 +7,7 @@ use App\Module\Shared\Application\UserResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 
-class UpdateUserProfileCommandHandler implements CommandHandler
+readonly class UpdateUserProfileCommandHandler implements CommandHandler
 {
     /**
      * @param \App\Module\User\Domain\Contract\UserCommandServiceInterface $service

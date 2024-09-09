@@ -9,6 +9,9 @@ use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 
 readonly class AdminUpdateUserCommandHandler implements CommandHandler
 {
+    /**
+     * @param \App\Module\User\Domain\Contract\UserCommandServiceInterface $service
+     */
     public function __construct(private UserCommandServiceInterface $service)
     {
     }

@@ -8,6 +8,9 @@ use App\Module\User\Domain\Contract\AuthUserServiceInterface;
 
 readonly class RegisterAppUserCommandHandler implements CommandHandler
 {
+    /**
+     * @param \App\Module\User\Domain\Contract\AuthUserServiceInterface $service
+     */
     public function __construct(private AuthUserServiceInterface $service)
     {
     }

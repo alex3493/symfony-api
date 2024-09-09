@@ -10,6 +10,10 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class MessageBusDispatcherDomainEventPublisher implements DomainEventPublisherInterface
 {
+    /**
+     * @param \Symfony\Component\Messenger\MessageBusInterface $dispatcher
+     * @param \Psr\Log\LoggerInterface $logger
+     */
     public function __construct(
         private MessageBusInterface $dispatcher, private LoggerInterface $logger
     ) {

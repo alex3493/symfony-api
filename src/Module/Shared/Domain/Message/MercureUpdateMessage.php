@@ -5,6 +5,10 @@ namespace App\Module\Shared\Domain\Message;
 
 readonly class MercureUpdateMessage implements AsyncMessageInterface
 {
+    /**
+     * @param string $topic
+     * @param array $payload
+     */
     public function __construct(
         private string $topic, private array $payload
     ) {

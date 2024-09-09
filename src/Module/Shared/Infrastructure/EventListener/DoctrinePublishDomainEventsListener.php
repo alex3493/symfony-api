@@ -12,6 +12,9 @@ use Doctrine\ORM\Events;
 #[AsDoctrineListener(event: Events::onFlush)]
 readonly class DoctrinePublishDomainEventsListener
 {
+    /**
+     * @param \App\Module\Shared\Domain\Event\DomainEventPublisherInterface $publisher
+     */
     public function __construct(private DomainEventPublisherInterface $publisher)
     {
     }

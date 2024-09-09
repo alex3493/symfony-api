@@ -16,6 +16,9 @@ use Symfony\Component\Messenger\Exception\ValidationFailedException;
 
 readonly class ExceptionListener
 {
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
     public function __construct(private LoggerInterface $logger)
     {
     }
