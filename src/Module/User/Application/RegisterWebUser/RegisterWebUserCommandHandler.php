@@ -7,13 +7,13 @@ use App\Module\Shared\Application\UserResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 
-class RegisterWebUserCommandHandler implements CommandHandler
+readonly class RegisterWebUserCommandHandler implements CommandHandler
 {
-    private UserCommandServiceInterface $service;
-
-    public function __construct(UserCommandServiceInterface $service)
+    /**
+     * @param \App\Module\User\Domain\Contract\UserCommandServiceInterface $service
+     */
+    public function __construct(private UserCommandServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     /**
@@ -25,9 +25,6 @@ class RegisterWebUserCommandHandler implements CommandHandler
         $user = $this->service->create($command->email(), $command->password(), $command->firstName(),
             $command->lastName());
 
-        $response = new UserResponse();
-        $response->user = $user;
-
-        return $response;
+        return new UserResponse($user);
     }
 }

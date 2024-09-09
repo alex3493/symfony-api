@@ -9,11 +9,8 @@ use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 
 class AdminForceDeleteUserCommandHandler implements CommandHandler
 {
-    private UserCommandServiceInterface $service;
-
-    public function __construct(UserCommandServiceInterface $service)
+    public function __construct(private UserCommandServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     public function __invoke(AdminForceDeleteUserCommand $command): MessageResponse

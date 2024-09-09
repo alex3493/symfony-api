@@ -3,18 +3,15 @@ declare(strict_types=1);
 
 namespace App\Module\Shared\Domain\Event;
 
-use App\Module\Shared\Domain\ValueObject\EntityId;
-
 abstract class DomainEvent
 {
-    private string $eventId;
-
-    private \DateTime $occurredOn;
-
-    public function __construct(?string $eventId = null, ?\DateTime $occurredOn = null)
-    {
-        $this->eventId = $eventId ?: EntityId::create()->getValue();
-        $this->occurredOn = $occurredOn ?: new \DateTime();
+    /**
+     * @param string|null $eventId
+     * @param \DateTime|null $occurredOn
+     */
+    public function __construct(
+        private readonly ?string $eventId = null, private readonly ?\DateTime $occurredOn = null
+    ) {
     }
 
     abstract public static function eventName(): string;

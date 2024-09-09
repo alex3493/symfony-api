@@ -7,13 +7,10 @@ use App\Module\Shared\Application\MessageResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 
-class LogoutWebUserCommandHandler implements CommandHandler
+readonly class LogoutWebUserCommandHandler implements CommandHandler
 {
-    private UserCommandServiceInterface $service;
-
-    public function __construct(UserCommandServiceInterface $service)
+    public function __construct(private UserCommandServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     public function __invoke(LogoutWebUserCommand $command): MessageResponse

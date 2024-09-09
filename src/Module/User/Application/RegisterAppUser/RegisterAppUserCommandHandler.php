@@ -6,13 +6,10 @@ namespace App\Module\User\Application\RegisterAppUser;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\AuthUserServiceInterface;
 
-class RegisterAppUserCommandHandler implements CommandHandler
+readonly class RegisterAppUserCommandHandler implements CommandHandler
 {
-    private AuthUserServiceInterface $service;
-
-    public function __construct(AuthUserServiceInterface $service)
+    public function __construct(private AuthUserServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     /**
@@ -24,10 +21,6 @@ class RegisterAppUserCommandHandler implements CommandHandler
         [$user, $token] = $this->service->register($command->email(), $command->password(), $command->firstName(),
             $command->lastName(), $command->deviceName());
 
-        $response = new RegisterAppUserResponse();
-        $response->user = $user;
-        $response->token = $token;
-
-        return $response;
+        return new RegisterAppUserResponse($user, $token);
     }
 }

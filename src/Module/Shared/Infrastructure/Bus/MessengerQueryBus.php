@@ -12,15 +12,13 @@ use Symfony\Component\Messenger\Exception\NoHandlerForMessageException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class MessengerQueryBus implements QueryBus
+readonly class MessengerQueryBus implements QueryBus
 {
     use HandleTrait {
         handle as handleQuery;
     }
 
-    private MessageBusInterface $messageBus;
-
-    public function __construct(MessageBusInterface $queryBus)
+    public function __construct(private MessageBusInterface $queryBus)
     {
         $this->messageBus = $queryBus;
     }

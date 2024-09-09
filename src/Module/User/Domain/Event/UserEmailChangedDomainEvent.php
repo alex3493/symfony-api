@@ -9,12 +9,6 @@ use App\Module\User\Domain\User;
 
 class UserEmailChangedDomainEvent extends DomainEvent implements AsyncDomainEventInterface
 {
-    private User $user;
-
-    private string $newEmail;
-
-    private string $oldEmail;
-
     /**
      * @param User $user
      * @param string $oldEmail
@@ -23,14 +17,10 @@ class UserEmailChangedDomainEvent extends DomainEvent implements AsyncDomainEven
      * @param \DateTime|null $occurredOn
      */
     public function __construct(
-        User $user, string $oldEmail, string $newEmail, string $eventId = null, \DateTime $occurredOn = null
+        private readonly User $user, private readonly string $oldEmail, private readonly string $newEmail,
+        string $eventId = null, \DateTime $occurredOn = null
     ) {
         parent::__construct($eventId, $occurredOn);
-
-        $this->user = $user;
-
-        $this->oldEmail = $oldEmail;
-        $this->newEmail = $newEmail;
     }
 
     public static function eventName(): string

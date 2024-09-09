@@ -8,7 +8,7 @@ use App\Module\User\Domain\User;
 
 class RegisterAppUserResponse implements CommandResponse
 {
-    public User $user;
-
-    public string $token;
+    public function __construct(public User $user, public string $token)
+    {
+    }
 }

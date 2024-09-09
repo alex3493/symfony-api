@@ -14,24 +14,18 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class ResetPasswordService implements ResetPasswordServiceInterface
+readonly class ResetPasswordService implements ResetPasswordServiceInterface
 {
-    private ResetPasswordTokenRepository $repository;
-
-    private UserPasswordHasherInterface $passwordHasher;
-
-    private MailerInterface $mailer;
-
-    private ContainerBagInterface $params;
-
+    /**
+     * @param \App\Module\User\Infrastructure\Persistence\Doctrine\ResetPasswordTokenRepository $repository
+     * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $passwordHasher
+     * @param \Symfony\Component\Mailer\MailerInterface $mailer
+     * @param \Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface $params
+     */
     public function __construct(
-        ResetPasswordTokenRepository $repository, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer,
-        ContainerBagInterface $params
+        private ResetPasswordTokenRepository $repository, private UserPasswordHasherInterface $passwordHasher, private MailerInterface $mailer,
+        private ContainerBagInterface $params
     ) {
-        $this->repository = $repository;
-        $this->passwordHasher = $passwordHasher;
-        $this->mailer = $mailer;
-        $this->params = $params;
     }
 
     /**

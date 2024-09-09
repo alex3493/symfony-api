@@ -5,20 +5,17 @@ namespace App\Module\Shared\Domain\ValueObject;
 
 use App\Module\Shared\Domain\Exception\UnprocessableEntityDomainException;
 
-class Email
+readonly class Email
 {
-    private string $value;
-
     /**
      * @param string $value
      * @throws UnprocessableEntityDomainException
      */
-    public function __construct(string $value)
+    public function __construct(private string $value)
     {
         if (! filter_var($value, FILTER_VALIDATE_EMAIL)) {
             throw new UnprocessableEntityDomainException("Email {$value} is not valid.");
         }
-        $this->value = $value;
     }
 
     /**

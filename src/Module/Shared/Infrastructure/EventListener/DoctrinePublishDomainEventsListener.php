@@ -10,13 +10,10 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 
 #[AsDoctrineListener(event: Events::onFlush)]
-class DoctrinePublishDomainEventsListener
+readonly class DoctrinePublishDomainEventsListener
 {
-    private DomainEventPublisherInterface $publisher;
-
-    public function __construct(DomainEventPublisherInterface $publisher)
+    public function __construct(private DomainEventPublisherInterface $publisher)
     {
-        $this->publisher = $publisher;
     }
 
     public function onFlush(OnFlushEventArgs $eventArgs): void

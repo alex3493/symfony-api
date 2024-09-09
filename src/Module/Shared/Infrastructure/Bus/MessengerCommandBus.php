@@ -13,15 +13,13 @@ use Symfony\Component\Messenger\Exception\NoHandlerForMessageException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class MessengerCommandBus implements CommandBus
+readonly class MessengerCommandBus implements CommandBus
 {
     use HandleTrait {
         handle as handleCommand;
     }
 
-    private MessageBusInterface $messageBus;
-
-    public function __construct(MessageBusInterface $commandBus)
+    public function __construct(private MessageBusInterface $commandBus)
     {
         $this->messageBus = $commandBus;
     }

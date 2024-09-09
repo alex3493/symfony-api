@@ -15,15 +15,13 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
 {
-    private UserQueryServiceInterface $userQueryService;
-
-    private UserCommandServiceInterface $userCommandService;
-
+    /**
+     * @param \App\Module\User\Domain\Contract\UserQueryServiceInterface $userQueryService
+     * @param \App\Module\User\Domain\Contract\UserCommandServiceInterface $userCommandService
+     */
     public function __construct(
-        UserQueryServiceInterface $userQueryService, UserCommandServiceInterface $userCommandService
+        private UserQueryServiceInterface $userQueryService, private UserCommandServiceInterface $userCommandService
     ) {
-        $this->userQueryService = $userQueryService;
-        $this->userCommandService = $userCommandService;
     }
 
     /**

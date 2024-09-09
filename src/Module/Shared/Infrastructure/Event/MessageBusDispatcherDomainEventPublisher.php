@@ -8,16 +8,11 @@ use App\Module\Shared\Domain\Event\DomainEventPublisherInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class MessageBusDispatcherDomainEventPublisher implements DomainEventPublisherInterface
+readonly class MessageBusDispatcherDomainEventPublisher implements DomainEventPublisherInterface
 {
-    private MessageBusInterface $dispatcher;
-
-    private LoggerInterface $logger;
-
-    public function __construct(MessageBusInterface $dispatcher, LoggerInterface $logger)
-    {
-        $this->dispatcher = $dispatcher;
-        $this->logger = $logger;
+    public function __construct(
+        private MessageBusInterface $dispatcher, private LoggerInterface $logger
+    ) {
     }
 
     /**

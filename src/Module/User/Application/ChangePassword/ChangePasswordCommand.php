@@ -6,16 +6,8 @@ namespace App\Module\User\Application\ChangePassword;
 use App\Module\Shared\Domain\Bus\Command\Command;
 use App\Module\Shared\Domain\Bus\Command\ValidatedMessageInterface;
 
-class ChangePasswordCommand implements Command, ValidatedMessageInterface
+readonly class ChangePasswordCommand implements Command, ValidatedMessageInterface
 {
-    private string $id;
-
-    private string $currentPassword;
-
-    private string $password;
-
-    private string $passwordConfirmation;
-
     /**
      * @param string $id
      * @param string $currentPassword
@@ -23,12 +15,8 @@ class ChangePasswordCommand implements Command, ValidatedMessageInterface
      * @param string $passwordConfirmation
      */
     public function __construct(
-        string $id, string $currentPassword, string $password, string $passwordConfirmation
+        private string $id, private string $currentPassword, private string $password, private string $passwordConfirmation
     ) {
-        $this->id = $id;
-        $this->currentPassword = $currentPassword;
-        $this->password = $password;
-        $this->passwordConfirmation = $passwordConfirmation;
     }
 
     public function id(): string

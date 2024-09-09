@@ -7,23 +7,16 @@ use App\Module\Shared\Application\UserResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\AuthUserServiceInterface;
 
-class SignOutAppUserCommandHandler implements CommandHandler
+readonly class SignOutAppUserCommandHandler implements CommandHandler
 {
-    private AuthUserServiceInterface $service;
-
-    public function __construct(AuthUserServiceInterface $service)
+    public function __construct(private AuthUserServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     public function __invoke(SignOutAppUserCommand $command): UserResponse
     {
         $user = $this->service->signOut($command->userId());
 
-        $response = new UserResponse();
-
-        $response->user = $user;
-
-        return $response;
+        return new UserResponse($user);
     }
 }

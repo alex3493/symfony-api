@@ -20,10 +20,6 @@ class ChangePasswordCommandHandler implements CommandHandler
     {
         $user = $this->service->changePassword($command->id(), $command->currentPassword(), $command->password());
 
-        $response = new UserResponse();
-
-        $response->user = $user;
-
-        return $response;
+        return new UserResponse($user);
     }
 }

@@ -90,7 +90,7 @@ class UserSeeder extends SeederBase
 
                 $expiresAfter = $withToken['expiresAfter'] ?? null;
                 $expiresAt = $withToken['isExpired'] ? new DateTime('yesterday noon') : ($expiresAfter > 0 ? (new DateTime())->add(new DateInterval("PT{$expiresAfter}M")) : null);
-                $authToken = new AuthToken(EntityId::create(), $user, $token, $withToken['name'], new DateTime(), null,
+                $authToken = new AuthToken(EntityId::create()->getValue(), $user, $token, $withToken['name'], new DateTime(), null,
                     $expiresAt);
 
                 $tokenRepository->save($authToken);

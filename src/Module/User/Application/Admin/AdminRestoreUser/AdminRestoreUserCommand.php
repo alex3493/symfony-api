@@ -5,13 +5,10 @@ namespace App\Module\User\Application\Admin\AdminRestoreUser;
 
 use App\Module\Shared\Domain\Bus\Command\Command;
 
-class AdminRestoreUserCommand implements Command
+readonly class AdminRestoreUserCommand implements Command
 {
-    public string $userId;
-
-    public function __construct(string $userId)
+    public function __construct(private string $userId)
     {
-        $this->userId = $userId;
     }
 
     public function userId(): string

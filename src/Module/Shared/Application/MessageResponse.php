@@ -7,10 +7,10 @@ use App\Module\Shared\Domain\Bus\Contract\CommandResponse;
 
 class MessageResponse implements CommandResponse
 {
-    public string $message;
-
-    public function __construct(string $message)
+    /**
+     * @param string $message
+     */
+    public function __construct(public string $message)
     {
-        $this->message = $message;
     }
 }

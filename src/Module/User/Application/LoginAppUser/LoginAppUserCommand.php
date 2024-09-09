@@ -5,19 +5,15 @@ namespace App\Module\User\Application\LoginAppUser;
 
 use App\Module\Shared\Domain\Bus\Command\Command;
 
-class LoginAppUserCommand implements Command
+readonly class LoginAppUserCommand implements Command
 {
-    private string $email;
-
-    private string $password;
-
-    private ?string $deviceName;
-
-    public function __construct(string $email, string $password, ?string $deviceName = null)
+    /**
+     * @param string $email
+     * @param string $password
+     * @param string|null $deviceName
+     */
+    public function __construct(private string $email, private string $password, private ?string $deviceName = null)
     {
-        $this->email = $email;
-        $this->password = $password;
-        $this->deviceName = $deviceName;
     }
 
     public function email(): string

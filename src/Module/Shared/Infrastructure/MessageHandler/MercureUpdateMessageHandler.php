@@ -7,13 +7,10 @@ use App\Module\Shared\Domain\Message\MercureUpdateMessage;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 
-class MercureUpdateMessageHandler
+readonly class MercureUpdateMessageHandler
 {
-    private HubInterface $hub;
-
-    public function __construct(HubInterface $hub)
+    public function __construct(private HubInterface $hub)
     {
-        $this->hub = $hub;
     }
 
     public function __invoke(MercureUpdateMessage $message): void

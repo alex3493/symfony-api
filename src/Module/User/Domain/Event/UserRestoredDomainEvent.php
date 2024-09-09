@@ -9,18 +9,14 @@ use App\Module\User\Domain\User;
 
 class UserRestoredDomainEvent extends DomainEvent implements AsyncDomainEventInterface
 {
-    private User $user;
-
     /**
      * @param User $user
      * @param string|null $eventId
      * @param \DateTime|null $occurredOn
      */
-    public function __construct(User $user, string $eventId = null, \DateTime $occurredOn = null)
+    public function __construct(private readonly User $user, string $eventId = null, \DateTime $occurredOn = null)
     {
         parent::__construct($eventId, $occurredOn);
-
-        $this->user = $user;
     }
 
     public static function eventName(): string

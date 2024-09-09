@@ -9,13 +9,13 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class UserEmailChangedEventSubscriber implements DomainEventSubscriberInterface
+readonly class UserEmailChangedEventSubscriber implements DomainEventSubscriberInterface
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(private LoggerInterface $logger)
     {
-        $this->logger = $logger;
     }
 
     public function __invoke(UserEmailChangedDomainEvent $event): void

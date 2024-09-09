@@ -12,52 +12,34 @@ use App\Module\User\Domain\Event\UserEmailChangedDomainEvent;
 use App\Module\User\Domain\Event\UserRestoredDomainEvent;
 use App\Module\User\Domain\Event\UserSoftDeletedDomainEvent;
 use App\Module\User\Domain\ValueObject\UserRole;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 class User extends DomainEventAwareEntity implements SoftDeleteAwareEntityInterface
 {
-    private string $id;
-
-    private string $email;
-
-    private ?string $password;
-
-    private ?string $firstName;
-
-    private ?string $lastName;
-
-    /**
-     * @var array<string>
-     */
-    private array $roles;
-
     /**
      * @var Collection<AuthToken>
      */
     private Collection $authTokens;
 
-    private DateTime $createdAt;
-
-    private ?DateTime $updatedAt;
-
-    private ?DateTime $deletedAt;
-
+    /**
+     * @param string $id
+     * @param string $email
+     * @param string $password
+     * @param string|null $firstName
+     * @param string|null $lastName
+     * @param array $roles
+     * @param \DateTime $createdAt
+     * @param \DateTime|null $updatedAt
+     * @param \DateTime|null $deletedAt
+     */
     public function __construct(
-        EntityId $id, Email $email, string $password, ?string $firstName, ?string $lastName, array $roles,
-        DateTime $createdAt, ?DateTime $updatedAt = null, ?DateTime $deletedAt = null
+        private readonly string $id, private string $email, private string $password, private ?string $firstName,
+        private ?string $lastName, private array $roles,
+        // TODO: actually we never change $createdAt, but we have a reserved method that reloads a user from Doctrine. We have to fix it!
+        /** @link \App\Module\User\Domain\Contract\UserQueryServiceInterface::freshUserById */
+        private \DateTime $createdAt, private ?\DateTime $updatedAt = null, private ?\DateTime $deletedAt = null
     ) {
-        $this->id = $id->getValue();
-        $this->email = $email->getValue();
-        $this->password = $password;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->roles = $roles;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
-        $this->deletedAt = $deletedAt;
-
         $this->authTokens = new ArrayCollection();
     }
 
@@ -73,7 +55,8 @@ class User extends DomainEventAwareEntity implements SoftDeleteAwareEntityInterf
     public static function create(
         string $email, string $password, ?string $firstName, ?string $lastName, array $roles = []
     ): User {
-        $user = new self(EntityId::create(), new Email($email), $password, $firstName, $lastName, [], new DateTime());
+        $user = new self(EntityId::create()->getValue(), (new Email($email))->getValue(), $password, $firstName,
+            $lastName, [], new \DateTime());
 
         return $user->setRoles($roles);
     }
@@ -209,7 +192,7 @@ class User extends DomainEventAwareEntity implements SoftDeleteAwareEntityInterf
     /**
      * @return \DateTime
      */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -217,7 +200,7 @@ class User extends DomainEventAwareEntity implements SoftDeleteAwareEntityInterf
     /**
      * @return \DateTime|null
      */
-    public function getDeletedAt(): ?DateTime
+    public function getDeletedAt(): ?\DateTime
     {
         return $this->deletedAt;
     }
@@ -226,7 +209,7 @@ class User extends DomainEventAwareEntity implements SoftDeleteAwareEntityInterf
      * @param \DateTime|null $deletedAt
      * @return void
      */
-    public function setDeletedAt(?DateTime $deletedAt): void
+    public function setDeletedAt(?\DateTime $deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
@@ -234,14 +217,14 @@ class User extends DomainEventAwareEntity implements SoftDeleteAwareEntityInterf
     /**
      * @return \DateTime|null
      */
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
     public function setUpdatedAtNow(): void
     {
-        $this->updatedAt = new DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -328,7 +311,7 @@ class User extends DomainEventAwareEntity implements SoftDeleteAwareEntityInterf
      */
     public function softDelete(): void
     {
-        $this->deletedAt = new DateTime();
+        $this->deletedAt = new \DateTime();
 
         $this->record(new UserSoftDeletedDomainEvent($this));
     }

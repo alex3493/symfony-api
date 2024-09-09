@@ -8,5 +8,7 @@ use App\Module\User\Domain\User;
 
 class UserResponse implements CommandResponse
 {
-    public User $user;
+    public function __construct(public User $user)
+    {
+    }
 }

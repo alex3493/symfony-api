@@ -5,13 +5,13 @@ namespace App\Module\User\Application\SignOutAppUser;
 
 use App\Module\Shared\Domain\Bus\Command\Command;
 
-class SignOutAppUserCommand implements Command
+readonly class SignOutAppUserCommand implements Command
 {
-    private string $userId;
-
-    public function __construct(string $userId)
+    /**
+     * @param string $userId
+     */
+    public function __construct(private string $userId)
     {
-        $this->userId = $userId;
     }
 
     public function userId(): string

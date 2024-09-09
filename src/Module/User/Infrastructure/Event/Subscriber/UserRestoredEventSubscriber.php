@@ -9,13 +9,13 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class UserRestoredEventSubscriber implements DomainEventSubscriberInterface
+readonly class UserRestoredEventSubscriber implements DomainEventSubscriberInterface
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(private LoggerInterface $logger)
     {
-        $this->logger = $logger;
     }
 
     public function __invoke(UserRestoredDomainEvent $event): void

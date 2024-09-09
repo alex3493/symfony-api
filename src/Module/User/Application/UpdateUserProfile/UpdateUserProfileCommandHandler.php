@@ -9,11 +9,11 @@ use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 
 class UpdateUserProfileCommandHandler implements CommandHandler
 {
-    private UserCommandServiceInterface $service;
-
-    public function __construct(UserCommandServiceInterface $service)
+    /**
+     * @param \App\Module\User\Domain\Contract\UserCommandServiceInterface $service
+     */
+    public function __construct(private UserCommandServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     public function __invoke(UpdateUserProfileCommand $command): UserResponse
@@ -21,9 +21,6 @@ class UpdateUserProfileCommandHandler implements CommandHandler
         $user = $this->service->updateProfile($command->id(), $command->email(), $command->firstName(),
             $command->lastName());
 
-        $response = new UserResponse();
-        $response->user = $user;
-
-        return $response;
+        return new UserResponse($user);
     }
 }

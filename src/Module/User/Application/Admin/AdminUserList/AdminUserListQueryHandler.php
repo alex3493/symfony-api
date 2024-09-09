@@ -21,11 +21,6 @@ class AdminUserListQueryHandler implements QueryHandler
         $list = $this->service->list($query->numPage(), $query->limit(), $query->orderBy(), $query->orderType(),
             $query->withDeleted());
 
-        $response = new PaginatedListResponse();
-        $response->items = $list['items'];
-        $response->totalItems = $list['totalItems'];
-        $response->totalPages = $list['totalPages'];
-
-        return $response;
+        return new PaginatedListResponse($list['items'], $list['totalItems'], $list['totalPages']);
     }
 }

@@ -20,10 +20,6 @@ class LogoutAppUserDeviceCommandHandler implements CommandHandler
     {
         $user = $this->service->logout($command->tokenId());
 
-        $response = new UserResponse();
-
-        $response->user = $user;
-
-        return $response;
+        return new UserResponse($user);
     }
 }

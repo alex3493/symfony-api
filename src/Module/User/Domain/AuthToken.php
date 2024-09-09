@@ -5,42 +5,21 @@ namespace App\Module\User\Domain;
 
 use App\Module\Shared\Domain\ValueObject\EntityId;
 use DateInterval;
-use DateTime;
 
 class AuthToken
 {
-    private string $id;
-
-    private User $user;
-
-    private string $token;
-
-    private string $name;
-
-    private DateTime $createdAt;
-
-    private ?DateTime $lastUsedAt;
-
-    private ?DateTime $expiresAt;
-
     public function __construct(
-        EntityId $id, User $user, string $token, string $name, DateTime $createdAt, ?DateTime $lastUsedAt,
-        ?DateTime $expiresAt
+        private readonly string $id, private User $user, private string $token, private string $name,
+        private readonly \DateTime $createdAt, private ?\DateTime $lastUsedAt, private ?\DateTime $expiresAt
     ) {
-        $this->id = $id->getValue();
-        $this->user = $user;
-        $this->token = $token;
-        $this->name = $name;
-        $this->createdAt = $createdAt;
-        $this->lastUsedAt = $lastUsedAt;
-        $this->expiresAt = $expiresAt;
     }
 
     public static function create(User $user, string $token, string $name, ?int $expiresAfter = null): self
     {
-        $expiresAt = $expiresAfter > 0 ? (new DateTime())->add(new DateInterval("PT{$expiresAfter}M")) : null;
+        $expiresAt = $expiresAfter > 0 ? (new \DateTime())->add(new DateInterval("PT{$expiresAfter}M")) : null;
 
-        return new self(EntityId::create(), $user, $token, $name, new DateTime(), new DateTime(), $expiresAt);
+        return new self(EntityId::create()->getValue(), $user, $token, $name, new \DateTime(), new \DateTime(),
+            $expiresAt);
     }
 
     public function getId(): string
@@ -84,29 +63,29 @@ class AuthToken
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function getLastUsedAt(): ?DateTime
+    public function getLastUsedAt(): ?\DateTime
     {
         return $this->lastUsedAt;
     }
 
-    public function setLastUsedAt(?DateTime $lastUsedAt): AuthToken
+    public function setLastUsedAt(?\DateTime $lastUsedAt): AuthToken
     {
         $this->lastUsedAt = $lastUsedAt;
 
         return $this;
     }
 
-    public function getExpiresAt(): ?DateTime
+    public function getExpiresAt(): ?\DateTime
     {
         return $this->expiresAt;
     }
 
-    public function setExpiresAt(?DateTime $expiresAt): AuthToken
+    public function setExpiresAt(?\DateTime $expiresAt): AuthToken
     {
         $this->expiresAt = $expiresAt;
 
@@ -115,6 +94,6 @@ class AuthToken
 
     public function isValid(): bool
     {
-        return $this->expiresAt === null || $this->expiresAt > new DateTime();
+        return $this->expiresAt === null || $this->expiresAt > new \DateTime();
     }
 }

@@ -6,18 +6,8 @@ namespace App\Module\User\Application\RegisterWebUser;
 use App\Module\Shared\Domain\Bus\Command\Command;
 use App\Module\Shared\Domain\Bus\Command\ValidatedMessageInterface;
 
-class RegisterWebUserCommand implements Command, ValidatedMessageInterface
+readonly class RegisterWebUserCommand implements Command, ValidatedMessageInterface
 {
-    private string $email;
-
-    private string $password;
-
-    private string $passwordConfirmation;
-
-    private ?string $firstName;
-
-    private ?string $lastName;
-
     /**
      * @param string $email
      * @param string $password
@@ -26,13 +16,8 @@ class RegisterWebUserCommand implements Command, ValidatedMessageInterface
      * @param string|null $lastName
      */
     public function __construct(
-        string $email, string $password, string $passwordConfirmation, ?string $firstName, ?string $lastName
+        private string $email, private string $password, private string $passwordConfirmation, private ?string $firstName, private ?string $lastName
     ) {
-        $this->email = $email;
-        $this->password = $password;
-        $this->passwordConfirmation = $passwordConfirmation;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
     }
 
     public function email(): string

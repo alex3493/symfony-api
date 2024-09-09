@@ -5,13 +5,10 @@ namespace App\Module\User\Application\Admin\AdminForceDeleteUser;
 
 use App\Module\Shared\Domain\Bus\Command\Command;
 
-class AdminForceDeleteUserCommand implements Command
+readonly class AdminForceDeleteUserCommand implements Command
 {
-    private string $userId;
-
-    public function __construct(string $userId)
+    public function __construct(private string $userId)
     {
-        $this->userId = $userId;
     }
 
     public function userId(): string
