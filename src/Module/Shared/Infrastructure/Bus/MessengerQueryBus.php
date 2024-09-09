@@ -12,7 +12,7 @@ use Symfony\Component\Messenger\Exception\NoHandlerForMessageException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class MessengerQueryBus implements QueryBus
+class MessengerQueryBus implements QueryBus
 {
     use HandleTrait {
         handle as handleQuery;
@@ -21,7 +21,7 @@ readonly class MessengerQueryBus implements QueryBus
     /**
      * @param \Symfony\Component\Messenger\MessageBusInterface $queryBus
      */
-    public function __construct(private MessageBusInterface $queryBus)
+    public function __construct(private readonly MessageBusInterface $queryBus)
     {
         $this->messageBus = $queryBus;
     }

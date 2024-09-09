@@ -13,7 +13,7 @@ use Symfony\Component\Messenger\Exception\NoHandlerForMessageException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class MessengerCommandBus implements CommandBus
+class MessengerCommandBus implements CommandBus
 {
     use HandleTrait {
         handle as handleCommand;
@@ -22,7 +22,7 @@ readonly class MessengerCommandBus implements CommandBus
     /**
      * @param \Symfony\Component\Messenger\MessageBusInterface $commandBus
      */
-    public function __construct(private MessageBusInterface $commandBus)
+    public function __construct(private readonly MessageBusInterface $commandBus)
     {
         $this->messageBus = $commandBus;
     }
