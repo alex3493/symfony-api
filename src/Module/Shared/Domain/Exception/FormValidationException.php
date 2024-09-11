@@ -8,6 +8,10 @@ namespace App\Module\Shared\Domain\Exception;
  */
 class FormValidationException extends DomainException
 {
+    /**
+     * @param string $description
+     * @param array $errors
+     */
     public function __construct(
         string $description, private readonly array $errors = []
     ) {

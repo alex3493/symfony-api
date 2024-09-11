@@ -34,6 +34,12 @@ final class AddUserCommand extends Command
 {
     private SymfonyStyle $io;
 
+    /**
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $passwordHasher
+     * @param \App\Command\AddUser\Validator $validator
+     * @param \App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository $users
+     */
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly UserPasswordHasherInterface $passwordHasher, private readonly Validator $validator,

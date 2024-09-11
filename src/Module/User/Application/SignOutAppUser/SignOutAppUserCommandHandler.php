@@ -9,6 +9,9 @@ use App\Module\User\Domain\Contract\AuthUserServiceInterface;
 
 readonly class SignOutAppUserCommandHandler implements CommandHandler
 {
+    /**
+     * @param \App\Module\User\Domain\Contract\AuthUserServiceInterface $service
+     */
     public function __construct(private AuthUserServiceInterface $service)
     {
     }

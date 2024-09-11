@@ -5,6 +5,11 @@ namespace App\Module\User\Domain;
 
 readonly class ResetPasswordToken
 {
+    /**
+     * @param string $email
+     * @param string $resetToken
+     * @param \DateTime|null $validUntil
+     */
     public function __construct(
         private string $email, private string $resetToken, private ?\DateTime $validUntil
     ) {

@@ -8,6 +8,15 @@ use DateInterval;
 
 class AuthToken
 {
+    /**
+     * @param string $id
+     * @param \App\Module\User\Domain\User $user
+     * @param string $token
+     * @param string $name
+     * @param \DateTime $createdAt
+     * @param \DateTime|null $lastUsedAt
+     * @param \DateTime|null $expiresAt
+     */
     public function __construct(
         private readonly string $id, private User $user, private string $token, private string $name,
         private readonly \DateTime $createdAt, private ?\DateTime $lastUsedAt, private ?\DateTime $expiresAt

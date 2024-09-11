@@ -15,6 +15,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class AbstractApiController extends AbstractController
 {
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Symfony\Component\Serializer\SerializerInterface $serializer
+     */
     public function __construct(
         protected readonly LoggerInterface $logger, protected readonly SerializerInterface $serializer
     ) {

@@ -8,6 +8,9 @@ use App\Module\User\Domain\Contract\ResetPasswordServiceInterface;
 
 readonly class RequestResetPasswordCommandHandler implements CommandHandler
 {
+    /**
+     * @param \App\Module\User\Domain\Contract\ResetPasswordServiceInterface $service
+     */
     public function __construct(private ResetPasswordServiceInterface $service)
     {
     }
