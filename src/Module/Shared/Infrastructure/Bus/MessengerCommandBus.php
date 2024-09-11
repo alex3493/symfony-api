@@ -19,9 +19,10 @@ class MessengerCommandBus implements CommandBus
         handle as handleCommand;
     }
 
-    private MessageBusInterface $messageBus;
-
-    public function __construct(MessageBusInterface $commandBus)
+    /**
+     * @param \Symfony\Component\Messenger\MessageBusInterface $commandBus
+     */
+    public function __construct(private readonly MessageBusInterface $commandBus)
     {
         $this->messageBus = $commandBus;
     }

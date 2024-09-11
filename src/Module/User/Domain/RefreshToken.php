@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Module\User\Domain;
 
-use DateTime;
-use DateTimeInterface;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenInterface;
 use InvalidArgumentException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -12,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RefreshToken implements RefreshTokenInterface
 {
     /**
-     * @var int|string|null
+     * @var string|int|null
      */
     private string|int|null $id;
 
@@ -29,7 +27,7 @@ class RefreshToken implements RefreshTokenInterface
     /**
      * @var \DateTimeInterface|null
      */
-    private ?DateTimeInterface $valid;
+    private ?\DateTimeInterface $valid;
 
     /**
      * @param string $refreshToken
@@ -40,7 +38,7 @@ class RefreshToken implements RefreshTokenInterface
     public static function createForUserWithTtl(
         string $refreshToken, UserInterface $user, int $ttl
     ): RefreshTokenInterface {
-        $valid = new DateTime();
+        $valid = new \DateTime();
 
         // Explicitly check for a negative number based on a behavior change in PHP 8.2, see https://github.com/php/php-src/issues/9950
         if ($ttl > 0) {
@@ -111,7 +109,7 @@ class RefreshToken implements RefreshTokenInterface
     /**
      * @return \DateTimeInterface|null
      */
-    public function getValid(): ?DateTimeInterface
+    public function getValid(): ?\DateTimeInterface
     {
         return $this->valid;
     }
@@ -140,6 +138,6 @@ class RefreshToken implements RefreshTokenInterface
      */
     public function isValid(): bool
     {
-        return null !== $this->valid && $this->valid >= new DateTime();
+        return null !== $this->valid && $this->valid >= new \DateTime();
     }
 }

@@ -17,31 +17,21 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AuthUserService implements AuthUserServiceInterface
+readonly class AuthUserService implements AuthUserServiceInterface
 {
-    private UserCommandServiceInterface $userCommandService;
-
-    private UserQueryServiceInterface $userQueryService;
-
-    private UserPasswordHasherInterface $passwordHasher;
-
-    private AuthTokenServiceInterface $tokenService;
-
-    private ValidatorInterface $validator;
-
-    private LoggerInterface $logger;
-
+    /**
+     * @param \App\Module\User\Domain\Contract\UserCommandServiceInterface $userCommandService
+     * @param \App\Module\User\Domain\Contract\UserQueryServiceInterface $userQueryService
+     * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $passwordHasher
+     * @param \App\Module\User\Domain\Contract\AuthTokenServiceInterface $tokenService
+     * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
+     * @param \Psr\Log\LoggerInterface $logger
+     */
     public function __construct(
-        UserCommandServiceInterface $userCommandService, UserQueryServiceInterface $userQueryInterface,
-        UserPasswordHasherInterface $passwordHasher, AuthTokenServiceInterface $tokenService,
-        ValidatorInterface $validator, LoggerInterface $logger
+        private UserCommandServiceInterface $userCommandService, private UserQueryServiceInterface $userQueryService,
+        private UserPasswordHasherInterface $passwordHasher, private AuthTokenServiceInterface $tokenService,
+        private ValidatorInterface $validator, private LoggerInterface $logger
     ) {
-        $this->userCommandService = $userCommandService;
-        $this->userQueryService = $userQueryInterface;
-        $this->passwordHasher = $passwordHasher;
-        $this->tokenService = $tokenService;
-        $this->validator = $validator;
-        $this->logger = $logger;
     }
 
     /**
@@ -130,7 +120,7 @@ class AuthUserService implements AuthUserServiceInterface
         }
 
         $userId = $token->getUser()->getId();
-        $user = $this->userQueryService->freshUserById($userId);
+        $user = $this->userQueryService->findById($userId);
 
         $user->removeAuthToken($token);
         $this->userCommandService->save($user);
@@ -147,7 +137,7 @@ class AuthUserService implements AuthUserServiceInterface
      */
     public function signOut(string $userId): User
     {
-        $user = $this->userQueryService->freshUserById($userId);
+        $user = $this->userQueryService->findById($userId);
 
         if (is_null($user)) {
             throw new AccessDeniedDomainException('User not found');
@@ -169,10 +159,7 @@ class AuthUserService implements AuthUserServiceInterface
      */
     public function changePassword(string $userId, string $currentPassword, string $password): User
     {
-        // When we change password we check that the current password provided in request is valid.
-        // We must get fresh user here because user password was already erased in
-        // authentication manager.
-        $user = $this->userQueryService->freshUserById($userId);
+        $user = $this->userQueryService->findById($userId);
 
         if (is_null($user)) {
             throw new AccessDeniedDomainException('User not found');
@@ -207,10 +194,7 @@ class AuthUserService implements AuthUserServiceInterface
      */
     public function deleteAccount(string $id, string $password): void
     {
-        // When we delete account we check that the password provided in request is valid.
-        // We must get fresh user here because user password was already erased in
-        // authentication manager.
-        $user = $this->userQueryService->freshUserById($id);
+        $user = $this->userQueryService->findById($id);
 
         if (is_null($user)) {
             throw new AccessDeniedDomainException('User not found');

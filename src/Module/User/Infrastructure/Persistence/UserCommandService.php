@@ -15,20 +15,17 @@ use App\Module\User\Infrastructure\Security\AuthUser;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UserCommandService implements UserCommandServiceInterface
+readonly class UserCommandService implements UserCommandServiceInterface
 {
-    private UserRepository $repository;
-
-    private UserPasswordHasherInterface $passwordHasher;
-
-    private ValidatorInterface $validator;
-
+    /**
+     * @param \App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository $repository
+     * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $passwordHasher
+     * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
+     */
     public function __construct(
-        UserRepository $repository, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validator
+        private UserRepository $repository, private UserPasswordHasherInterface $passwordHasher,
+        private ValidatorInterface $validator
     ) {
-        $this->repository = $repository;
-        $this->passwordHasher = $passwordHasher;
-        $this->validator = $validator;
     }
 
     /**

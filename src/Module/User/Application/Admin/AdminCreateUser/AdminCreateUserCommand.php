@@ -7,33 +7,19 @@ use App\Module\Shared\Domain\Bus\Command\Command;
 use App\Module\Shared\Domain\Bus\Command\ValidatedMessageInterface;
 use App\Module\User\Domain\ValueObject\UserRole;
 
-class AdminCreateUserCommand implements Command, ValidatedMessageInterface
+readonly class AdminCreateUserCommand implements Command, ValidatedMessageInterface
 {
-    private string $email;
-
-    private ?string $password;
-
-    private ?string $firstName;
-
-    private ?string $lastName;
-
-    private array $roles;
-
     /**
      * @param string $email
      * @param string|null $password
      * @param string|null $firstName
      * @param string|null $lastName
-     * @param array $roles
+     * @param array<UserRole> $roles
      */
     public function __construct(
-        string $email, ?string $password, ?string $firstName, ?string $lastName, array $roles = [UserRole::ROLE_USER]
+        private string $email, private ?string $password, private ?string $firstName, private ?string $lastName,
+        private array $roles = [UserRole::ROLE_USER]
     ) {
-        $this->email = $email;
-        $this->password = $password;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->roles = $roles;
     }
 
     public function email(): string

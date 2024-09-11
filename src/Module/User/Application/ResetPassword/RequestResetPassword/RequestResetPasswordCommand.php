@@ -6,13 +6,13 @@ namespace App\Module\User\Application\ResetPassword\RequestResetPassword;
 use App\Module\Shared\Domain\Bus\Command\AsyncCommand;
 use App\Module\Shared\Domain\Bus\Command\ValidatedMessageInterface;
 
-class RequestResetPasswordCommand implements AsyncCommand, ValidatedMessageInterface
+readonly class RequestResetPasswordCommand implements AsyncCommand, ValidatedMessageInterface
 {
-    private string $email;
-
-    public function __construct(string $email)
+    /**
+     * @param string $email
+     */
+    public function __construct(private string $email)
     {
-        $this->email = $email;
     }
 
     public function issuedAt(): \DateTime

@@ -3,19 +3,16 @@ declare(strict_types=1);
 
 namespace App\Module\User\Domain;
 
-class ResetPasswordToken
+readonly class ResetPasswordToken
 {
-    private string $email;
-
-    private string $resetToken;
-
-    private ?\DateTime $validUntil;
-
-    public function __construct(string $email, string $resetToken, ?\DateTime $validUntil)
-    {
-        $this->email = $email;
-        $this->resetToken = $resetToken;
-        $this->validUntil = $validUntil;
+    /**
+     * @param string $email
+     * @param string $resetToken
+     * @param \DateTime|null $validUntil
+     */
+    public function __construct(
+        private string $email, private string $resetToken, private ?\DateTime $validUntil
+    ) {
     }
 
     public function getEmail(): string

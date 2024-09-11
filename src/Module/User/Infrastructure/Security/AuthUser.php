@@ -11,14 +11,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    private User $user;
-
-    private ?string $deviceId;
-
-    public function __construct(User $user, ?string $deviceId = null)
+    /**
+     * @param \App\Module\User\Domain\User $user
+     * @param string|null $deviceId
+     */
+    public function __construct(private User $user, private readonly ?string $deviceId = null)
     {
-        $this->user = $user;
-        $this->deviceId = $deviceId;
     }
 
     /**

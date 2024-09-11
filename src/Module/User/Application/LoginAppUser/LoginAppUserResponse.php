@@ -8,7 +8,11 @@ use App\Module\User\Domain\User;
 
 class LoginAppUserResponse implements CommandResponse
 {
-    public string $token;
-
-    public User $user;
+    /**
+     * @param string $token
+     * @param \App\Module\User\Domain\User $user
+     */
+    public function __construct(public string $token, public User $user)
+    {
+    }
 }

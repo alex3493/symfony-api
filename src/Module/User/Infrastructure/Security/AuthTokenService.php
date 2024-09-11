@@ -9,16 +9,14 @@ use App\Module\User\Domain\User;
 use App\Module\User\Infrastructure\Persistence\Doctrine\AuthTokenRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
-class AuthTokenService implements AuthTokenServiceInterface
+readonly class AuthTokenService implements AuthTokenServiceInterface
 {
-    private AuthTokenRepository $repository;
-
-    private ContainerBagInterface $params;
-
-    public function __construct(AuthTokenRepository $repository, ContainerBagInterface $params)
+    /**
+     * @param \App\Module\User\Infrastructure\Persistence\Doctrine\AuthTokenRepository $repository
+     * @param \Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface $params
+     */
+    public function __construct(private AuthTokenRepository $repository, private ContainerBagInterface $params)
     {
-        $this->repository = $repository;
-        $this->params = $params;
     }
 
     /**

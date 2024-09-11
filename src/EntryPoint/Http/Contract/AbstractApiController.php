@@ -15,14 +15,13 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class AbstractApiController extends AbstractController
 {
-    protected LoggerInterface $logger;
-
-    protected SerializerInterface $serializer;
-
-    public function __construct(LoggerInterface $logger, SerializerInterface $serializer)
-    {
-        $this->logger = $logger;
-        $this->serializer = $serializer;
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Symfony\Component\Serializer\SerializerInterface $serializer
+     */
+    public function __construct(
+        protected readonly LoggerInterface $logger, protected readonly SerializerInterface $serializer
+    ) {
     }
 
     /**

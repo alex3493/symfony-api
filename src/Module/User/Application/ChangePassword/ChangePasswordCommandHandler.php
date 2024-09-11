@@ -7,23 +7,19 @@ use App\Module\Shared\Application\UserResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\AuthUserServiceInterface;
 
-class ChangePasswordCommandHandler implements CommandHandler
+readonly class ChangePasswordCommandHandler implements CommandHandler
 {
-    private AuthUserServiceInterface $service;
-
-    public function __construct(AuthUserServiceInterface $service)
+    /**
+     * @param \App\Module\User\Domain\Contract\AuthUserServiceInterface $service
+     */
+    public function __construct(private AuthUserServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     public function __invoke(ChangePasswordCommand $command): UserResponse
     {
         $user = $this->service->changePassword($command->id(), $command->currentPassword(), $command->password());
 
-        $response = new UserResponse();
-
-        $response->user = $user;
-
-        return $response;
+        return new UserResponse($user);
     }
 }

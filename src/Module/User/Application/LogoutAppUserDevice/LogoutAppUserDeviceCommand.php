@@ -5,13 +5,13 @@ namespace App\Module\User\Application\LogoutAppUserDevice;
 
 use App\Module\Shared\Domain\Bus\Command\Command;
 
-class LogoutAppUserDeviceCommand implements Command
+readonly class LogoutAppUserDeviceCommand implements Command
 {
-    private string $tokenId;
-
-    public function __construct(string $tokenId)
+    /**
+     * @param string $tokenId
+     */
+    public function __construct(private string $tokenId)
     {
-        $this->tokenId = $tokenId;
     }
 
     public function tokenId(): string

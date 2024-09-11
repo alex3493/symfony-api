@@ -6,17 +6,9 @@ namespace App\Module\User\Application\Admin\AdminUserList;
 use App\Module\Shared\Domain\Bus\Query\Query;
 use Doctrine\Common\Collections\Order;
 
-class AdminUserListQuery implements Query
+readonly class AdminUserListQuery implements Query
 {
-    private int $numPage;
-
-    private int $limit;
-
-    private string $orderBy;
-
     private Order $orderType;
-
-    private bool $withDeleted;
 
     /**
      * @param int $numPage
@@ -26,13 +18,10 @@ class AdminUserListQuery implements Query
      * @param bool $withDeleted
      */
     public function __construct(
-        int $numPage = 1, int $limit = 15, string $orderBy = 'id', string $orderType = 'ASC', bool $withDeleted = false
+        private int $numPage = 1, private int $limit = 15, private string $orderBy = 'id', string $orderType = 'ASC',
+        private bool $withDeleted = false
     ) {
-        $this->numPage = $numPage;
-        $this->limit = $limit;
-        $this->orderBy = $orderBy;
         $this->orderType = strtoupper($orderType) == 'ASC' ? Order::Ascending : Order::Descending;
-        $this->withDeleted = $withDeleted;
     }
 
     public function numPage(): int

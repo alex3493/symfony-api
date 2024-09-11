@@ -7,13 +7,13 @@ use App\Module\Shared\Application\MessageResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\AuthUserServiceInterface;
 
-class DeleteAppUserCommandHandler implements CommandHandler
+readonly class DeleteAppUserCommandHandler implements CommandHandler
 {
-    private AuthUserServiceInterface $service;
-
-    public function __construct(AuthUserServiceInterface $service)
+    /**
+     * @param \App\Module\User\Domain\Contract\AuthUserServiceInterface $service
+     */
+    public function __construct(private AuthUserServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     public function __invoke(DeleteAppUserCommand $command): MessageResponse

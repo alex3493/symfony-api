@@ -7,22 +7,19 @@ use App\Module\Shared\Application\UserResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\ResetPasswordServiceInterface;
 
-class PerformResetPasswordCommandHandler implements CommandHandler
+readonly class PerformResetPasswordCommandHandler implements CommandHandler
 {
-    private ResetPasswordServiceInterface $service;
-
-    public function __construct(ResetPasswordServiceInterface $service)
+    /**
+     * @param \App\Module\User\Domain\Contract\ResetPasswordServiceInterface $service
+     */
+    public function __construct(private ResetPasswordServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     public function __invoke(PerformResetPasswordCommand $command): UserResponse
     {
         $user = $this->service->resetPassword($command->resetToken(), $command->email(), $command->password());
 
-        $response = new UserResponse();
-        $response->user = $user;
-
-        return $response;
+        return new UserResponse($user);
     }
 }

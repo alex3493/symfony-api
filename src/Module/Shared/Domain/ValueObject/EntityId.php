@@ -5,16 +5,13 @@ namespace App\Module\Shared\Domain\ValueObject;
 
 use Symfony\Component\Uid\Uuid;
 
-class EntityId
+readonly class EntityId
 {
-    private string $value;
-
     /**
      * @param string $value
      */
-    public function __construct(string $value)
+    private function __construct(private string $value)
     {
-        $this->value = $value;
     }
 
     public static function create(): static

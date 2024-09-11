@@ -7,13 +7,13 @@ use App\Module\Shared\Application\UserResponse;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 
-class AdminCreateUserCommandHandler implements CommandHandler
+readonly class AdminCreateUserCommandHandler implements CommandHandler
 {
-    private UserCommandServiceInterface $service;
-
-    public function __construct(UserCommandServiceInterface $service)
+    /**
+     * @param \App\Module\User\Domain\Contract\UserCommandServiceInterface $service
+     */
+    public function __construct(private UserCommandServiceInterface $service)
     {
-        $this->service = $service;
     }
 
     public function __invoke(AdminCreateUserCommand $command): UserResponse
@@ -21,9 +21,6 @@ class AdminCreateUserCommandHandler implements CommandHandler
         $user = $this->service->create($command->email(), $command->password(), $command->firstName(),
             $command->lastName(), $command->roles());
 
-        $response = new UserResponse();
-        $response->user = $user;
-
-        return $response;
+        return new UserResponse($user);
     }
 }

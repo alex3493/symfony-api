@@ -14,13 +14,13 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Messenger\Exception\ValidationFailedException;
 
-class ExceptionListener
+readonly class ExceptionListener
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(private LoggerInterface $logger)
     {
-        $this->logger = $logger;
     }
 
     /**

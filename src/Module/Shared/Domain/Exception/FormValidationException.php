@@ -8,13 +8,14 @@ namespace App\Module\Shared\Domain\Exception;
  */
 class FormValidationException extends DomainException
 {
-    private array $errors;
-
-    public function __construct(string $description, array $errors = [])
-    {
+    /**
+     * @param string $description
+     * @param array $errors
+     */
+    public function __construct(
+        string $description, private readonly array $errors = []
+    ) {
         parent::__construct($description, self::$codes['UNPROCESSABLE_ENTITY']);
-
-        $this->errors = $errors;
     }
 
     public function getErrors(): array

@@ -8,13 +8,13 @@ use App\Module\User\Domain\User;
 use App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository;
 use Doctrine\Common\Collections\Order;
 
-class UserQueryService implements UserQueryServiceInterface
+readonly class UserQueryService implements UserQueryServiceInterface
 {
-    private UserRepository $repository;
-
-    public function __construct(UserRepository $repository)
+    /**
+     * @param \App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository $repository
+     */
+    public function __construct(private UserRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function findByEmail(string $email): ?User
@@ -27,6 +27,7 @@ class UserQueryService implements UserQueryServiceInterface
         return $this->repository->find($id);
     }
 
+    // TODO: check if we really need this method!
     public function freshUserById(string $id): ?User
     {
         $user = $this->repository->find($id);

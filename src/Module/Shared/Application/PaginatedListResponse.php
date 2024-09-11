@@ -8,9 +8,13 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class PaginatedListResponse implements QueryResponse
 {
-    public array|Paginator $items;
-
-    public int $totalPages;
-
-    public int $totalItems;
+    /**
+     * @param array|\Doctrine\ORM\Tools\Pagination\Paginator $items
+     * @param int $totalItems
+     * @param int $totalPages
+     */
+    public function __construct(
+        public array|Paginator $items, public int $totalItems, public int $totalPages
+    ) {
+    }
 }

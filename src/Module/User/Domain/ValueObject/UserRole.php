@@ -16,18 +16,15 @@ class UserRole
         self::ROLE_ADMIN,
     ];
 
-    private string $value;
-
     /**
      * @param string $value
      * @throws UnprocessableEntityDomainException
      */
-    public function __construct(string $value)
+    public function __construct(private readonly string $value)
     {
         if (! in_array($value, self::$VALID_ROLES, true)) {
             throw new UnprocessableEntityDomainException("Role {$value} is not valid.");
         }
-        $this->value = $value;
     }
 
     /**
