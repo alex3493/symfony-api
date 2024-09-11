@@ -17,8 +17,8 @@ readonly class RegisterAppUserCommand implements Command, ValidatedMessageInterf
      * @param string|null $deviceName
      */
     public function __construct(
-        private string $email, private string $password, private string $passwordConfirmation, private ?string $firstName, private ?string $lastName,
-        private ?string $deviceName = null
+        private string $email, private string $password, private string $passwordConfirmation,
+        private ?string $firstName, private ?string $lastName, private ?string $deviceName = null
     ) {
     }
 

@@ -23,8 +23,8 @@ readonly class ResetPasswordService implements ResetPasswordServiceInterface
      * @param \Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface $params
      */
     public function __construct(
-        private ResetPasswordTokenRepository $repository, private UserPasswordHasherInterface $passwordHasher, private MailerInterface $mailer,
-        private ContainerBagInterface $params
+        private ResetPasswordTokenRepository $repository, private UserPasswordHasherInterface $passwordHasher,
+        private MailerInterface $mailer, private ContainerBagInterface $params
     ) {
     }
 

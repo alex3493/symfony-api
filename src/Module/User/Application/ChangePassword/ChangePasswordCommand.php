@@ -15,7 +15,8 @@ readonly class ChangePasswordCommand implements Command, ValidatedMessageInterfa
      * @param string $passwordConfirmation
      */
     public function __construct(
-        private string $id, private string $currentPassword, private string $password, private string $passwordConfirmation
+        private string $id, private string $currentPassword, private string $password,
+        private string $passwordConfirmation
     ) {
     }
 

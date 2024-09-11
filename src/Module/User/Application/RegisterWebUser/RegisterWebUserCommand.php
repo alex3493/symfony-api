@@ -16,7 +16,8 @@ readonly class RegisterWebUserCommand implements Command, ValidatedMessageInterf
      * @param string|null $lastName
      */
     public function __construct(
-        private string $email, private string $password, private string $passwordConfirmation, private ?string $firstName, private ?string $lastName
+        private string $email, private string $password, private string $passwordConfirmation,
+        private ?string $firstName, private ?string $lastName
     ) {
     }
 
