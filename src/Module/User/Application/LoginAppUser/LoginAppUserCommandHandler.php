@@ -6,7 +6,7 @@ namespace App\Module\User\Application\LoginAppUser;
 use App\Module\Shared\Domain\Bus\Command\CommandHandler;
 use App\Module\User\Domain\Contract\AuthUserServiceInterface;
 
-class LoginAppUserCommandHandler implements CommandHandler
+readonly class LoginAppUserCommandHandler implements CommandHandler
 {
     /**
      * @param \App\Module\User\Domain\Contract\AuthUserServiceInterface $service
