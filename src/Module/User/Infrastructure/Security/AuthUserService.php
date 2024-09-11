@@ -120,7 +120,7 @@ readonly class AuthUserService implements AuthUserServiceInterface
         }
 
         $userId = $token->getUser()->getId();
-        $user = $this->userQueryService->freshUserById($userId);
+        $user = $this->userQueryService->findById($userId);
 
         $user->removeAuthToken($token);
         $this->userCommandService->save($user);
@@ -137,7 +137,7 @@ readonly class AuthUserService implements AuthUserServiceInterface
      */
     public function signOut(string $userId): User
     {
-        $user = $this->userQueryService->freshUserById($userId);
+        $user = $this->userQueryService->findById($userId);
 
         if (is_null($user)) {
             throw new AccessDeniedDomainException('User not found');
@@ -159,10 +159,7 @@ readonly class AuthUserService implements AuthUserServiceInterface
      */
     public function changePassword(string $userId, string $currentPassword, string $password): User
     {
-        // When we change password we check that the current password provided in request is valid.
-        // We must get fresh user here because user password was already erased in
-        // authentication manager.
-        $user = $this->userQueryService->freshUserById($userId);
+        $user = $this->userQueryService->findById($userId);
 
         if (is_null($user)) {
             throw new AccessDeniedDomainException('User not found');
@@ -197,10 +194,7 @@ readonly class AuthUserService implements AuthUserServiceInterface
      */
     public function deleteAccount(string $id, string $password): void
     {
-        // When we delete account we check that the password provided in request is valid.
-        // We must get fresh user here because user password was already erased in
-        // authentication manager.
-        $user = $this->userQueryService->freshUserById($id);
+        $user = $this->userQueryService->findById($id);
 
         if (is_null($user)) {
             throw new AccessDeniedDomainException('User not found');

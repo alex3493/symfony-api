@@ -35,10 +35,8 @@ class User extends DomainEventAwareEntity implements SoftDeleteAwareEntityInterf
      */
     public function __construct(
         private readonly string $id, private string $email, private string $password, private ?string $firstName,
-        private ?string $lastName, private array $roles,
-        // TODO: actually we never change $createdAt, but we have a reserved method that reloads a user from Doctrine. We have to fix it!
-        /** @link \App\Module\User\Domain\Contract\UserQueryServiceInterface::freshUserById */
-        private \DateTime $createdAt, private ?\DateTime $updatedAt = null, private ?\DateTime $deletedAt = null
+        private ?string $lastName, private array $roles, private readonly \DateTime $createdAt,
+        private ?\DateTime $updatedAt = null, private ?\DateTime $deletedAt = null
     ) {
         $this->authTokens = new ArrayCollection();
     }
