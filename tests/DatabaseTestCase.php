@@ -109,10 +109,12 @@ class DatabaseTestCase extends WebTestCase
             /** @var \App\Module\User\Domain\User $user */
             $user = $userData['user'];
             $deviceTokens = $user->getAuthTokens()->toArray();
-            if ($authDeviceName) {
-                $token = current(array_filter($deviceTokens, function ($token) use ($authDeviceName) {
-                    return $token->getName() === $authDeviceName;
-                })) ?: '';
+            if ($authDeviceName && $token = current(array_filter($deviceTokens,
+                    function ($token) use ($authDeviceName) {
+                        return $token->getName() === $authDeviceName;
+                    }))) {
+                /** @var \App\Module\User\Domain\AuthToken $token */
+                $token = $token->getToken();
             } else {
                 $token = $userData['app_token'] ?? '';
             }
@@ -121,6 +123,14 @@ class DatabaseTestCase extends WebTestCase
         $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $token));
 
         return $client;
+    }
+
+    /**
+     * @return \Symfony\Bundle\FrameworkBundle\KernelBrowser|null
+     */
+    protected function getAnonymousClient(): ?KernelBrowser
+    {
+        return static::getReusableClient();
     }
 
     /**

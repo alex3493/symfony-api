@@ -11,7 +11,7 @@ class AccessTest extends DatabaseTestCase
 {
     public function test_public_page(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
         $client->jsonRequest('GET', '/api/');
 
         $this->assertResponseIsSuccessful();
@@ -23,17 +23,9 @@ class AccessTest extends DatabaseTestCase
             ['name' => 'web', 'expiresAfter' => 24 * 60],
         ]);
 
-        $client = $this->getAuthenticatedClient($user, false);
+        $client = $this->getAuthenticatedClient($user, false, 'web');
 
         $client->jsonRequest('GET', '/api/app/dashboard');
-
-        //$token = $user['app_token'];
-        //
-        //$client = self::getReusableClient();
-        //
-        //$client->jsonRequest('GET', '/api/app/dashboard', [], [
-        //    'HTTP_Authorization' => 'Bearer '.$token,
-        //]);
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -46,13 +38,9 @@ class AccessTest extends DatabaseTestCase
     {
         $user = static::$userSeeder->seedUser([], [], true);
 
-        $token = $user['jwt_token'];
+        $client = $this->getAuthenticatedClient($user);
 
-        $client = self::getReusableClient();
-
-        $client->jsonRequest('GET', '/api/web/dashboard', [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        $client->jsonRequest('GET', '/api/web/dashboard');
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -69,13 +57,9 @@ class AccessTest extends DatabaseTestCase
             ['name' => 'iPhone 15', 'expiresAfter' => null],
         ]);
 
-        $token = $user['app_token'];
+        $client = $this->getAuthenticatedClient($user, false);
 
-        $client = self::getReusableClient();
-
-        $client->jsonRequest('GET', '/api/app/dashboard', [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        $client->jsonRequest('GET', '/api/app/dashboard');
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -89,13 +73,9 @@ class AccessTest extends DatabaseTestCase
             'deleted' => true,
         ], [], true);
 
-        $token = $user['jwt_token'];
+        $client = $this->getAuthenticatedClient($user, true);
 
-        $client = self::getReusableClient();
-
-        $client->jsonRequest('GET', '/api/web/dashboard', [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        $client->jsonRequest('GET', '/api/web/dashboard');
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -105,7 +85,7 @@ class AccessTest extends DatabaseTestCase
 
     public function test_we_cannot_access_private_page_when_unauthorized(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('GET', '/api/app/dashboard', [], [
             'HTTP_Authorization' => 'Bearer wrong_token',
@@ -120,13 +100,9 @@ class AccessTest extends DatabaseTestCase
             ['name' => 'web', 'isExpired' => true],
         ]);
 
-        $token = $user['app_token'];
+        $client = $this->getAuthenticatedClient($user, false);
 
-        $client = self::getReusableClient();
-
-        $client->jsonRequest('GET', '/api/app/dashboard', [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        $client->jsonRequest('GET', '/api/app/dashboard');
 
         $this->assertResponseStatusCodeSame(401);
     }
@@ -135,7 +111,7 @@ class AccessTest extends DatabaseTestCase
     {
         $user = static::$userSeeder->seedUser();
 
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/app/forgot-password', [
             'email' => $user['user']->getEmail(),
@@ -178,7 +154,7 @@ class AccessTest extends DatabaseTestCase
 
     public function test_user_request_password_reset_validation(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/app/forgot-password', [
             'email' => '@invalid-email',
@@ -199,7 +175,7 @@ class AccessTest extends DatabaseTestCase
         $user = static::$userSeeder->seedUser([], [], true);
         $passwordResetToken = static::$userSeeder->seedPasswordResetToken($user['user'], 'test-token');
 
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/app/reset-password', [
             'email' => $user['user']->getEmail(),

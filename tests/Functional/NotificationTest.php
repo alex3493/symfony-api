@@ -12,9 +12,7 @@ class NotificationTest extends DatabaseTestCase
             ['name' => 'web', 'expiresAfter' => 24 * 60],
         ]);
 
-        $token = $user['app_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user, false);
 
         $client->jsonRequest('POST', '/api/app/test-mercure', [
             'topic' => 'test-topic',
@@ -22,8 +20,6 @@ class NotificationTest extends DatabaseTestCase
                 'message' => 'Hi, there!',
                 'status' => 'OK',
             ],
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $response = json_decode($client->getResponse()->getContent());
@@ -46,13 +42,9 @@ class NotificationTest extends DatabaseTestCase
     {
         $user = static::$userSeeder->seedUser([], [], true);
 
-        $token = $user['jwt_token'];
+        $client = $this->getAuthenticatedClient($user, true);
 
-        $client = self::getReusableClient();
-
-        $client->jsonRequest('GET', '/api/web/mercure-auth', [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        $client->jsonRequest('GET', '/api/web/mercure-auth');
 
         $this->assertResponseIsSuccessful();
 

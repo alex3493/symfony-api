@@ -37,13 +37,9 @@ class AdminTest extends DatabaseTestCase
             ])['user'];
         }
 
-        $token = $user['jwt_token'];
+        $client = $this->getAuthenticatedClient($user);
 
-        $client = self::getReusableClient();
-
-        $client->jsonRequest('GET', '/api/admin/users?page=1&limit=10&orderBy=name&orderType=asc', [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        $client->jsonRequest('GET', '/api/admin/users?page=1&limit=10&orderBy=name&orderType=asc');
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -67,17 +63,13 @@ class AdminTest extends DatabaseTestCase
             'roles' => ['ROLE_ADMIN'],
         ], [], true);
 
-        $token = $user['jwt_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
         $client->jsonRequest('POST', '/api/admin/users', [
             'email' => 'user@example.com',
             'password' => 'password',
             'first_name' => 'John',
             'last_name' => 'Doe',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $response = json_decode($client->getResponse()->getContent());
@@ -94,9 +86,7 @@ class AdminTest extends DatabaseTestCase
             'roles' => ['ROLE_ADMIN'],
         ], [], true);
 
-        $token = $user['jwt_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
         $client->jsonRequest('POST', '/api/admin/users', [
             'email' => 'user@example.com',
@@ -104,8 +94,6 @@ class AdminTest extends DatabaseTestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'role' => 'ROLE_ADMIN',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $response = json_decode($client->getResponse()->getContent());
@@ -125,11 +113,9 @@ class AdminTest extends DatabaseTestCase
             'roles' => ['ROLE_ADMIN'],
         ], [], true);
 
-        $token = $user['jwt_token'];
-
         $testUser = static::$userSeeder->seedUser();
 
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
         $client->jsonRequest('PATCH', '/api/admin/user/'.$testUser['user']->getId(), [
             'email' => 'updated@example.com',
@@ -137,8 +123,6 @@ class AdminTest extends DatabaseTestCase
             'first_name' => 'Jane',
             'last_name' => 'Doe',
             'role' => 'ROLE_ADMIN',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $response = json_decode($client->getResponse()->getContent());
@@ -175,11 +159,9 @@ class AdminTest extends DatabaseTestCase
             'roles' => ['ROLE_ADMIN'],
         ], [], true);
 
-        $token = $user['jwt_token'];
-
         $testUser = static::$userSeeder->seedUser();
 
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
         $client->jsonRequest('PATCH', '/api/admin/user/'.$testUser['user']->getId(), [
             'email' => '@invalid-email',
@@ -187,8 +169,6 @@ class AdminTest extends DatabaseTestCase
             'first_name' => 'Jane',
             'last_name' => 'Doe',
             'role' => 'ROLE_ADMIN',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $this->assertResponseStatusCodeSame(422);
@@ -208,15 +188,11 @@ class AdminTest extends DatabaseTestCase
             'roles' => ['ROLE_ADMIN'],
         ], [], true);
 
-        $token = $user['jwt_token'];
-
         $testUser = static::$userSeeder->seedUser();
 
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('PATCH', '/api/admin/user/delete/'.$testUser['user']->getId(), [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        $client->jsonRequest('PATCH', '/api/admin/user/delete/'.$testUser['user']->getId());
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -244,17 +220,13 @@ class AdminTest extends DatabaseTestCase
             'roles' => ['ROLE_ADMIN'],
         ], [], true);
 
-        $token = $user['jwt_token'];
-
         $testUser = static::$userSeeder->seedUser([
             'deleted' => true,
         ]);
 
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('PATCH', '/api/admin/user/restore/'.$testUser['user']->getId(), [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        $client->jsonRequest('PATCH', '/api/admin/user/restore/'.$testUser['user']->getId());
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -282,15 +254,11 @@ class AdminTest extends DatabaseTestCase
             'roles' => ['ROLE_ADMIN'],
         ], [], true);
 
-        $token = $user['jwt_token'];
-
         $testUser = static::$userSeeder->seedUser();
 
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('DELETE', '/api/admin/user/'.$testUser['user']->getId(), [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        $client->jsonRequest('DELETE', '/api/admin/user/'.$testUser['user']->getId());
 
         $response = json_decode($client->getResponse()->getContent());
 
