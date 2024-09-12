@@ -23,13 +23,17 @@ class AccessTest extends DatabaseTestCase
             ['name' => 'web', 'expiresAfter' => 24 * 60],
         ]);
 
-        $token = $user['app_token'];
+        $client = $this->getAuthenticatedClient($user, false);
 
-        $client = self::getReusableClient();
+        $client->jsonRequest('GET', '/api/app/dashboard');
 
-        $client->jsonRequest('GET', '/api/app/dashboard', [], [
-            'HTTP_Authorization' => 'Bearer '.$token,
-        ]);
+        //$token = $user['app_token'];
+        //
+        //$client = self::getReusableClient();
+        //
+        //$client->jsonRequest('GET', '/api/app/dashboard', [], [
+        //    'HTTP_Authorization' => 'Bearer '.$token,
+        //]);
 
         $response = json_decode($client->getResponse()->getContent());
 

@@ -94,6 +94,36 @@ class DatabaseTestCase extends WebTestCase
     }
 
     /**
+     * @param array $userData
+     * @param bool|null $jwtAuth
+     * @param string|null $authDeviceName
+     * @return \Symfony\Bundle\FrameworkBundle\KernelBrowser|null
+     */
+    protected function getAuthenticatedClient(array $userData, ?bool $jwtAuth = true, ?string $authDeviceName = null
+    ): ?KernelBrowser {
+        $client = static::getReusableClient();
+
+        if ($jwtAuth) {
+            $token = $userData['jwt_token'] ?? '';
+        } else {
+            /** @var \App\Module\User\Domain\User $user */
+            $user = $userData['user'];
+            $deviceTokens = $user->getAuthTokens()->toArray();
+            if ($authDeviceName) {
+                $token = current(array_filter($deviceTokens, function ($token) use ($authDeviceName) {
+                    return $token->getName() === $authDeviceName;
+                })) ?: '';
+            } else {
+                $token = $userData['app_token'] ?? '';
+            }
+        }
+
+        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $token));
+
+        return $client;
+    }
+
+    /**
      * @return \Doctrine\ORM\EntityManager
      */
     protected function getEntityManager(): EntityManagerInterface
