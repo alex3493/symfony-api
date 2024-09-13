@@ -26,19 +26,6 @@ class DatabaseTestCase extends WebTestCase
 
     protected static ?UserSeeder $userSeeder;
 
-    //protected static function bootKernel(array $options = []): KernelInterface
-    //{
-    //    $kernel = parent::bootKernel($options);
-    //
-    //    // For MySql testing database we have to reset database before each test.
-    //    $platform = $kernel->getContainer()->get('doctrine')->getConnection()->getDatabasePlatform();
-    //    if (! $platform instanceof SqlitePlatform) {
-    //        // static::populateDatabase();
-    //    }
-    //
-    //    return $kernel;
-    //}
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -79,7 +66,7 @@ class DatabaseTestCase extends WebTestCase
     /**
      * @return \Symfony\Bundle\FrameworkBundle\KernelBrowser|null
      */
-    protected static function getReusableClient(): ?KernelBrowser
+    protected function getReusableClient(): ?KernelBrowser
     {
         if (isset(static::$client)) {
             return static::$client;
@@ -98,7 +85,7 @@ class DatabaseTestCase extends WebTestCase
      */
     protected function getAuthenticatedClient(array $userData, ?bool $jwtAuth = true, ?string $authDeviceName = null
     ): ?KernelBrowser {
-        $client = static::getReusableClient();
+        $client = $this->getReusableClient();
 
         if ($jwtAuth) {
             $token = $userData['jwt_token'] ?? '';
@@ -127,7 +114,7 @@ class DatabaseTestCase extends WebTestCase
      */
     protected function getAnonymousClient(): ?KernelBrowser
     {
-        return static::getReusableClient();
+        return $this->getReusableClient();
     }
 
     /**
@@ -135,7 +122,7 @@ class DatabaseTestCase extends WebTestCase
      */
     protected function getEntityManager(): EntityManagerInterface
     {
-        $client = static::getReusableClient();
+        $client = $this->getReusableClient();
 
         return $client->getContainer()->get('doctrine')->getManager();
     }
