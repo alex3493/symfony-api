@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\Persistence\ObjectRepository;
-use Hautelook\AliceBundle\PhpUnit\BaseDatabaseTrait;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -22,25 +21,23 @@ class DatabaseTestCase extends WebTestCase
     use InteractsWithMessenger;
 
     // Only when using MySql as testing database.
-    use BaseDatabaseTrait;
 
     protected static ?KernelBrowser $client;
 
     protected static ?UserSeeder $userSeeder;
 
-    protected static function bootKernel(array $options = []): KernelInterface
-    {
-        static::ensureKernelTestCase();
-        $kernel = parent::bootKernel($options);
-
-        // For MySql testing database we have to reset database before each test.
-        $platform = $kernel->getContainer()->get('doctrine')->getConnection()->getDatabasePlatform();
-        if (! $platform instanceof SqlitePlatform) {
-            static::populateDatabase();
-        }
-
-        return $kernel;
-    }
+    //protected static function bootKernel(array $options = []): KernelInterface
+    //{
+    //    $kernel = parent::bootKernel($options);
+    //
+    //    // For MySql testing database we have to reset database before each test.
+    //    $platform = $kernel->getContainer()->get('doctrine')->getConnection()->getDatabasePlatform();
+    //    if (! $platform instanceof SqlitePlatform) {
+    //        // static::populateDatabase();
+    //    }
+    //
+    //    return $kernel;
+    //}
 
     protected function setUp(): void
     {
