@@ -12,7 +12,7 @@ class WebUserTest extends DatabaseTestCase
 {
     public function test_we_can_register_a_user(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/web/register', [
             'email' => 'test@example.com',
@@ -51,7 +51,7 @@ class WebUserTest extends DatabaseTestCase
 
     public function test_register_user_error_password_confirmation(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/web/register', [
             'email' => 'test@example.com',
@@ -77,7 +77,7 @@ class WebUserTest extends DatabaseTestCase
 
     public function test_we_can_login_a_user(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         static::$userSeeder->seedUser([
             'email' => 'test@example.com',
@@ -106,7 +106,7 @@ class WebUserTest extends DatabaseTestCase
 
     public function test_login_user_error_invalid_credentials(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         static::$userSeeder->seedUser([
             'email' => 'test@example.com',
@@ -129,7 +129,7 @@ class WebUserTest extends DatabaseTestCase
 
     public function test_we_can_refresh_token_jwt(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $user = static::$userSeeder->seedUser([
             'email' => 'test@example.com',
@@ -163,16 +163,12 @@ class WebUserTest extends DatabaseTestCase
             'lastName' => 'Last',
         ], [], true);
 
-        $token = $user['jwt_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
         $client->jsonRequest('PATCH', '/api/web/account/me/update', [
             'email' => 'updated@example.com',
             'first_name' => 'First Modified',
             'last_name' => 'Last Modified',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $this->assertResponseIsSuccessful();
@@ -197,16 +193,12 @@ class WebUserTest extends DatabaseTestCase
             ['name' => 'iPhone 15', 'expiresAfter' => null],
         ], true);
 
-        $token = $user['jwt_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
         $client->jsonRequest('PATCH', '/api/web/account/me/change-password', [
             'current_password' => 'password',
             'password' => 'new-password',
             'password_confirmation' => 'new-password',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $this->assertResponseIsSuccessful();
@@ -223,16 +215,12 @@ class WebUserTest extends DatabaseTestCase
             'email' => 'test@test.com',
         ], [], true);
 
-        $token = $user['jwt_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user);
 
         $client->jsonRequest('POST', '/api/web/account/me/logout', [
             'current_password' => 'password',
             'password' => 'new-password',
             'password_confirmation' => 'new-password',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $this->assertResponseIsSuccessful();

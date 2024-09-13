@@ -24,7 +24,7 @@ doctrine:
                 alias: App\Module\User\Domain
 
         controller_resolver:
-            auto_mapping: true
+            auto_mapping: false
 
         filters:
             softDeleted:

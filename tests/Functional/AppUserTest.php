@@ -11,7 +11,7 @@ class AppUserTest extends DatabaseTestCase
 {
     public function test_we_can_register_a_user(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/app/register', [
             'email' => 'test@example.com',
@@ -48,7 +48,7 @@ class AppUserTest extends DatabaseTestCase
 
     public function test_register_a_user_error_duplicate_email(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         static::$userSeeder->seedUser([
             'email' => 'test@example.com',
@@ -77,7 +77,7 @@ class AppUserTest extends DatabaseTestCase
 
     public function test_register_a_user_error_invalid_email(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/app/register', [
             'email' => 'invalid.com',
@@ -99,7 +99,7 @@ class AppUserTest extends DatabaseTestCase
 
     public function test_register_user_error_missing_password(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/app/register', [
             'email' => 'test@example.com',
@@ -115,7 +115,7 @@ class AppUserTest extends DatabaseTestCase
 
     public function test_register_user_error_blank_password(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/app/register', [
             'email' => 'test@example.com',
@@ -131,7 +131,7 @@ class AppUserTest extends DatabaseTestCase
 
     public function test_register_user_error_invalid_email(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         $client->jsonRequest('POST', '/api/app/register', [
             'email' => 'invalid-email.com',
@@ -147,7 +147,7 @@ class AppUserTest extends DatabaseTestCase
 
     public function test_we_can_login_a_user(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         static::$userSeeder->seedUser([
             'email' => 'test@example.com',
@@ -181,7 +181,7 @@ class AppUserTest extends DatabaseTestCase
 
     public function test_login_error_invalid_credentials(): void
     {
-        $client = self::getReusableClient();
+        $client = $this->getAnonymousClient();
 
         static::$userSeeder->seedUser([
             'email' => 'test@example.com',
@@ -214,13 +214,9 @@ class AppUserTest extends DatabaseTestCase
 
         $tokens = $user['user']->getAuthTokens();
 
-        $token = $tokens[0];
+        $client = $this->getAuthenticatedClient($user, false, 'iPhone 15');
 
-        $client = self::getReusableClient();
-
-        $client->jsonRequest('DELETE', '/api/app/account/logout/'.$tokens[1]->getId(), [], [
-            'HTTP_Authorization' => 'Bearer '.$token->getToken(),
-        ]);
+        $client->jsonRequest('DELETE', '/api/app/account/logout/'.$tokens[1]->getId());
 
         $this->assertResponseIsSuccessful();
 
@@ -244,15 +240,9 @@ class AppUserTest extends DatabaseTestCase
             ['name' => 'iPhone 15', 'expiresAfter' => null],
         ]);
 
-        $tokens = $user['user']->getAuthTokens();
+        $client = $this->getAuthenticatedClient($user, false);
 
-        $token = $tokens[0];
-
-        $client = self::getReusableClient();
-
-        $client->jsonRequest('DELETE', '/api/app/account/logout/invalid-token', [], [
-            'HTTP_Authorization' => 'Bearer '.$token->getToken(),
-        ]);
+        $client->jsonRequest('DELETE', '/api/app/account/logout/invalid-token');
 
         $this->assertResponseStatusCodeSame(404);
 
@@ -267,13 +257,9 @@ class AppUserTest extends DatabaseTestCase
             ['name' => 'iPad', 'expiresAfter' => null],
         ]);
 
-        $token = $user['user']->getAuthTokens()[0];
+        $client = $this->getAuthenticatedClient($user, false, 'iPhone 15');
 
-        $client = self::getReusableClient();
-
-        $client->jsonRequest('POST', '/api/app/account/me/sign-out', [], [
-            'HTTP_Authorization' => 'Bearer '.$token->getToken(),
-        ]);
+        $client->jsonRequest('POST', '/api/app/account/me/sign-out');
 
         $this->assertResponseIsSuccessful();
 
@@ -300,16 +286,12 @@ class AppUserTest extends DatabaseTestCase
             ['name' => 'iPad', 'expiresAfter' => null],
         ]);
 
-        $token = $user['app_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user, false);
 
         $client->jsonRequest('PATCH', '/api/app/account/me/update', [
             'email' => 'updated@example.com',
             'first_name' => 'First Modified',
             'last_name' => 'Last Modified',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $this->assertResponseIsSuccessful();
@@ -333,16 +315,12 @@ class AppUserTest extends DatabaseTestCase
             ['name' => 'iPhone 15', 'expiresAfter' => null],
         ]);
 
-        $token = $user['app_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user, false);
 
         $client->jsonRequest('PATCH', '/api/app/account/me/change-password', [
             'current_password' => 'password',
             'password' => 'new-password',
             'password_confirmation' => 'new-password',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $this->assertResponseIsSuccessful();
@@ -361,16 +339,12 @@ class AppUserTest extends DatabaseTestCase
             ['name' => 'iPhone 15', 'expiresAfter' => null],
         ]);
 
-        $token = $user['app_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user, false);
 
         $client->jsonRequest('PATCH', '/api/app/account/me/change-password', [
             'current_password' => 'wrong-password',
             'password' => 'new-password',
             'password_confirmation' => 'new-password',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $this->assertResponseStatusCodeSame(422);
@@ -392,16 +366,12 @@ class AppUserTest extends DatabaseTestCase
             ['name' => 'iPhone 15', 'expiresAfter' => null],
         ]);
 
-        $token = $user['app_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user, false);
 
         $client->jsonRequest('PATCH', '/api/app/account/me/change-password', [
             'current_password' => '',
             'password' => 'new-password',
             'password_confirmation' => 'wrong-new-password',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $this->assertResponseStatusCodeSame(422);
@@ -430,14 +400,10 @@ class AppUserTest extends DatabaseTestCase
             ['name' => 'iPhone 15', 'expiresAfter' => null],
         ]);
 
-        $token = $user['app_token'];
-
-        $client = self::getReusableClient();
+        $client = $this->getAuthenticatedClient($user, false);
 
         $client->jsonRequest('POST', '/api/app/account/me/delete-account', [
             'password' => 'password',
-        ], [
-            'HTTP_Authorization' => 'Bearer '.$token,
         ]);
 
         $this->assertResponseIsSuccessful();

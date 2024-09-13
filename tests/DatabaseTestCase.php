@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\Persistence\ObjectRepository;
-use Hautelook\AliceBundle\PhpUnit\BaseDatabaseTrait;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -22,25 +21,10 @@ class DatabaseTestCase extends WebTestCase
     use InteractsWithMessenger;
 
     // Only when using MySql as testing database.
-    use BaseDatabaseTrait;
 
     protected static ?KernelBrowser $client;
 
     protected static ?UserSeeder $userSeeder;
-
-    protected static function bootKernel(array $options = []): KernelInterface
-    {
-        static::ensureKernelTestCase();
-        $kernel = parent::bootKernel($options);
-
-        // For MySql testing database we have to reset database before each test.
-        $platform = $kernel->getContainer()->get('doctrine')->getConnection()->getDatabasePlatform();
-        if (! $platform instanceof SqlitePlatform) {
-            static::populateDatabase();
-        }
-
-        return $kernel;
-    }
 
     protected function setUp(): void
     {
@@ -82,7 +66,7 @@ class DatabaseTestCase extends WebTestCase
     /**
      * @return \Symfony\Bundle\FrameworkBundle\KernelBrowser|null
      */
-    protected static function getReusableClient(): ?KernelBrowser
+    protected function getReusableClient(): ?KernelBrowser
     {
         if (isset(static::$client)) {
             return static::$client;
@@ -94,11 +78,51 @@ class DatabaseTestCase extends WebTestCase
     }
 
     /**
+     * @param array $userData
+     * @param bool|null $jwtAuth
+     * @param string|null $authDeviceName
+     * @return \Symfony\Bundle\FrameworkBundle\KernelBrowser|null
+     */
+    protected function getAuthenticatedClient(array $userData, ?bool $jwtAuth = true, ?string $authDeviceName = null
+    ): ?KernelBrowser {
+        $client = $this->getReusableClient();
+
+        if ($jwtAuth) {
+            $token = $userData['jwt_token'] ?? '';
+        } else {
+            /** @var \App\Module\User\Domain\User $user */
+            $user = $userData['user'];
+            $deviceTokens = $user->getAuthTokens()->toArray();
+            if ($authDeviceName && $token = current(array_filter($deviceTokens,
+                    function ($token) use ($authDeviceName) {
+                        return $token->getName() === $authDeviceName;
+                    }))) {
+                /** @var \App\Module\User\Domain\AuthToken $token */
+                $token = $token->getToken();
+            } else {
+                $token = $userData['app_token'] ?? '';
+            }
+        }
+
+        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $token));
+
+        return $client;
+    }
+
+    /**
+     * @return \Symfony\Bundle\FrameworkBundle\KernelBrowser|null
+     */
+    protected function getAnonymousClient(): ?KernelBrowser
+    {
+        return $this->getReusableClient();
+    }
+
+    /**
      * @return \Doctrine\ORM\EntityManager
      */
     protected function getEntityManager(): EntityManagerInterface
     {
-        $client = static::getReusableClient();
+        $client = $this->getReusableClient();
 
         return $client->getContainer()->get('doctrine')->getManager();
     }
