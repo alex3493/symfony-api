@@ -156,6 +156,11 @@ See frontend readme for details.
 
 Use Mailer container UI http://localhost:8025 to read password reset emails.
 
+**Important note:** when using frontend application in development mode (compiled with Vite) make sure that you have API
+Docker containers already running. Mercure Hub is configured to use port 3000, which is also the default port for React
+UI. Vite automatically assigns next available port if 3000 is occupied. However, it will not work the other way
+round: `docker compose up -d` will fail if port 3000 is not available.
+
 ## What's next
 
 Currently, we have only one entity CRUD example - User entity. As far as this entity is also used for authentication, it
