@@ -54,7 +54,8 @@ Depending on the authentication mode all subsequent requests should use one of t
 - `^/api/app/` - Auth token (mobile app)
 - `^/api/web/` - JWT (browser)
 - `^/api/admin/` - JWT (browser), endpoints for admin users only
-- `^/api/app/(forgot-password|reset-password)` - special endpoints for mobile app users who wish to reset their passwords
+- `^/api/app/(forgot-password|reset-password)` - special endpoints for mobile app users who wish to reset their
+  passwords
 - `^/api/web/(forgot-password|reset-password)` - special endpoints for Web SPA users who wish to reset their passwords
 
 **Account actions (auth token):**
@@ -141,6 +142,19 @@ commands should be executed inside docker `php` container.
 You can use Swagger UI at http://localhost:8888 for testing selected API endpoints. Most endpoints require
 authorization, so you will have to run registration / login first and then copy token from response to authorize
 subsequent requests.
+
+You can also test some API features using a compatible ReactJS [frontend](https://github.com/alex3493/symfony-react-ui)
+project. It is preconfigured to use default http://localhost as API URL.
+
+For testing *password reset* flow in frontend you have to configure frontend URL to get correct password reset link by
+email. See `.env`: `FRONTEND_URL=http://localhost:8080`
+
+This is a default value that will work if you run the frontend application in Docker. However, if you compile UI locally
+with npm this value will most likely be `FRONTEND_URL=http://localhost:3001`.
+
+See frontend readme for details.
+
+Use Mailer container UI http://localhost:8025 to read password reset emails.
 
 ## What's next
 
