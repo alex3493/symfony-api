@@ -304,5 +304,15 @@ class AdminTest extends DatabaseTestCase
 
         $users = $userRepository->findAll();
         $this->assertCount(1, $users);
+
+        $messages = $this->transport('async')->queue()->messages();
+
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
+        $this->assertEquals('force_delete', $messages[0]->getPayload()['action']);
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
     }
 }
