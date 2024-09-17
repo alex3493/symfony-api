@@ -8,6 +8,7 @@ use App\Module\Shared\Domain\Event\DomainEventAwareEntity;
 use App\Module\Shared\Domain\Exception\UnprocessableEntityDomainException;
 use App\Module\Shared\Domain\ValueObject\Email;
 use App\Module\Shared\Domain\ValueObject\EntityId;
+use App\Module\User\Domain\Event\UserCreatedDomainEvent;
 use App\Module\User\Domain\Event\UserEmailChangedDomainEvent;
 use App\Module\User\Domain\Event\UserRestoredDomainEvent;
 use App\Module\User\Domain\Event\UserSoftDeletedDomainEvent;
@@ -47,16 +48,24 @@ class User extends DomainEventAwareEntity implements SoftDeleteAwareEntityInterf
      * @param string|null $firstName
      * @param string|null $lastName
      * @param array $roles
+     * @param bool $recordCreatedEvent
      * @return User
      * @throws \App\Module\Shared\Domain\Exception\UnprocessableEntityDomainException
      */
     public static function create(
-        string $email, string $password, ?string $firstName, ?string $lastName, array $roles = []
+        string $email, string $password, ?string $firstName, ?string $lastName, array $roles = [],
+        bool $recordCreatedEvent = true
     ): User {
         $user = new self(EntityId::create()->getValue(), (new Email($email))->getValue(), $password, $firstName,
             $lastName, [], new \DateTime());
 
-        return $user->setRoles($roles);
+        $user->setRoles($roles);
+
+        if ($recordCreatedEvent) {
+            $user->record(new UserCreatedDomainEvent($user));
+        }
+
+        return $user;
     }
 
     /**

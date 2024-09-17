@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Module\Shared\Domain\Message\MercureUpdateMessage;
+use App\Module\User\Domain\Event\UserCreatedDomainEvent;
 use App\Module\User\Domain\Event\UserEmailChangedDomainEvent;
 use App\Module\User\Domain\Event\UserRestoredDomainEvent;
 use App\Module\User\Domain\Event\UserSoftDeletedDomainEvent;
@@ -104,6 +106,25 @@ class AdminTest extends DatabaseTestCase
         $this->assertEquals('John', $response->user->first_name);
         $this->assertEquals('Doe', $response->user->last_name);
         $this->assertEquals('ROLE_ADMIN', $response->user->role);
+
+        $this->transport('async')->queue()->assertNotEmpty();
+
+        $messages = $this->transport('async')->queue()->messages();
+
+        $this->assertInstanceOf(UserCreatedDomainEvent::class, $messages[0]);
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
+
+        $this->assertEquals('user@example.com', $messages[0]->toPrimitives()['user']->getEmail());
+        $this->assertEquals('user@example.com', $messages[1]->getPayload()['user']['email']);
+
+        $this->assertEquals($response->user->id, $messages[0]->toPrimitives()['user']->getId());
+
+        $this->assertEquals($messages[0]->toPrimitives()['user']->getId(), $messages[1]->getPayload()['user']['id']);
+
+        $this->transport('async')->process(2);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
     }
 
     public function test_admin_can_update_user(): void

@@ -5,6 +5,7 @@ namespace App\Module\User\Infrastructure\Persistence;
 
 use App\Module\Shared\Domain\Exception\NotFoundDomainException;
 use App\Module\Shared\Domain\Exception\ValidationException;
+use App\Module\Shared\Domain\Message\MercureUpdateMessage;
 use App\Module\Shared\Domain\ValueObject\Email;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 use App\Module\User\Domain\RefreshToken;
@@ -12,19 +13,23 @@ use App\Module\User\Domain\User;
 use App\Module\User\Domain\ValueObject\UserRole;
 use App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository;
 use App\Module\User\Infrastructure\Security\AuthUser;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class UserCommandService implements UserCommandServiceInterface
 {
     /**
      * @param \App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository $repository
+     * @param \Symfony\Component\Messenger\MessageBusInterface $bus
+     * @param \Symfony\Component\Serializer\SerializerInterface $serializer
      * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $passwordHasher
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
      */
     public function __construct(
-        private UserRepository $repository, private UserPasswordHasherInterface $passwordHasher,
-        private ValidatorInterface $validator
+        private UserRepository $repository, private MessageBusInterface $bus, private SerializerInterface $serializer,
+        private UserPasswordHasherInterface $passwordHasher, private ValidatorInterface $validator
     ) {
     }
 
@@ -48,7 +53,11 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $user = User::create($email, $password, $firstName, $lastName, $roles);
 
-        return $this->validateAndSave($user, $password);
+        $user = $this->validateAndSave($user, $password);
+
+        $this->publishMercureUpdate($user, 'create');
+
+        return $user;
     }
 
     /**
@@ -222,5 +231,20 @@ readonly class UserCommandService implements UserCommandServiceInterface
         $this->repository->save($user);
 
         return $user;
+    }
+
+    /**
+     * @param \App\Module\User\Domain\User $user
+     * @param string $action
+     * @return void
+     */
+    private function publishMercureUpdate(User $user, string $action): void
+    {
+        $message = new MercureUpdateMessage('user::created', [
+            'user' => $this->serializer->normalize($user, 'json', ['groups' => ['user']]),
+            'action' => $action,
+        ]);
+
+        $this->bus->dispatch($message);
     }
 }
