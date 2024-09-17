@@ -6,6 +6,7 @@ namespace App\Tests\Integration;
 use App\Module\Shared\Domain\Bus\Command\CommandBus;
 use App\Module\Shared\Domain\Bus\Query\QueryBus;
 use App\Module\Shared\Domain\Exception\ValidationException;
+use App\Module\Shared\Domain\Message\MercureUpdateMessage;
 use App\Module\User\Application\Admin\AdminCreateUser\AdminCreateUserCommand;
 use App\Module\User\Application\Admin\AdminForceDeleteUser\AdminForceDeleteUserCommand;
 use App\Module\User\Application\Admin\AdminRestoreUser\AdminRestoreUserCommand;
@@ -140,7 +141,10 @@ class AdminUserTest extends DatabaseTestCase
         $this->assertEquals('test@example.com', $messages[0]->getOldEmail());
         $this->assertEquals('updated@example.com', $messages[0]->getNewEmail());
 
-        $this->transport('async')->process(1);
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
+        $this->assertEquals('update', $messages[1]->getPayload()['action']);
+
+        $this->transport('async')->process(2);
 
         $this->transport('async')->rejected()->assertEmpty();
         $this->transport('async')->queue()->assertEmpty();
@@ -167,7 +171,14 @@ class AdminUserTest extends DatabaseTestCase
         $updatedPassword = $user->getPassword();
         $this->assertNotEquals($originalPassword, $updatedPassword);
 
-        // We didn't update user email, so we don't expect messages in queue.
+        $messages = $this->transport('async')->queue()->messages();
+
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
+        $this->assertEquals('update', $messages[0]->getPayload()['action']);
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
         $this->transport('async')->queue()->assertEmpty();
     }
 
@@ -211,7 +222,10 @@ class AdminUserTest extends DatabaseTestCase
 
         $this->assertInstanceOf(UserSoftDeletedDomainEvent::class, $messages[0]);
 
-        $this->transport('async')->process(1);
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
+        $this->assertEquals('soft_delete', $messages[1]->getPayload()['action']);
+
+        $this->transport('async')->process(2);
 
         $this->transport('async')->rejected()->assertEmpty();
         $this->transport('async')->queue()->assertEmpty();
@@ -239,7 +253,10 @@ class AdminUserTest extends DatabaseTestCase
 
         $this->assertInstanceOf(UserRestoredDomainEvent::class, $messages[0]);
 
-        $this->transport('async')->process(1);
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
+        $this->assertEquals('restore', $messages[1]->getPayload()['action']);
+
+        $this->transport('async')->process(2);
 
         $this->transport('async')->rejected()->assertEmpty();
         $this->transport('async')->queue()->assertEmpty();

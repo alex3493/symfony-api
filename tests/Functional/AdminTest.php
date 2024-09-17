@@ -113,6 +113,7 @@ class AdminTest extends DatabaseTestCase
 
         $this->assertInstanceOf(UserCreatedDomainEvent::class, $messages[0]);
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
+        $this->assertEquals('create', $messages[1]->getPayload()['action']);
 
         $this->assertEquals('user@example.com', $messages[0]->toPrimitives()['user']->getEmail());
         $this->assertEquals('user@example.com', $messages[1]->getPayload()['user']['email']);
@@ -167,7 +168,10 @@ class AdminTest extends DatabaseTestCase
         $this->assertEquals('test@example.com', $messages[0]->getOldEmail());
         $this->assertEquals('updated@example.com', $messages[0]->getNewEmail());
 
-        $this->transport('async')->process(1);
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
+        $this->assertEquals('update', $messages[1]->getPayload()['action']);
+
+        $this->transport('async')->process(2);
 
         $this->transport('async')->rejected()->assertEmpty();
         $this->transport('async')->queue()->assertEmpty();
@@ -228,7 +232,10 @@ class AdminTest extends DatabaseTestCase
 
         $this->assertInstanceOf(UserSoftDeletedDomainEvent::class, $messages[0]);
 
-        $this->transport('async')->process(1);
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
+        $this->assertEquals('soft_delete', $messages[1]->getPayload()['action']);
+
+        $this->transport('async')->process(2);
 
         $this->transport('async')->rejected()->assertEmpty();
         $this->transport('async')->queue()->assertEmpty();
@@ -262,7 +269,10 @@ class AdminTest extends DatabaseTestCase
 
         $this->assertInstanceOf(UserRestoredDomainEvent::class, $messages[0]);
 
-        $this->transport('async')->process(1);
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
+        $this->assertEquals('restore', $messages[1]->getPayload()['action']);
+
+        $this->transport('async')->process(2);
 
         $this->transport('async')->rejected()->assertEmpty();
         $this->transport('async')->queue()->assertEmpty();

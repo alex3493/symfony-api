@@ -83,7 +83,11 @@ readonly class UserCommandService implements UserCommandServiceInterface
         $user->setFirstName($firstName);
         $user->setLastName($lastName);
 
-        return $this->validateAndSave($user, null);
+        $user = $this->validateAndSave($user);
+
+        $this->publishMercureUpdate($user, 'update');
+
+        return $user;
     }
 
     /**
@@ -114,7 +118,11 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $user->setRoles($roles);
 
-        return $this->validateAndSave($user, $password);
+        $user = $this->validateAndSave($user, $password);
+
+        $this->publishMercureUpdate($user, 'update');
+
+        return $user;
     }
 
     /**
@@ -157,6 +165,8 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         // Delete from repository.
         $this->repository->delete($user);
+
+        $this->publishMercureUpdate($user, 'force_delete');
     }
 
     /**
@@ -176,6 +186,8 @@ readonly class UserCommandService implements UserCommandServiceInterface
         $user->softDelete();
 
         $this->repository->save($user);
+
+        $this->publishMercureUpdate($user, 'soft_delete');
 
         return $user;
     }
@@ -198,6 +210,8 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $this->repository->save($user);
 
+        $this->publishMercureUpdate($user, 'restore');
+
         return $user;
     }
 
@@ -214,7 +228,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
      * @return \App\Module\User\Domain\User
      * @throws \App\Module\Shared\Domain\Exception\ValidationException
      */
-    private function validateAndSave(User $user, ?string $password): User
+    private function validateAndSave(User $user, ?string $password = null): User
     {
         $errors = $this->validator->validate($user);
         if (count($errors) > 0) {
@@ -240,7 +254,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
      */
     private function publishMercureUpdate(User $user, string $action): void
     {
-        $message = new MercureUpdateMessage('user::created', [
+        $message = new MercureUpdateMessage('users::update', [
             'user' => $this->serializer->normalize($user, 'json', ['groups' => ['user']]),
             'action' => $action,
         ]);
