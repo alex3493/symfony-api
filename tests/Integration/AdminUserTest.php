@@ -5,7 +5,6 @@ namespace App\Tests\Integration;
 
 use App\Module\Shared\Domain\Bus\Command\CommandBus;
 use App\Module\Shared\Domain\Bus\Query\QueryBus;
-use App\Module\Shared\Domain\Exception\ValidationException;
 use App\Module\Shared\Domain\Message\MercureUpdateMessage;
 use App\Module\User\Application\Admin\AdminCreateUser\AdminCreateUserCommand;
 use App\Module\User\Application\Admin\AdminForceDeleteUser\AdminForceDeleteUserCommand;
@@ -21,7 +20,6 @@ use App\Tests\DatabaseTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Messenger\Exception\ValidationFailedException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AdminUserTest extends DatabaseTestCase
 {
@@ -105,7 +103,6 @@ class AdminUserTest extends DatabaseTestCase
         $container = static::getContainer();
         $userRepository = $this->getRepository(User::class);
         $commandBus = $container->get(CommandBus::class);
-        $validator = $container->get(ValidatorInterface::class);
 
         $user = self::$userSeeder->seedUser()['user'];
         $originalPassword = $user->getPassword();
