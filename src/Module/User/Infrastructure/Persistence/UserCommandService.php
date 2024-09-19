@@ -85,7 +85,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $user = $this->validateAndSave($user);
 
-        $this->publishMercureUpdate($user, 'update');
+        $this->publishMercureUpdate($user, 'update', true);
 
         return $user;
     }
@@ -120,7 +120,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $user = $this->validateAndSave($user, $password);
 
-        $this->publishMercureUpdate($user, 'update');
+        $this->publishMercureUpdate($user, 'update', true);
 
         return $user;
     }
@@ -166,7 +166,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
         // Delete from repository.
         $this->repository->delete($user);
 
-        $this->publishMercureUpdate($user, 'force_delete');
+        $this->publishMercureUpdate($user, 'force_delete', true);
     }
 
     /**
@@ -187,7 +187,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $this->repository->save($user);
 
-        $this->publishMercureUpdate($user, 'soft_delete');
+        $this->publishMercureUpdate($user, 'soft_delete', true);
 
         return $user;
     }
@@ -250,15 +250,25 @@ readonly class UserCommandService implements UserCommandServiceInterface
     /**
      * @param \App\Module\User\Domain\User $user
      * @param string $action
+     * @param bool $duplicateToItemTopic - also publish message to single user topic
      * @return void
      */
-    private function publishMercureUpdate(User $user, string $action): void
+    private function publishMercureUpdate(User $user, string $action, bool $duplicateToItemTopic = false): void
     {
-        $message = new MercureUpdateMessage('users::update', [
-            'user' => $this->serializer->normalize($user, 'json', ['groups' => ['user']]),
+        $userObject = $this->serializer->normalize($user, 'json', ['groups' => ['user']]);
+
+        $listMessage = new MercureUpdateMessage('users::update', [
+            'user' => $userObject,
             'action' => $action,
         ]);
+        $this->bus->dispatch($listMessage);
 
-        $this->bus->dispatch($message);
+        if ($duplicateToItemTopic) {
+            $itemMessage = new MercureUpdateMessage('user::update::'.$user->getId(), [
+                'user' => $userObject,
+                'action' => $action,
+            ]);
+            $this->bus->dispatch($itemMessage);
+        }
     }
 }
