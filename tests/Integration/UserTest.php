@@ -7,6 +7,7 @@ use App\Module\Shared\Domain\Bus\Command\CommandBus;
 use App\Module\Shared\Domain\Exception\FormValidationException;
 use App\Module\Shared\Domain\Exception\UnauthorizedDomainException;
 use App\Module\Shared\Domain\Exception\ValidationException;
+use App\Module\Shared\Domain\Message\MercureUpdateMessage;
 use App\Module\User\Application\ChangePassword\ChangePasswordCommand;
 use App\Module\User\Application\DeleteAppUser\DeleteAppUserCommand;
 use App\Module\User\Application\LoginAppUser\LoginAppUserCommand;
@@ -143,7 +144,17 @@ class UserTest extends DatabaseTestCase
         $this->assertEquals('iPhone 15', $tokens[0]->getName());
         $this->assertEquals('test@test.com', $tokens[0]->getUser()->getEmail());
 
-        // TODO: check for Mercure update message...
+        $messages = $this->transport('async')->queue()->messages();
+
+        // Check Mercure update messages.
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
+        $this->assertEquals('user_update', $messages[0]->getPayload()['action']);
+        $this->assertEquals('user::update::'.$response->user->getId(), $messages[0]->getTopic());
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
     }
 
     public function test_login_app_user_command_validation(): void
@@ -382,7 +393,17 @@ class UserTest extends DatabaseTestCase
         $this->assertCount(1, $response->user->getAuthTokens());
         $this->assertEquals('iPhone 15', $response->user->getAuthTokens()[0]->getName());
 
-        // TODO: check for Mercure update message...
+        $messages = $this->transport('async')->queue()->messages();
+
+        // Check Mercure update messages.
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
+        $this->assertEquals('user_update', $messages[0]->getPayload()['action']);
+        $this->assertEquals('user::update::'.$response->user->getId(), $messages[0]->getTopic());
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
     }
 
     public function test_sign_out_app_user_command(): void
@@ -404,7 +425,17 @@ class UserTest extends DatabaseTestCase
         // Check that we have removed all device tokens.
         $this->assertEmpty($response->user->getAuthTokens());
 
-        // TODO: check for Mercure update message...
+        $messages = $this->transport('async')->queue()->messages();
+
+        // Check Mercure update messages.
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
+        $this->assertEquals('user_update', $messages[0]->getPayload()['action']);
+        $this->assertEquals('user::update::'.$response->user->getId(), $messages[0]->getTopic());
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
     }
 
     public function test_delete_app_user_command(): void
