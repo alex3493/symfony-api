@@ -5,8 +5,8 @@ namespace App\Module\User\Infrastructure\Persistence;
 
 use App\Module\Shared\Domain\Exception\NotFoundDomainException;
 use App\Module\Shared\Domain\Exception\ValidationException;
-use App\Module\Shared\Domain\Message\MercureUpdateMessage;
 use App\Module\Shared\Domain\ValueObject\Email;
+use App\Module\Shared\Infrastructure\Persistence\Service\MercureUpdateCapableService;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 use App\Module\User\Domain\RefreshToken;
 use App\Module\User\Domain\User;
@@ -18,7 +18,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class UserCommandService implements UserCommandServiceInterface
+readonly class UserCommandService extends MercureUpdateCapableService implements UserCommandServiceInterface
 {
     /**
      * @param \App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository $repository
@@ -28,9 +28,11 @@ readonly class UserCommandService implements UserCommandServiceInterface
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
      */
     public function __construct(
-        private UserRepository $repository, private MessageBusInterface $bus, private SerializerInterface $serializer,
-        private UserPasswordHasherInterface $passwordHasher, private ValidatorInterface $validator
+        private UserRepository $repository, private SerializerInterface $serializer,
+        private UserPasswordHasherInterface $passwordHasher, private ValidatorInterface $validator,
+        MessageBusInterface $bus
     ) {
+        parent::__construct($bus);
     }
 
     /**
@@ -55,7 +57,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $user = $this->validateAndSave($user, $password);
 
-        $this->publishMercureUpdate($user, 'create');
+        $this->publishUserUpdate($user, 'user_create');
 
         return $user;
     }
@@ -85,7 +87,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $user = $this->validateAndSave($user);
 
-        $this->publishMercureUpdate($user, 'update', true);
+        $this->publishUserUpdate($user, 'user_update', true);
 
         return $user;
     }
@@ -120,7 +122,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $user = $this->validateAndSave($user, $password);
 
-        $this->publishMercureUpdate($user, 'update', true);
+        $this->publishUserUpdate($user, 'user_update', true);
 
         return $user;
     }
@@ -166,7 +168,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
         // Delete from repository.
         $this->repository->delete($user);
 
-        $this->publishMercureUpdate($user, 'force_delete', true);
+        $this->publishUserUpdate($user, 'user_force_delete', true);
     }
 
     /**
@@ -187,7 +189,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $this->repository->save($user);
 
-        $this->publishMercureUpdate($user, 'soft_delete', true);
+        $this->publishUserUpdate($user, 'user_soft_delete', true);
 
         return $user;
     }
@@ -210,7 +212,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $this->repository->save($user);
 
-        $this->publishMercureUpdate($user, 'restore');
+        $this->publishUserUpdate($user, 'user_restore');
 
         return $user;
     }
@@ -250,25 +252,23 @@ readonly class UserCommandService implements UserCommandServiceInterface
     /**
      * @param \App\Module\User\Domain\User $user
      * @param string $action
-     * @param bool $duplicateToItemTopic - also publish message to single user topic
+     * @param bool $duplicateToItemTopic
      * @return void
      */
-    private function publishMercureUpdate(User $user, string $action, bool $duplicateToItemTopic = false): void
+    private function publishUserUpdate(User $user, string $action, bool $duplicateToItemTopic = false): void
     {
-        $userObject = $this->serializer->normalize($user, 'json', ['groups' => ['user']]);
+        $data = $this->serializer->normalize($user, 'json', ['groups' => ['user']]);
 
-        $listMessage = new MercureUpdateMessage('users::update', [
-            'user' => $userObject,
-            'action' => $action,
-        ]);
-        $this->bus->dispatch($listMessage);
+        $this->publishMercureUpdate($data, $action, true, $duplicateToItemTopic);
+    }
 
-        if ($duplicateToItemTopic) {
-            $itemMessage = new MercureUpdateMessage('user::update::'.$user->getId(), [
-                'user' => $userObject,
-                'action' => $action,
-            ]);
-            $this->bus->dispatch($itemMessage);
-        }
+    protected function listTopic(): string
+    {
+        return 'users::update';
+    }
+
+    protected function singleItemTopic(): string
+    {
+        return 'user::update::';
     }
 }
