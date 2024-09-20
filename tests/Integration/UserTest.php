@@ -142,6 +142,8 @@ class UserTest extends DatabaseTestCase
 
         $this->assertEquals('iPhone 15', $tokens[0]->getName());
         $this->assertEquals('test@test.com', $tokens[0]->getUser()->getEmail());
+
+        // TODO: check for Mercure update message...
     }
 
     public function test_login_app_user_command_validation(): void
@@ -379,6 +381,8 @@ class UserTest extends DatabaseTestCase
         // Check that we have removed second device token.
         $this->assertCount(1, $response->user->getAuthTokens());
         $this->assertEquals('iPhone 15', $response->user->getAuthTokens()[0]->getName());
+
+        // TODO: check for Mercure update message...
     }
 
     public function test_sign_out_app_user_command(): void
@@ -399,6 +403,8 @@ class UserTest extends DatabaseTestCase
 
         // Check that we have removed all device tokens.
         $this->assertEmpty($response->user->getAuthTokens());
+
+        // TODO: check for Mercure update message...
     }
 
     public function test_delete_app_user_command(): void

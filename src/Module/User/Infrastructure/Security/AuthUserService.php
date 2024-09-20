@@ -8,13 +8,16 @@ use App\Module\Shared\Domain\Exception\FormValidationException;
 use App\Module\Shared\Domain\Exception\NotFoundDomainException;
 use App\Module\Shared\Domain\Exception\UnauthorizedDomainException;
 use App\Module\Shared\Domain\Exception\ValidationException;
+use App\Module\Shared\Domain\Message\MercureUpdateMessage;
 use App\Module\User\Domain\Contract\AuthTokenServiceInterface;
 use App\Module\User\Domain\Contract\AuthUserServiceInterface;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 use App\Module\User\Domain\Contract\UserQueryServiceInterface;
 use App\Module\User\Domain\User;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class AuthUserService implements AuthUserServiceInterface
@@ -25,12 +28,15 @@ readonly class AuthUserService implements AuthUserServiceInterface
      * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $passwordHasher
      * @param \App\Module\User\Domain\Contract\AuthTokenServiceInterface $tokenService
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
+     * @param \Symfony\Component\Messenger\MessageBusInterface $bus
+     * @param \Symfony\Component\Serializer\SerializerInterface $serializer
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         private UserCommandServiceInterface $userCommandService, private UserQueryServiceInterface $userQueryService,
         private UserPasswordHasherInterface $passwordHasher, private AuthTokenServiceInterface $tokenService,
-        private ValidatorInterface $validator, private LoggerInterface $logger
+        private ValidatorInterface $validator, private MessageBusInterface $bus,
+        private SerializerInterface $serializer, private LoggerInterface $logger
     ) {
     }
 
@@ -103,6 +109,8 @@ readonly class AuthUserService implements AuthUserServiceInterface
         $user->addAuthToken($authToken);
         $this->userCommandService->save($user);
 
+        $this->publishMercureUpdate($user);
+
         return [$user, $authToken->getToken()];
     }
 
@@ -127,6 +135,8 @@ readonly class AuthUserService implements AuthUserServiceInterface
 
         $this->tokenService->delete($token);
 
+        $this->publishMercureUpdate($user);
+
         return $user;
     }
 
@@ -145,6 +155,8 @@ readonly class AuthUserService implements AuthUserServiceInterface
 
         $user->removeAllAuthTokens();
         $this->userCommandService->save($user);
+
+        $this->publishMercureUpdate($user);
 
         return $user;
     }
@@ -213,5 +225,16 @@ readonly class AuthUserService implements AuthUserServiceInterface
         }
 
         $this->userCommandService->forceDelete($id);
+    }
+
+    private function publishMercureUpdate(User $user): void
+    {
+        $userObject = $this->serializer->normalize($user, 'json', ['groups' => ['user']]);
+
+        $itemMessage = new MercureUpdateMessage('user::update::'.$user->getId(), [
+            'user' => $userObject,
+            'action' => 'update',
+        ]);
+        $this->bus->dispatch($itemMessage);
     }
 }

@@ -177,6 +177,8 @@ class AppUserTest extends DatabaseTestCase
 
         $this->assertEquals('iPhone 15', $tokens[0]->getName());
         $this->assertEquals('test@example.com', $tokens[0]->getUser()->getEmail());
+
+        // TODO: check for Mercure update message...
     }
 
     public function test_login_error_invalid_credentials(): void
@@ -232,6 +234,8 @@ class AppUserTest extends DatabaseTestCase
         $userRepository = $this->getRepository(User::class);
         $users = $userRepository->findAll();
         $this->assertNotEmpty($users[0]->getPassword());
+
+        // TODO: check for Mercure update message...
     }
 
     public function test_logout_fails_if_device_token_not_found()
@@ -273,6 +277,8 @@ class AppUserTest extends DatabaseTestCase
         $userRepository = $this->getRepository(User::class);
         $users = $userRepository->findAll();
         $this->assertNotEmpty($users[0]->getPassword());
+
+        // TODO: check for Mercure update message...
     }
 
     public function test_we_can_update_a_user(): void
