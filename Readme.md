@@ -142,6 +142,21 @@ You can use Swagger UI at http://localhost:8888 for testing selected API endpoin
 authorization, so you will have to run registration / login first and then copy token from response to authorize
 subsequent requests.
 
+You can use Mercure UI to review update messages published when tests are executed.
+
+1. Open http://localhost:3000/.well-known/mercure/ui/
+2. In "Topics to get updates for" type:
+    - user::update::{id}
+    - users::update
+3. Scroll down to Settings and choose "Authorization HTTP Header" Authorization type.
+4. Copy/paste
+`eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdLCJwYXlsb2FkIjp7InJlbW90ZUFkZHIiOiIxMjcuMC4wLjEifX19.a8yZxU5WF2Jcb87Ckp4ntDbaQP_DE57pveqld3QpX2A`
+to JWT field.
+5. Click "Subscribe" button.
+6. Execute unit tests and check Mercure messages being published.
+
+## Testing in React Web app
+
 You can also test some API features using a compatible ReactJS [frontend](https://github.com/alex3493/symfony-react-ui)
 project. It is preconfigured to use default http://localhost as API URL.
 
