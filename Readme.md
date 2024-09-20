@@ -92,10 +92,9 @@ Depending on the authentication mode all subsequent requests should use one of t
 - User can request reset-password link email.
 - User can reset password with her email and token received in reset-password email.
 
-We leverage Symfony Mercure (SSE) to implement real-time updates for all connected UI clients. Whenever an entity is
-created, updated or deleted we can publish a Mercure update message, so that all clients see updates without the need of
-page reload. _This feature is reserved right now, however we have a testable controller that publishes Mercure
-messages._
+We leverage Symfony Mercure (SSE) to implement real-time updates for all connected UI clients. Whenever a user is
+created, updated or deleted we publish Mercure update messages, so that all clients see updates without the need of
+page reload.
 
 ## Installation
 

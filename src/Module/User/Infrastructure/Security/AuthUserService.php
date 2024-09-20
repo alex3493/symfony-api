@@ -14,6 +14,7 @@ use App\Module\User\Domain\Contract\AuthUserServiceInterface;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 use App\Module\User\Domain\Contract\UserQueryServiceInterface;
 use App\Module\User\Domain\User;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -27,16 +28,17 @@ readonly class AuthUserService extends MercureUpdateCapableService implements Au
      * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $passwordHasher
      * @param \App\Module\User\Domain\Contract\AuthTokenServiceInterface $tokenService
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
-     * @param \Symfony\Component\Messenger\MessageBusInterface $bus
      * @param \Symfony\Component\Serializer\SerializerInterface $serializer
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Symfony\Component\Messenger\MessageBusInterface $bus
+     * @param \Symfony\Bundle\SecurityBundle\Security $security
      */
     public function __construct(
         private UserCommandServiceInterface $userCommandService, private UserQueryServiceInterface $userQueryService,
         private UserPasswordHasherInterface $passwordHasher, private AuthTokenServiceInterface $tokenService,
         private ValidatorInterface $validator, private SerializerInterface $serializer, MessageBusInterface $bus,
+        Security $security
     ) {
-        parent::__construct($bus);
+        parent::__construct($bus, $security);
     }
 
     /**
