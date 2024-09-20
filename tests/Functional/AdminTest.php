@@ -115,6 +115,7 @@ class AdminTest extends DatabaseTestCase
         $this->assertInstanceOf(UserCreatedDomainEvent::class, $messages[0]);
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
         $this->assertEquals('user_create', $messages[1]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[1]->getPayload()['causer']);
         $this->assertEquals('users::update', $messages[1]->getTopic());
 
         $this->assertEquals('user@example.com', $messages[0]->toPrimitives()['user']->getEmail());
@@ -173,10 +174,12 @@ class AdminTest extends DatabaseTestCase
         // Check Mercure update messages.
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
         $this->assertEquals('user_update', $messages[1]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[1]->getPayload()['causer']);
         $this->assertEquals('users::update', $messages[1]->getTopic());
 
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[2]);
         $this->assertEquals('user_update', $messages[2]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[2]->getPayload()['causer']);
         $this->assertEquals('user::update::'.$response->user->id, $messages[2]->getTopic());
 
         $this->transport('async')->process(3);
@@ -243,10 +246,12 @@ class AdminTest extends DatabaseTestCase
         // Check Mercure update messages.
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
         $this->assertEquals('user_soft_delete', $messages[1]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[1]->getPayload()['causer']);
         $this->assertEquals('users::update', $messages[1]->getTopic());
 
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[2]);
         $this->assertEquals('user_soft_delete', $messages[2]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[2]->getPayload()['causer']);
         $this->assertEquals('user::update::'.$response->user->id, $messages[2]->getTopic());
 
         $this->transport('async')->process(3);
@@ -286,6 +291,7 @@ class AdminTest extends DatabaseTestCase
         // Check Mercure update messages.
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
         $this->assertEquals('user_restore', $messages[1]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[1]->getPayload()['causer']);
         $this->assertEquals('users::update', $messages[1]->getTopic());
 
 
@@ -327,10 +333,12 @@ class AdminTest extends DatabaseTestCase
         // Check Mercure update messages.
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
         $this->assertEquals('user_force_delete', $messages[0]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[0]->getPayload()['causer']);
         $this->assertEquals('users::update', $messages[0]->getTopic());
 
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
         $this->assertEquals('user_force_delete', $messages[1]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[1]->getPayload()['causer']);
         $this->assertEquals('user::update::'.$testUser['user']->getId(), $messages[1]->getTopic());
 
         $this->transport('async')->process(2);
