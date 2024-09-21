@@ -150,10 +150,12 @@ You can use Mercure UI to review update messages published when tests are execut
     - users::update
 3. Scroll down to Settings and choose "Authorization HTTP Header" Authorization type.
 4. Copy/paste
-`eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdLCJwYXlsb2FkIjp7InJlbW90ZUFkZHIiOiIxMjcuMC4wLjEifX19.a8yZxU5WF2Jcb87Ckp4ntDbaQP_DE57pveqld3QpX2A`
-to JWT field.
+   `eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdLCJwYXlsb2FkIjp7InJlbW90ZUFkZHIiOiIxMjcuMC4wLjEifX19.a8yZxU5WF2Jcb87Ckp4ntDbaQP_DE57pveqld3QpX2A`
+   to JWT field.
 5. Click "Subscribe" button.
-6. Execute unit tests and check Mercure messages being published.
+6. Execute unit tests and check for Mercure messages being published.
+7. You can also use Swagger UI (http://localhost:8888) to run requests that modify a user. You should see Mercure update
+   messages in Mercure monitoring UI.
 
 ## Testing in React Web app
 
