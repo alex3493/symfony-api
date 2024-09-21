@@ -12,7 +12,6 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 use Zenstruck\Messenger\Test\InteractsWithMessenger;
 

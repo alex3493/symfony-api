@@ -51,7 +51,7 @@ class UserSeeder extends SeederBase
         ], $options);
 
         $user = User::create($options['email'], $options['password'], $options['firstName'], $options['lastName'],
-            $options['roles']);
+            $options['roles'], false);
 
         if ($options['deleted']) {
             if (true === $options['deleted']) {

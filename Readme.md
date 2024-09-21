@@ -92,10 +92,9 @@ Depending on the authentication mode all subsequent requests should use one of t
 - User can request reset-password link email.
 - User can reset password with her email and token received in reset-password email.
 
-We leverage Symfony Mercure (SSE) to implement real-time updates for all connected UI clients. Whenever an entity is
-created, updated or deleted we can publish a Mercure update message, so that all clients see updates without the need of
-page reload. _This feature is reserved right now, however we have a testable controller that publishes Mercure
-messages._
+We leverage Symfony Mercure (SSE) to implement real-time updates for all connected UI clients. Whenever a user is
+created, updated or deleted we publish Mercure update messages, so that all clients see updates without the need of
+page reload.
 
 ## Installation
 
@@ -142,6 +141,23 @@ commands should be executed inside docker `php` container.
 You can use Swagger UI at http://localhost:8888 for testing selected API endpoints. Most endpoints require
 authorization, so you will have to run registration / login first and then copy token from response to authorize
 subsequent requests.
+
+You can use Mercure UI to review update messages published when tests are executed.
+
+1. Open http://localhost:3000/.well-known/mercure/ui/
+2. In "Topics to get updates for" type:
+    - user::update::{id}
+    - users::update
+3. Scroll down to Settings and choose "Authorization HTTP Header" Authorization type.
+4. Copy/paste
+   `eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdLCJwYXlsb2FkIjp7InJlbW90ZUFkZHIiOiIxMjcuMC4wLjEifX19.a8yZxU5WF2Jcb87Ckp4ntDbaQP_DE57pveqld3QpX2A`
+   to JWT field.
+5. Click "Subscribe" button.
+6. Execute unit tests and check for Mercure messages being published.
+7. You can also use Swagger UI (http://localhost:8888) to run requests that modify a user. You should see Mercure update
+   messages in Mercure monitoring UI.
+
+## Testing in React Web app
 
 You can also test some API features using a compatible ReactJS [frontend](https://github.com/alex3493/symfony-react-ui)
 project. It is preconfigured to use default http://localhost as API URL.

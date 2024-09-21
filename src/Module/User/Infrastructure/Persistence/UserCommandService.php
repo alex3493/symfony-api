@@ -6,26 +6,35 @@ namespace App\Module\User\Infrastructure\Persistence;
 use App\Module\Shared\Domain\Exception\NotFoundDomainException;
 use App\Module\Shared\Domain\Exception\ValidationException;
 use App\Module\Shared\Domain\ValueObject\Email;
+use App\Module\Shared\Infrastructure\Persistence\Service\MercureUpdateCapableService;
 use App\Module\User\Domain\Contract\UserCommandServiceInterface;
 use App\Module\User\Domain\RefreshToken;
 use App\Module\User\Domain\User;
 use App\Module\User\Domain\ValueObject\UserRole;
 use App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository;
 use App\Module\User\Infrastructure\Security\AuthUser;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class UserCommandService implements UserCommandServiceInterface
+readonly class UserCommandService extends MercureUpdateCapableService implements UserCommandServiceInterface
 {
     /**
      * @param \App\Module\User\Infrastructure\Persistence\Doctrine\UserRepository $repository
+     * @param \Symfony\Component\Serializer\SerializerInterface $serializer
      * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $passwordHasher
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
+     * @param \Symfony\Component\Messenger\MessageBusInterface $bus
+     * @param \Symfony\Bundle\SecurityBundle\Security $security
      */
     public function __construct(
-        private UserRepository $repository, private UserPasswordHasherInterface $passwordHasher,
-        private ValidatorInterface $validator
+        private UserRepository $repository, private SerializerInterface $serializer,
+        private UserPasswordHasherInterface $passwordHasher, private ValidatorInterface $validator,
+        MessageBusInterface $bus, Security $security
     ) {
+        parent::__construct($bus, $security);
     }
 
     /**
@@ -48,7 +57,11 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $user = User::create($email, $password, $firstName, $lastName, $roles);
 
-        return $this->validateAndSave($user, $password);
+        $user = $this->validateAndSave($user, $password);
+
+        $this->publishUserUpdate($user, 'user_create');
+
+        return $user;
     }
 
     /**
@@ -74,7 +87,11 @@ readonly class UserCommandService implements UserCommandServiceInterface
         $user->setFirstName($firstName);
         $user->setLastName($lastName);
 
-        return $this->validateAndSave($user, null);
+        $user = $this->validateAndSave($user);
+
+        $this->publishUserUpdate($user, 'user_update', true);
+
+        return $user;
     }
 
     /**
@@ -105,7 +122,11 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $user->setRoles($roles);
 
-        return $this->validateAndSave($user, $password);
+        $user = $this->validateAndSave($user, $password);
+
+        $this->publishUserUpdate($user, 'user_update', true);
+
+        return $user;
     }
 
     /**
@@ -148,6 +169,8 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         // Delete from repository.
         $this->repository->delete($user);
+
+        $this->publishUserUpdate($user, 'user_force_delete', true);
     }
 
     /**
@@ -167,6 +190,8 @@ readonly class UserCommandService implements UserCommandServiceInterface
         $user->softDelete();
 
         $this->repository->save($user);
+
+        $this->publishUserUpdate($user, 'user_soft_delete', true);
 
         return $user;
     }
@@ -189,6 +214,8 @@ readonly class UserCommandService implements UserCommandServiceInterface
 
         $this->repository->save($user);
 
+        $this->publishUserUpdate($user, 'user_restore');
+
         return $user;
     }
 
@@ -205,7 +232,7 @@ readonly class UserCommandService implements UserCommandServiceInterface
      * @return \App\Module\User\Domain\User
      * @throws \App\Module\Shared\Domain\Exception\ValidationException
      */
-    private function validateAndSave(User $user, ?string $password): User
+    private function validateAndSave(User $user, ?string $password = null): User
     {
         $errors = $this->validator->validate($user);
         if (count($errors) > 0) {
@@ -222,5 +249,28 @@ readonly class UserCommandService implements UserCommandServiceInterface
         $this->repository->save($user);
 
         return $user;
+    }
+
+    /**
+     * @param \App\Module\User\Domain\User $user
+     * @param string $action
+     * @param bool $duplicateToItemTopic
+     * @return void
+     */
+    private function publishUserUpdate(User $user, string $action, bool $duplicateToItemTopic = false): void
+    {
+        $data = $this->serializer->normalize($user, 'json', ['groups' => ['user']]);
+
+        $this->publishMercureUpdate($data, $action, true, $duplicateToItemTopic);
+    }
+
+    protected function listTopic(): string
+    {
+        return 'users::update';
+    }
+
+    protected function singleItemTopic(): string
+    {
+        return 'user::update::';
     }
 }

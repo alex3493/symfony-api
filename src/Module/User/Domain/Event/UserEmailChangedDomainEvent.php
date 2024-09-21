@@ -25,7 +25,7 @@ class UserEmailChangedDomainEvent extends DomainEvent implements AsyncDomainEven
 
     public static function eventName(): string
     {
-        return 'user.restored';
+        return 'user.email_changed';
     }
 
     public function toPrimitives(): array

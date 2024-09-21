@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Module\Shared\Domain\Message\MercureUpdateMessage;
 use App\Module\User\Domain\AuthToken;
 use App\Module\User\Domain\User;
 use App\Tests\DatabaseTestCase;
@@ -177,6 +178,19 @@ class AppUserTest extends DatabaseTestCase
 
         $this->assertEquals('iPhone 15', $tokens[0]->getName());
         $this->assertEquals('test@example.com', $tokens[0]->getUser()->getEmail());
+
+        $messages = $this->transport('async')->queue()->messages();
+
+        // Check Mercure update messages.
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
+        $this->assertEquals('user_update', $messages[0]->getPayload()['action']);
+        $this->assertNull($messages[0]->getPayload()['causer']);
+        $this->assertEquals('user::update::'.$response->user->id, $messages[0]->getTopic());
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
     }
 
     public function test_login_error_invalid_credentials(): void
@@ -232,6 +246,19 @@ class AppUserTest extends DatabaseTestCase
         $userRepository = $this->getRepository(User::class);
         $users = $userRepository->findAll();
         $this->assertNotEmpty($users[0]->getPassword());
+
+        $messages = $this->transport('async')->queue()->messages();
+
+        // Check Mercure update messages.
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
+        $this->assertEquals('user_update', $messages[0]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[0]->getPayload()['causer']);
+        $this->assertEquals('user::update::'.$response->user->id, $messages[0]->getTopic());
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
     }
 
     public function test_logout_fails_if_device_token_not_found()
@@ -273,6 +300,19 @@ class AppUserTest extends DatabaseTestCase
         $userRepository = $this->getRepository(User::class);
         $users = $userRepository->findAll();
         $this->assertNotEmpty($users[0]->getPassword());
+
+        $messages = $this->transport('async')->queue()->messages();
+
+        // Check Mercure update messages.
+        $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
+        $this->assertEquals('user_update', $messages[0]->getPayload()['action']);
+        $this->assertEquals($user['user']->getEmail(), $messages[0]->getPayload()['causer']);
+        $this->assertEquals('user::update::'.$response->user->id, $messages[0]->getTopic());
+
+        $this->transport('async')->process(1);
+
+        $this->transport('async')->rejected()->assertEmpty();
+        $this->transport('async')->queue()->assertEmpty();
     }
 
     public function test_we_can_update_a_user(): void
