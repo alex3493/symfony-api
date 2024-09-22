@@ -32,6 +32,9 @@ class AccessTest extends DatabaseTestCase
         $this->assertResponseIsSuccessful();
         $this->assertEquals('Welcome to dashboard. You are logged in.', $response->data->message);
         $this->assertEquals('test@example.com', $response->user->email);
+
+        $discoveryLink = $client->getResponse()->headers->get('link');
+        $this->assertStringContainsString('.well-known/mercure', $discoveryLink);
     }
 
     public function test_we_can_access_private_page_from_web(): void
