@@ -41,7 +41,7 @@ class AdminTest extends DatabaseTestCase
 
         $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('GET', '/api/web/admin/users?page=1&limit=10&orderBy=name&orderType=asc');
+        $client->jsonRequest('GET', '/api/web/admin/users?page=1&limit=10&orderBy=name&orderDesc=0');
 
         $response = json_decode($client->getResponse()->getContent());
 

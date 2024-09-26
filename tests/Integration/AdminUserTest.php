@@ -48,7 +48,7 @@ class AdminUserTest extends DatabaseTestCase
         }
 
         // Default user list.
-        $query = new AdminUserListQuery(1, 10, 'id', 'ASC');
+        $query = new AdminUserListQuery(1, 10, 'id', false);
 
         $response = $queryBus->ask($query);
 
@@ -57,7 +57,7 @@ class AdminUserTest extends DatabaseTestCase
         $this->assertEquals(2, $response->totalPages);
 
         // User list including soft-deleted users.
-        $query = new AdminUserListQuery(1, 10, 'id', 'ASC', true);
+        $query = new AdminUserListQuery(1, 10, 'id', false, true);
 
         $response = $queryBus->ask($query);
 

@@ -22,16 +22,16 @@ get:
             schema:
                 type: string
             required: false
-            description: Table order by
+            description: Table sort by
         -   in: query
-            name: orderType
+            name: orderDesc
             schema:
-                type: strings
+                type: integer
                 enum:
-                    - asc
-                    - desc
+                    - 0
+                    - 1
             required: false
-            description: Table order type.
+            description: Sort direction descending.
     requestBody:
         content:
             application/json: { }
