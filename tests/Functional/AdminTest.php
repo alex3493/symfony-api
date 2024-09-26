@@ -41,7 +41,7 @@ class AdminTest extends DatabaseTestCase
 
         $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('GET', '/api/admin/users?page=1&limit=10&orderBy=name&orderType=asc');
+        $client->jsonRequest('GET', '/api/web/admin/users?page=1&limit=10&orderBy=name&orderType=asc');
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -67,7 +67,7 @@ class AdminTest extends DatabaseTestCase
 
         $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('POST', '/api/admin/users', [
+        $client->jsonRequest('POST', '/api/web/admin/users', [
             'email' => 'user@example.com',
             'password' => 'password',
             'first_name' => 'John',
@@ -90,7 +90,7 @@ class AdminTest extends DatabaseTestCase
 
         $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('POST', '/api/admin/users', [
+        $client->jsonRequest('POST', '/api/web/admin/users', [
             'email' => 'user@example.com',
             'password' => 'password',
             'first_name' => 'John',
@@ -142,7 +142,7 @@ class AdminTest extends DatabaseTestCase
 
         $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('PATCH', '/api/admin/user/'.$testUser['user']->getId(), [
+        $client->jsonRequest('PATCH', '/api/web/admin/user/'.$testUser['user']->getId(), [
             'email' => 'updated@example.com',
             'password' => 'new_password',
             'first_name' => 'Jane',
@@ -199,7 +199,7 @@ class AdminTest extends DatabaseTestCase
 
         $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('PATCH', '/api/admin/user/'.$testUser['user']->getId(), [
+        $client->jsonRequest('PATCH', '/api/web/admin/user/'.$testUser['user']->getId(), [
             'email' => '@invalid-email',
             'password' => 'new_password',
             'first_name' => 'Jane',
@@ -228,7 +228,7 @@ class AdminTest extends DatabaseTestCase
 
         $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('PATCH', '/api/admin/user/delete/'.$testUser['user']->getId());
+        $client->jsonRequest('PATCH', '/api/web/admin/user/delete/'.$testUser['user']->getId());
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -273,7 +273,7 @@ class AdminTest extends DatabaseTestCase
 
         $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('PATCH', '/api/admin/user/restore/'.$testUser['user']->getId());
+        $client->jsonRequest('PATCH', '/api/web/admin/user/restore/'.$testUser['user']->getId());
 
         $response = json_decode($client->getResponse()->getContent());
 
@@ -312,7 +312,7 @@ class AdminTest extends DatabaseTestCase
 
         $client = $this->getAuthenticatedClient($user);
 
-        $client->jsonRequest('DELETE', '/api/admin/user/'.$testUser['user']->getId());
+        $client->jsonRequest('DELETE', '/api/web/admin/user/'.$testUser['user']->getId());
 
         $response = json_decode($client->getResponse()->getContent());
 

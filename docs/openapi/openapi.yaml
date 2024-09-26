@@ -46,13 +46,13 @@ paths:
         $ref: 'paths/account/web/delete-account.yaml'
 
     # Web SPA admin endpoints.
-    /api/admin/users:
+    /api/web/admin/users:
         $ref: 'paths/admin/users/index.yaml'
-    /api/admin/user/{userId}:
+    /api/web/admin/user/{userId}:
         $ref: 'paths/admin/users/item.yaml'
-    /api/admin/user/delete/{userId}:
+    /api/web/admin/user/delete/{userId}:
         $ref: 'paths/admin/users/soft-delete.yaml'
-    /api/admin/user/restore/{userId}:
+    /api/web/admin/user/restore/{userId}:
         $ref: 'paths/admin/users/restore.yaml'
 
     # Reset password endpoints.
