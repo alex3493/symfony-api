@@ -19,7 +19,7 @@ readonly class AdminUserListQueryHandler implements QueryHandler
     public function __invoke(AdminUserListQuery $query): PaginatedListResponse
     {
         $list = $this->service->list($query->numPage(), $query->limit(), $query->orderBy(), $query->orderType(),
-            $query->withDeleted());
+            $query->search(), $query->withDeleted());
 
         return new PaginatedListResponse($list['items'], $list['totalItems'], $list['totalPages']);
     }

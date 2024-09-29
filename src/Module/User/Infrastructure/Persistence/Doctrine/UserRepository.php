@@ -5,6 +5,7 @@ namespace App\Module\User\Infrastructure\Persistence\Doctrine;
 
 use App\Module\Shared\Infrastructure\Persistence\Trait\PaginatedRepositoryTrait;
 use App\Module\Shared\Infrastructure\Persistence\Trait\RelatedRepositoryTrait;
+use App\Module\Shared\Infrastructure\Persistence\Trait\SearchableRepositoryTrait;
 use App\Module\User\Domain\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -15,13 +16,17 @@ class UserRepository extends ServiceEntityRepository
 {
     use RelatedRepositoryTrait;
     use PaginatedRepositoryTrait;
+    use SearchableRepositoryTrait;
 
     private array $orderByAccepted = [
         'id' => ['u.id'],
         'name' => ['u.lastName', 'u.firstName', 'u.email'],
         'email' => ['u.email'],
         'createdAt' => ['u.createdAt'],
+        'updatedAt' => ['u.updatedAt'],
     ];
+
+    protected array $coalesceFields = ['u.lastName', 'u.firstName', 'u.email'];
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -63,12 +68,13 @@ class UserRepository extends ServiceEntityRepository
      * @param int $limit
      * @param string $orderBy
      * @param \Doctrine\Common\Collections\Order $orderType
+     * @param string $query
      * @param bool $withDeleted
      * @return array
      * @throws \Doctrine\ORM\Query\QueryException
      */
     public function list(
-        int $numPage, int $limit, string $orderBy = 'name', Order $orderType = Order::Ascending,
+        int $numPage, int $limit, string $orderBy = 'name', Order $orderType = Order::Ascending, string $query = '',
         bool $withDeleted = false
     ): array {
         $qb = $this->createQueryBuilder('u');
@@ -76,6 +82,8 @@ class UserRepository extends ServiceEntityRepository
         $criteria = Criteria::create();
 
         $this->addSelectedOrder($criteria, $orderBy, $orderType, $this->orderByAccepted);
+
+        $this->addSearchQuery($qb, $query, $this->coalesceFields);
 
         if ($withDeleted) {
             $this->_em->getFilters()->disable('softDeleted');

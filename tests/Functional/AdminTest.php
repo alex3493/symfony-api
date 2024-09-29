@@ -59,6 +59,38 @@ class AdminTest extends DatabaseTestCase
         $this->assertEquals(3, $response->totalPages);
     }
 
+    public function test_admin_can_list_users_with_search(): void
+    {
+        $user = static::$userSeeder->seedUser([
+            'name' => 'Admin',
+            'roles' => ['ROLE_ADMIN'],
+        ], [], true);
+
+        static::$userSeeder->seedUser([
+            'email' => 'user1-email@example.com',
+            'firstName' => 'User1',
+            'lastName' => 'Test1',
+        ]);
+
+        static::$userSeeder->seedUser([
+            'email' => 'user2-email@example.com',
+            'firstName' => 'User2',
+            'lastName' => 'Test2',
+        ]);
+
+        $client = $this->getAuthenticatedClient($user);
+
+        $client->jsonRequest('GET', '/api/web/admin/users?page=1&limit=10&orderBy=name&orderDesc=0&query=user2%20test');
+
+        $response = json_decode($client->getResponse()->getContent());
+
+        $this->assertResponseIsSuccessful();
+
+        // Check that we return user2-email@example.com only.
+        $this->assertCount(1, $response->items);
+        $this->assertEquals('user2-email@example.com', $response->items[0]->email);
+    }
+
     public function test_admin_can_create_user(): void
     {
         $user = static::$userSeeder->seedUser([

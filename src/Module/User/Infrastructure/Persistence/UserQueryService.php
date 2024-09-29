@@ -41,13 +41,14 @@ readonly class UserQueryService implements UserQueryServiceInterface
      * @param int $limit
      * @param string $orderBy
      * @param \Doctrine\Common\Collections\Order $orderType
+     * @param string $search
      * @param bool $withDeleted
      * @return array
      * @throws \Doctrine\ORM\Query\QueryException
      */
     public function list(
-        int $numPage, int $limit, string $orderBy, Order $orderType, bool $withDeleted
+        int $numPage, int $limit, string $orderBy, Order $orderType, string $search, bool $withDeleted
     ): array {
-        return $this->repository->list($numPage, $limit, $orderBy, $orderType, $withDeleted);
+        return $this->repository->list($numPage, $limit, $orderBy, $orderType, $search, $withDeleted);
     }
 }

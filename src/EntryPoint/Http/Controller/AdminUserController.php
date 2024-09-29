@@ -30,7 +30,7 @@ class AdminUserController extends AbstractApiController
     {
         $query = new AdminUserListQuery($request->query->getInt('page', 1), $request->query->getInt('limit', 15),
             $request->query->getString('orderBy', 'name'), $request->query->getBoolean('orderDesc', false),
-            $request->query->getBoolean('withDeleted', false));
+            $request->query->getString('query', ''), $request->query->getBoolean('withDeleted', false));
 
         $response = $queryBus->ask($query);
 

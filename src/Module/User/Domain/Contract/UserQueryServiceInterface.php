@@ -15,6 +15,6 @@ interface UserQueryServiceInterface
     public function freshUserById(string $id): ?User;
 
     public function list(
-        int $numPage, int $limit, string $orderBy, Order $orderType, bool $withDeleted
+        int $numPage, int $limit, string $orderBy, Order $orderType, string $search, bool $withDeleted
     ): array;
 }
