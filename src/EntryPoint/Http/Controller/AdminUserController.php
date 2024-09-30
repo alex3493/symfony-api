@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/admin')]
+#[Route('/api/web/admin')]
 class AdminUserController extends AbstractApiController
 {
     /**
@@ -29,8 +29,8 @@ class AdminUserController extends AbstractApiController
     public function index(Request $request, QueryBus $queryBus): JsonResponse
     {
         $query = new AdminUserListQuery($request->query->getInt('page', 1), $request->query->getInt('limit', 15),
-            $request->query->getString('orderBy', 'name'), $request->query->getString('orderType', 'ASC'),
-            $request->query->getBoolean('withDeleted', false));
+            $request->query->getString('orderBy', 'name'), $request->query->getBoolean('orderDesc', false),
+            $request->query->getString('query', ''), $request->query->getBoolean('withDeleted', false));
 
         $response = $queryBus->ask($query);
 

@@ -37,18 +37,22 @@ class AdminUserTest extends DatabaseTestCase
         for ($i = 0; $i < 20; $i++) {
             self::$userSeeder->seedUser([
                 'email' => 'user'.$i.'@example.com',
+                'firstName' => $i % 2 === 0 ? 'Even' : 'Odd',
+                'lastName' => 'Test Active',
             ]);
         }
 
         for ($i = 20; $i < 30; $i++) {
             self::$userSeeder->seedUser([
                 'email' => 'user'.$i.'@example.com',
+                'firstName' => $i % 2 === 0 ? 'Even' : 'Odd',
+                'lastName' => 'Test Deleted',
                 'deleted' => true,
             ]);
         }
 
         // Default user list.
-        $query = new AdminUserListQuery(1, 10, 'id', 'ASC');
+        $query = new AdminUserListQuery(1, 10, 'id', false);
 
         $response = $queryBus->ask($query);
 
@@ -57,13 +61,25 @@ class AdminUserTest extends DatabaseTestCase
         $this->assertEquals(2, $response->totalPages);
 
         // User list including soft-deleted users.
-        $query = new AdminUserListQuery(1, 10, 'id', 'ASC', true);
+        $query = new AdminUserListQuery(1, 10, 'id', false, '', true);
 
         $response = $queryBus->ask($query);
 
         $this->assertCount(10, $response->items);
         $this->assertEquals(30, $response->totalItems);
         $this->assertEquals(3, $response->totalPages);
+
+        // User list with search query. We are looking for users with "Even Active Test" full name.
+        $query = new AdminUserListQuery(1, 10, 'id', false, 'act test Even', false);
+
+        $response = $queryBus->ask($query);
+
+        // Check that "act Test" in search term matches "Test Active" last name.
+        // When search term contains multiple words we ignore their order when we find a match with a DB column value, e.g.
+        // for the last name "John Doe" both "John Doe" and "Doe John" should give exactly same result.
+        $this->assertCount(10, $response->items);
+        $this->assertEquals(10, $response->totalItems);
+        $this->assertEquals(1, $response->totalPages);
     }
 
     public function test_admin_create_user_command(): void
@@ -272,7 +288,6 @@ class AdminUserTest extends DatabaseTestCase
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
         $this->assertEquals('user_restore', $messages[1]->getPayload()['action']);
         $this->assertEquals('users::update', $messages[1]->getTopic());
-
 
         $this->transport('async')->process(2);
 

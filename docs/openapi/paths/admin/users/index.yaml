@@ -22,22 +22,37 @@ get:
             schema:
                 type: string
             required: false
-            description: Table order by
+            description: Table sort by
         -   in: query
-            name: orderType
+            name: orderDesc
             schema:
-                type: strings
+                type: integer
                 enum:
-                    - asc
-                    - desc
+                    - 0
+                    - 1
             required: false
-            description: Table order type.
+            description: Sort direction descending.
+        -   in: query
+            name: query
+            schema:
+                type: string
+            required: false
+            description: Search query
+        -   in: query
+            name: withDeleted
+            schema:
+                type: integer
+                enum:
+                    - 0
+                    - 1
+            required: false
+            description: Include soft-deleted users.
     requestBody:
         content:
             application/json: { }
     responses:
         200:
-            description: Greeting list
+            description: User list
             content:
                 application/json:
                     schema:
