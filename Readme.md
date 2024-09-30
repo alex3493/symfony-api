@@ -81,6 +81,7 @@ Depending on the authentication mode all subsequent requests should use one of t
 
 **User actions for administrator (JWT):**
 
+- Admin can list users with sorting and search.
 - Admin can create user.
 - Admin can edit all user data, including email and password.
 - Admin can soft-delete user.
