@@ -124,7 +124,7 @@ class AdminUserTest extends DatabaseTestCase
         $originalPassword = $user->getPassword();
 
         // Admin updates user profile not providing new password.
-        $command = new AdminUpdateUserCommand($user->getId(), 'updated@example.com', null, 'Jane', 'Doe',
+        $command = new AdminUpdateUserCommand($user->getId(), 'updated@example.com', '', 'Jane', 'Doe',
             ['ROLE_ADMIN']);
 
         $response = $commandBus->dispatch($command);
