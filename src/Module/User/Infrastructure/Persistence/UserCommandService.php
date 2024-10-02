@@ -239,7 +239,8 @@ readonly class UserCommandService extends MercureUpdateCapableService implements
             throw new ValidationException($errors);
         }
 
-        if (! is_null($password)) {
+        // We update user password only if it is provided.
+        if (! empty($password)) {
             $authUser = new AuthUser($user);
 
             $hashedPassword = $this->passwordHasher->hashPassword($authUser, $password);
