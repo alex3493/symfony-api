@@ -148,7 +148,7 @@ class UserTest extends DatabaseTestCase
 
         // Check Mercure update messages.
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
-        $this->assertEquals('user_update', $messages[0]->getPayload()['action']);
+        $this->assertEquals('update', $messages[0]->getPayload()['action']);
         $this->assertEquals('user::update::'.$response->user->getId(), $messages[0]->getTopic());
 
         $this->transport('async')->process(1);
@@ -397,7 +397,7 @@ class UserTest extends DatabaseTestCase
 
         // Check Mercure update messages.
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
-        $this->assertEquals('user_update', $messages[0]->getPayload()['action']);
+        $this->assertEquals('update', $messages[0]->getPayload()['action']);
         $this->assertEquals('user::update::'.$response->user->getId(), $messages[0]->getTopic());
 
         $this->transport('async')->process(1);
@@ -429,7 +429,7 @@ class UserTest extends DatabaseTestCase
 
         // Check Mercure update messages.
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[0]);
-        $this->assertEquals('user_update', $messages[0]->getPayload()['action']);
+        $this->assertEquals('update', $messages[0]->getPayload()['action']);
         $this->assertEquals('user::update::'.$response->user->getId(), $messages[0]->getTopic());
 
         $this->transport('async')->process(1);
