@@ -322,7 +322,7 @@ class AdminTest extends DatabaseTestCase
 
         // Check Mercure update messages.
         $this->assertInstanceOf(MercureUpdateMessage::class, $messages[1]);
-        $this->assertEquals('user_restore', $messages[1]->getPayload()['action']);
+        $this->assertEquals('restore', $messages[1]->getPayload()['action']);
         $this->assertEquals($user['user']->getEmail(), $messages[1]->getPayload()['causer']);
         $this->assertEquals('users::update', $messages[1]->getTopic());
 

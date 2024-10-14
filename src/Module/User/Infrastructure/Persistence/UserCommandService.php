@@ -214,7 +214,7 @@ readonly class UserCommandService extends MercureUpdateCapableService implements
 
         $this->repository->save($user);
 
-        $this->publishUserUpdate($user, 'user_restore');
+        $this->publishUserUpdate($user, 'restore');
 
         return $user;
     }
