@@ -59,7 +59,7 @@ readonly class UserCommandService extends MercureUpdateCapableService implements
 
         $user = $this->validateAndSave($user, $password);
 
-        $this->publishUserUpdate($user, 'user_create');
+        $this->publishUserUpdate($user, 'create');
 
         return $user;
     }
@@ -89,7 +89,7 @@ readonly class UserCommandService extends MercureUpdateCapableService implements
 
         $user = $this->validateAndSave($user);
 
-        $this->publishUserUpdate($user, 'user_update', true);
+        $this->publishUserUpdate($user, 'update', true);
 
         return $user;
     }
@@ -124,7 +124,7 @@ readonly class UserCommandService extends MercureUpdateCapableService implements
 
         $user = $this->validateAndSave($user, $password);
 
-        $this->publishUserUpdate($user, 'user_update', true);
+        $this->publishUserUpdate($user, 'update', true);
 
         return $user;
     }
@@ -170,7 +170,7 @@ readonly class UserCommandService extends MercureUpdateCapableService implements
         // Delete from repository.
         $this->repository->delete($user);
 
-        $this->publishUserUpdate($user, 'user_force_delete', true);
+        $this->publishUserUpdate($user, 'force_delete', true);
     }
 
     /**
@@ -191,7 +191,7 @@ readonly class UserCommandService extends MercureUpdateCapableService implements
 
         $this->repository->save($user);
 
-        $this->publishUserUpdate($user, 'user_soft_delete', true);
+        $this->publishUserUpdate($user, 'soft_delete', true);
 
         return $user;
     }
@@ -214,7 +214,7 @@ readonly class UserCommandService extends MercureUpdateCapableService implements
 
         $this->repository->save($user);
 
-        $this->publishUserUpdate($user, 'user_restore');
+        $this->publishUserUpdate($user, 'restore');
 
         return $user;
     }

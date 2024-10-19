@@ -236,7 +236,7 @@ readonly class AuthUserService extends MercureUpdateCapableService implements Au
     {
         $data = $this->serializer->normalize($user, 'json', ['groups' => ['user']]);
 
-        $this->publishMercureUpdate($data, 'user_update', false, true);
+        $this->publishMercureUpdate($data, 'update', false, true);
     }
 
     protected function listTopic(): string
