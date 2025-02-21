@@ -708,13 +708,15 @@ class UserTest extends DatabaseTestCase
         }
 
         // "Empty reset token" case.
+        $command = new PerformResetPasswordCommand('valid@email.com', '', 'password', 'password');
         try {
-            new PerformResetPasswordCommand('valid@email.com', '', 'password', 'password');
-        } catch (ValidationException $e) {
-            $errors = $e->getErrors();
-            $this->assertCount(1, $errors);
-            $this->assertEquals('This value should not be blank.', $errors[0]['errors'][0]);
-            $this->assertEquals('resetToken', $errors[0]['property']);
+            $commandBus->dispatch($command);
+
+            $this->fail('Validation exception not thrown');
+        } catch (ValidationFailedException $e) {
+            $violations = $e->getViolations();
+            $this->assertCount(1, $violations);
+            $this->assertEquals('resetToken', $violations[0]->getPropertyPath());
         }
     }
 }
